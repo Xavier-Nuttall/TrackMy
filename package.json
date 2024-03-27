@@ -1,0 +1,17 @@
+{
+  "name": "trackmy",
+  "version": "1.0.0",
+  "description": "A webapp for displaying room occupancy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chart.js": "^4.4.2",
+    "express": "^4.19.2",
+    "pg": "^8.11.3",
+    "ws": "^8.16.0"
+  }
+}
