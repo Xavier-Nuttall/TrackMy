@@ -36,8 +36,19 @@ CREATE TABLE UserTimes(
 );
 
 CREATE TABLE User(
+    user_id INT PRIMARY KEY,
+    email_address VARCHAR(255) NOT NULL UNIQUE,
+    CHECK (email_address LIKE '%@%'),
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    othernames VARCHAR(200),
 );
 
 CREATE TABLE Login(
+    session_token VARCHAR(200),
+    user_id INT,
+    
+    CONSTRAINT fk_login FOREIGN KEY(user_id) REFERENCES User(user_id),
+    PRIMARY KEY(session_token, user_id),
 );
 
