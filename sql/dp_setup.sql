@@ -16,11 +16,12 @@ USE INFO310PROJECT;
 
 CREATE TABLE Room(
     room_id INT AUTO_INCREMENT PRIMARY KEY,
-    threshold INT NOT NULL
+    threshold INT NOT NULL,
+    room_name VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE User(
-    user_id INT PRIMARY KEY,
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
     email_address VARCHAR(255) NOT NULL UNIQUE,
     CHECK (email_address LIKE '%@%'),
     firstname VARCHAR(100) NOT NULL,
