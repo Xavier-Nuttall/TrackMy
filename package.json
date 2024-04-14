@@ -5,18 +5,19 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-
     "install": "npm run docker-install && npm run front-install",
     "uninstall": "npm run docker-uninstall && npm run front-uninstall",
     "start": "npm run docker-start && npm run front-start",
-
-
     "front-install": "cd frontend && npm install",
-    "front-uninstall" : "cd frontend && npm uninstall *",
+    "front-uninstall": "",
     "front-start": "cd frontend && npm run start",
-
     "docker-install": "cd backend/db && docker build -t trackmy-db .",
     "docker-uninstall": "cd backend/db && docker-compose down && docker rmi trackmy-db",
     "docker-start": "cd backend/db && docker-compose up -d"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "ws": "^8.16.0"
   }
 }
