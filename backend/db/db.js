@@ -5,8 +5,8 @@ const { Pool } = require('pg');
  * Allows multiple connections to be used efficiently
  */
 const pool = new Pool({
-    host: 'info310VM.local',   // Lab machine Virtual Box
-    user: '=info310',
+    host: 'localhost', 
+    user: 'info310',
     password: 'password',
     database: 'trackmy',
     port: 5432,                // Default port for PostgreSQL
