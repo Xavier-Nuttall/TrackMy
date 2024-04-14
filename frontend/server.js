@@ -17,7 +17,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('public'));
  
 /* path routing and endpoints */
-app.use('/', require('./path_router'));
+app.use('/', require('./backend/api/path_router'));
 
  
 app.get('*', (request, response) => {
