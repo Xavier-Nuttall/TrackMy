@@ -19,9 +19,17 @@ INSERT INTO User (email_address, firstname, lastname, othernames) VALUES ('sherl
 
 --USERTIMES INSERT STATEMENTS
 INSERT INTO UserTimes (user_id, room_id, room_threshold, start_time, end_time) VALUES (1, 1, 10, '2024-04-10 08:00:00', '2024-04-10 10:00:00');
+INSERT INTO UserTimes (user_id, room_id, room_threshold, start_time, end_time) VALUES (7, 3, 20, '2024-04-10 10:00:00', '2024-04-10 16:00:00');
+INSERT INTO UserTimes (user_id, room_id, room_threshold, start_time, end_time) VALUES (4, 7, 10, '2024-04-10 11:00:00', '2024-04-10 14:00:00');
 
 --LOGIN INSERT STATEMENTS
 INSERT INTO Login (session_token, user_id) VALUES ('abc123xyz456', 1);
+INSERT INTO Login (session_token, user_id) VALUES ('yXtybX0KhZko', 2);
+INSERT INTO Login (session_token, user_id) VALUES ('y9Qq3CT0ijSZ', 5);
+INSERT INTO Login (session_token, user_id) VALUES ('l9AKhdVviuw2', 4);
+INSERT INTO Login (session_token, user_id) VALUES ('0eziScQwoHaQ', 3);
+INSERT INTO Login (session_token, user_id) VALUES ('WjPAiyQjaIGt', 6);
+INSERT INTO Login (session_token, user_id) VALUES ('BAhLjjCObhT8', 7);
 
 --ROOMTIME INSERT STATEMENTS
 INSERT INTO RoomTime (room_id, occupancy, time, date) VALUES (1, 10, '2024-04-10 08:00:00', '2024-04-10');
