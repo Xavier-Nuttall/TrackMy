@@ -1,7 +1,12 @@
 # TrackMy
 
+``npm run install``
+
+``npm run start``
+
 <details>
  <summary>User Stories</summary>
+ 
 ## Equipment Availability
 
 As a gym member I want to be able to view the availability of sports equipment to ensure that the inventory has the equipment I need at the moment.
