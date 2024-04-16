@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "install-init": "npm run install && npm run docker-install && npm run front-install",
+    "install-init": "npm install && ./backend/secrets/create.sh && npm run docker-install && npm run front-install",
     "uninstall": "npm run docker-uninstall && npm run front-uninstall",
     "start": "npm run docker-start && npm run front-start",
     "front-install": "cd frontend && npm install",
