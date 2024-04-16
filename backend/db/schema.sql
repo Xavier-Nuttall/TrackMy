@@ -3,8 +3,8 @@ CREATE SCHEMA tracking;
 
 CREATE TABLE tracking.Room(
     room_id SERIAL PRIMARY KEY,
-    threshold INT NOT NULL,
-    room_name VARCHAR(200) NOT NULL
+    room_name VARCHAR(200) NOT NULL,
+    threshold INT NOT NULL
 );
 
 CREATE TABLE pii.User(
