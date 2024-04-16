@@ -3,6 +3,9 @@
 # npm package lock file
 **/package-lock.json
 
+# secrets
+/backend/secrets/*.txt
+
 # dependencies
 **/node_modules
 /.pnp

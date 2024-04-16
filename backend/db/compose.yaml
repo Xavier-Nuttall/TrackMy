@@ -5,14 +5,15 @@ services:
     image: trackmy-db
     restart: always
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_USER_FILE: /run/secrets/db_admin_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_admin_password
       POSTGRES_DB: trackmy
     ports:
-      - 8000:8000
+      - 5432:5432
 
     secrets:
-      - db_password
+      - db_admin_password
+      - db_admin_user
       
   adminer:
     image: adminer
@@ -21,5 +22,7 @@ services:
       - 8080:8080
 
 secrets:
-  db_password:
-    file: ../secrets/db_password.txt
+  db_admin_password:
+    file: ../secrets/db_admin_password.txt
+  db_admin_user:
+    file: ../secrets/db_admin_user.txt
