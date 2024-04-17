@@ -45,9 +45,24 @@ nav{
 }
 
 #curr-notifs {
-    background-color: darkolivegreen;
+    background-color: rgb(36, 48, 16);
     padding: 2.5% 0;
     margin: 2.5%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#curr-notifs dt {
+    background-color: whitesmoke;
+    padding: 2.5% 2.5%;
+    margin: 2.5% 2.5% 0 2.5%;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+#curr-notifs dd {
+    background-color: whitesmoke;
+    padding: 0 2.5%;
+    margin: 0 2.5%;
     min-height: 25px;
     max-height: auto;
 }
