@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 const { readFileSync } = require('fs');
 const { parse } = require('ini');
 
-const config = parse(readFileSync('backend/secrets/secrets.ini', 'utf-8'));
+const config = parse(readFileSync('../backend/secrets/secrets.ini', 'utf-8'));
 /*
  * Database Connection Pool
  * Allows multiple connections to be used efficiently

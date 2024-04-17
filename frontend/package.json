@@ -2,7 +2,7 @@
   "name": "trackmy",
   "version": "0.1.0",
   "description": "A webapp for displaying room occupancy",
-  "main": "index.js",
+  "main": "server.js",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -18,8 +18,8 @@
     "ws": "^8.16.0"
   },
   "scripts": {
-    "startserver": "node frontend/server.js",
-    "start": "react-scripts start",
+    "startserver": "node server.js",
+    "start": "react-scripts build && node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
