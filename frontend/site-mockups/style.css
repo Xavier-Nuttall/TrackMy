@@ -81,7 +81,7 @@ main{
     margin:1.25% auto 0 auto;
     background-color: whitesmoke;
     width: 97.5%;
-    height: 60%;
+    height: 65%;
 }
 
 #room-show{
@@ -89,5 +89,13 @@ main{
     margin:1.25% auto 0 auto;
     background-color: whitesmoke;
     width: 97.5%;
-    height: 34.5%;
+    height: 28.5%;
+}
+
+.general-panel{
+    padding: 0%;
+    margin:1.25% auto 0 auto;
+    background-color: whitesmoke;
+    width: 97.5%;
+    height: 96%;
 }
