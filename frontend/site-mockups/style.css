@@ -20,14 +20,59 @@ nav{
     height: 75px;
 }
 
-h1{
+#title h1{
     padding: 0%;
     margin: 0%;
+    color:whitesmoke;
+    font-family:'Courier New', Courier, monospace;
+    font-size: 36pt;
+    line-height: 75px;
+    text-decoration: underline;
+}
+
+.go {
+    padding: 2.5% 0;
+    margin: 2.5%;
+    text-align: center;
+    background-color:rgb(71, 111, 60);
+    
+}
+.go a {
+    text-decoration: none;
+    color:whitesmoke;
+    font-size: 15pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#curr-notifs {
+    background-color: darkolivegreen;
+    padding: 2.5% 0;
+    margin: 2.5%;
+    min-height: 25px;
+    max-height: auto;
 }
 
 main{
     float: right;
-    background-color:darkolivegreen;
+    background-color: rgb(8, 65, 26);
     width: 80%;
     height: 100%;
+    padding: 0%;
+    margin: 0%;
+}
+
+#graph-show{
+    padding: 0%;
+    margin:1.25% auto 0 auto;
+    background-color: whitesmoke;
+    width: 97.5%;
+    height: 60%;
+}
+
+#room-show{
+    padding: 0%;
+    margin:1.25% auto 0 auto;
+    background-color: whitesmoke;
+    width: 97.5%;
+    height: 34.5%;
 }
