@@ -10,9 +10,11 @@ const PORT = 3000;
 
 // Serve static files from the 'build' directory (for production)
 app.use(express.static(path.join(__dirname, 'build')));
+
+console.log(__dirname);
  
 /* path routing and endpoints */
-app.use('/', require('../backend/api/path_router'));
+app.use('/', require('./path_router'));
 
  
 // Route all other requests to the React app's entry point
