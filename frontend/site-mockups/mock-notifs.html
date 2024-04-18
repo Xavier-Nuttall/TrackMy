@@ -38,13 +38,37 @@
         <main>
             <!--probably a minimap on the side of the floor plan to have a reference to which room you're going for-->
             <!--. with the floor change-->
-            <div id="top-set">
-                <div id="new-notif"></div>
-                <div id="mini-map"></div>
+            <div class="grid-contain">
+                <div id="top-set">
+                    <div id="new-notif">
+                        <fieldset>
+                            <legend>New Notification</legend>
+                            <form>
+                                <label>Room:</label><input>
+                                <label>Notify when occupancy goes over this amount of people:</label><input>
+                                <label>When to begin receiving notifications:</label><input>
+                                <label>Notifications will stop being received after:</label><input>
+                                <button>Create New</button>
+                            </form>
+                        </fieldset>
+                    </div>
+                    <div id="mini-map">
+                        <p>heatmap goes here albeit without current stats</p>
+                    </div>
+                </div>
+                <div id="full-list">
+                    <dl id="list-notifs">
+                        <dt>Room A</dt>
+                        <dd>Threshold: 10</dd>
+                        <dd>Times: 10:00 - 18:00</dd>
+        
+                        <dt>Room B</dt>
+                        <dd>Threshold: 20</dd>
+                        <dd>Times: 9:00 - 15:00</dd>
+                    </dl>
+                </div>
             </div>
-            <div id="full-list">
-
-            </div>
+            
         </main>
     </body>
 </html>
