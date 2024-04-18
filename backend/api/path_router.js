@@ -1,12 +1,17 @@
 const express = require('express');
-const pool = require('./db/db.js');
+const pool = require('./db');
 const router = express.Router();
-const path = require('path');
 
 router.get('/', async (req, res) => {
+    console.log('SUP');
     res.redirect('/trackmy');
 });
 
 router.get('/trackmy/', async (req, res) => {
-    res.render('index');
+    console.log('redirct');
+    // res.render('index');
+    // console.log("broke");
+    res.status(404).send("oops");
 });
+
+module.exports = router; 
