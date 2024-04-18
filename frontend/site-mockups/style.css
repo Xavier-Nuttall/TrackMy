@@ -74,6 +74,7 @@ main{
     height: 100%;
     padding: 0%;
     margin: 0%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .grid-contain{
@@ -102,6 +103,24 @@ main{
     height: 100%;
     grid-row-start: 3;
     grid-row-end: 4;
+}
+
+#login-panel{
+    background-color: whitesmoke;
+    width: 100%;
+    height: 99%;
+    grid-row: 1;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+#register-panel{
+    background-color: whitesmoke;
+    width: 100%;
+    height: 99%;
+    grid-row: 1;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 #top-set{
@@ -157,4 +176,16 @@ main{
 
 .general-panel p{
     margin: 0 5px;
+}
+
+input{
+    width: 100%;
+}
+
+#new-notif fieldset{
+    height: 92.5%;
+}
+
+legend{
+    font-weight: bold;
 }
