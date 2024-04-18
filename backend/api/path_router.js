@@ -8,8 +8,10 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/trackmy/', async (req, res) => {
-    console.log('SUP');
-    res.render('index');
+    console.log('redirct');
+    // res.render('index');
+    // console.log("broke");
+    res.status(404).send("oops");
 });
 
 module.exports = router; 

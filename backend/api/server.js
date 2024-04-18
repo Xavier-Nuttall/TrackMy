@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const PORT = 3000;
+const PORT = 3001;
 
 // Serve static files from the 'build' directory (for production)
 app.use(express.static(path.join(__dirname, 'build')));
