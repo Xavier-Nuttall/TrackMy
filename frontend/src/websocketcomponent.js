@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
 
 const WebSocketComponent = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        const socket = io('http://localhost:3000');
+        const socket = WebSocket('http://localhost:8081');
 
         socket.on('database_data', (newData) => {
             console.log('Received data from server:', newData);
