@@ -109,18 +109,16 @@ main{
     background-color: whitesmoke;
     width: 100%;
     height: 99%;
-    grid-row: 1;
-    grid-column-start: 1;
-    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
 }
 
 #register-panel{
     background-color: whitesmoke;
     width: 100%;
     height: 99%;
-    grid-row: 1;
-    grid-column-start: 2;
-    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
 }
 
 #top-set{
@@ -183,6 +181,14 @@ input{
 }
 
 #new-notif fieldset{
+    height: 92.5%;
+}
+
+#login-panel fieldset{
+    height: 92.5%;
+}
+
+#register-panel fieldset{
     height: 92.5%;
 }
 
