@@ -5,25 +5,22 @@
   "main": "server.js",
   "private": true,
   "scripts": {
-    "install-init": "npm install && ./backend/secrets/create.sh && npm run docker-install && npm run front-install",
+    "init-install": "npm install && ./backend/secrets/create.sh && npm run docker-install && npm run front-install && npm run back-install",
     "uninstall": "npm run docker-uninstall && npm run front-uninstall",
-    "start": "npm run docker-start && nohup npm run websocket-start > /dev/null & nohup npm run api-start > /dev/null & npm run front-start",
+    "start": "concurrently \"npm run docker-start\" \"npm run front-start\" \"npm run websocket-start\" \"npm run back-start\"",
     "front-install": "cd frontend && npm install",
     "front-uninstall": "",
     "front-start": "cd frontend && npm start",
     "docker-install": "cd backend/db && docker build -t trackmy-db .",
     "docker-uninstall": "cd backend/db && docker-compose down && docker rmi trackmy-db",
-    "docker-start": "cd backend/db && docker-compose up -d",
+    "docker-start": "cd backend/db && docker-compose up",
     "test": "jest",
-    "websocket-start": "node backend/websocket/websocket.js",
-    "api-start": "node backend/api/server.js"
+    "websocket-start": "cd backend && nodemon websocket/websocket.js",
+    "back-start": "cd backend && nodemon backend/server.js",
+    "back-install": "cd backend && npm install"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "express": "^4.19.2",
-    "ini": "^4.1.2",
-    "jest": "^29.7.0",
-    "pg": "^8.11.5",
-    "ws": "^8.16.0"
+    "concurrently": "^8.2.2",
+    "jest": "^29.7.0"
   }
 }

@@ -1,9 +1,8 @@
 const express = require('express');
-const pool = require('./db');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    console.log('SUP');
+    console.log('static hit');
     res.redirect('/trackmy');
 });
 
