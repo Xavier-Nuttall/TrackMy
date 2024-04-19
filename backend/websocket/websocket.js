@@ -12,6 +12,7 @@ function update(ws, data) {
 
 function print(ws, data) {
     console.log(data);
+
 }
 
 function messageHandler(ws, data) {
@@ -44,4 +45,7 @@ wss.on('connection', (ws) => {
 
 console.log("Created WebSocketServer on port 8081");
 
-
+module.exports = {
+    update,
+    print
+}
