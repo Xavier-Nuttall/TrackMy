@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import WebSocketComponent from './websocketcomponent.js';
+import WebSocketComponent from './websocketcomponent'; 
 
 function App() {
   return (
@@ -20,9 +20,7 @@ function App() {
           Learn React
         </a>
       </header>
-        <main>
-        <WebSocketComponent />
-        </main>
+      <WebSocketComponent></WebSocketComponent>
     </div>
 
   );
