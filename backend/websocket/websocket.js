@@ -51,6 +51,24 @@ function messageHandler(ws, data) {
 }
 
 wss.on('connection', (ws) => {
+    try {
+        const response = fetch('http://localhost:3001/api/heatmap-data', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const responseData = response.json();
+        console.log('Success:', responseData);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+
     console.log('Connection');
 
     ws.on('error', console.error);
@@ -58,7 +76,7 @@ wss.on('connection', (ws) => {
     ws.on('message', (data) => messageHandler(ws, data));
 
     ws.on('close', () => {
-        
+
     });
 
 });
