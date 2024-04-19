@@ -38,45 +38,38 @@ async function generateRandomData() {
         currentTime.setMinutes(currentTime.getMinutes() + Math.floor(Math.random() * 10)); // Add random minutes
     }
 
-    for(let i = 0; i < data.length; i++){
-        await fetch('http://localhost:3001/api/heatmap-update', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify(data[i]),
-    })
-        .then(response => {
+    let i = 0; // Initialize i outside of setInterval
+
+    const intervalId = setInterval(async () => {
+        if (i >= data.length) {
+            clearInterval(intervalId); // Stop interval when all requests are sent
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3001/api/heatmap-update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify(data[i]),
+            });
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch(error => {
-            console.error('Error: Hello', error);
-        });
-    }
-    
+
+            const responseData = await response.json();
+            console.log('Success:', responseData);
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+
+        i++; // Increment i after each request
+    }, 5000); // Set interval to 5 seconds
+
 
 }
 
-const randomData = generateRandomData();
-// console.log(randomData);
-
-
-// // Get the current date and time in YYYY-MM-DD HH:mm:ss format
-// const currentDate = new Date().toISOString().slice(0, 10);
-// const currentTime = new Date().toISOString().slice(11, 19);
-// const dateTime = `${currentDate} ${currentTime}`;
-
-// // Construct the roomData object with the generated values
-// const roomData = {
-//     room_id: 1, // Replace with actual room ID
-//     change: change,
-//     date: currentDate,
-//     time: dateTime,
-// };
+generateRandomData();
 

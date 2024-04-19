@@ -1,14 +1,28 @@
-const { WebSocketServer } = require('ws');
+const { WebSocket } = require('ws');
 
-const wss = new WebSocketServer({ port: 8081 });
+const wss = new WebSocket.Server({ port: 8081 });
+// Store active WebSocket connections
+
 console.log("Starting WebSocketServer")
 handlers = {
     "update": update,
     "print": print
 };
 function update(ws, data) {
-    ws.send("updated " + data)
+    broadcast("update" + data)
+    console.log('backend says hi');
 }
+
+// Function to broadcast messages to all clients
+wss.broadcast = function broadcast(data) {
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(data);
+        }
+    });
+};
+
+
 
 function print(ws, data) {
     console.log(data);
@@ -37,15 +51,18 @@ function messageHandler(ws, data) {
 }
 
 wss.on('connection', (ws) => {
+    console.log('Connection');
+
     ws.on('error', console.error);
 
-    ws.on('message', (data) => messageHandler(ws, data))
+    ws.on('message', (data) => messageHandler(ws, data));
+
+    ws.on('close', () => {
+        
+    });
 
 });
 
 console.log("Created WebSocketServer on port 8081");
 
-module.exports = {
-    update,
-    print
-}
+module.exports = wss;

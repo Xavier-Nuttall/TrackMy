@@ -2,10 +2,11 @@ const express = require('express');
 const pool = require('./db');
 const WebSocket = require('ws');
 const router = express.Router();
+const wss = require('../websocket/websocket.js');
 
 
-// Create a WebSocket connection outside of route handlers
-const ws = new WebSocket('ws://localhost:8081/');
+// // Create a WebSocket connection outside of route handlers
+// const ws = new WebSocket('ws://localhost:8081/');
 
 router.get('/', async (req, res) => {
     console.log('api hit');
@@ -29,11 +30,12 @@ router.get('/heatmap-data/', async (req, res) => {
 
 
         let obj = {
-            message: 'print',
+            message: 'update',
             data: JSON.stringify(queryResult.rows)
         }
         // Send data through WebSocket
-        ws.send(JSON.stringify(obj));
+        wss.broadcast(JSON.stringify(obj));
+        
 
         // Respond to the client with a success message
         res.status(200).send({message : 'Data sent through WebSocket.'});
