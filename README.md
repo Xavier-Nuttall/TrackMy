@@ -1,6 +1,6 @@
 # TrackMy
 
-``npm run install``
+``npm run init-install``
 
 ``npm run start``
 

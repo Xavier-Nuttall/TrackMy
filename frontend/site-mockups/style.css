@@ -156,6 +156,14 @@ main{
     height: 100%;
 }
 
+#full-list dt {
+    text-decoration: underline;
+    font-weight: bold;
+    border-top: 2px solid rgb(8, 65, 26);
+    padding: 5px;
+}
+
+
 .general-panel{
     padding: 0%;
     margin: 1%;
@@ -178,6 +186,15 @@ main{
 
 input{
     width: 100%;
+    border: 2px solid rgb(71, 111, 60);
+    border-radius: 2px;
+}
+
+select {
+    width: 100%;
+    border: 2px solid rgb(71, 111, 60);
+    border-radius: 2px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #new-notif fieldset{
@@ -194,4 +211,15 @@ input{
 
 legend{
     font-weight: bold;
+}
+
+button{
+    background-color:rgb(71, 111, 60);
+    color:whitesmoke;
+    font-size: 12pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 2px solid whitesmoke;
+    border-radius: 3px;
+    padding: 5px;
+    margin: 3px 0;
 }

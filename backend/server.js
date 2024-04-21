@@ -12,9 +12,12 @@ const PORT = 3001;
 app.use(express.static(path.join(__dirname, 'build')));
 
 console.log(__dirname);
+
+
+app.use('/api', require('./api/api'));
  
 /* path routing and endpoints */
-app.use('/', require('./path_router'));
+app.use('/', require('./static_router'));
 
  
 // Route all other requests to the React app's entry point
