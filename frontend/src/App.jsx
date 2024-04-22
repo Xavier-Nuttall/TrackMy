@@ -133,6 +133,12 @@ function NotifPage() {
 
 function App() {
   const [mainContent, setMainContent] = useState(HomePage);
+  const [menuOpen, setMenuOpen] = useState(true);
+
+  const toggleFilter = () => {
+    console.log("Hello");
+    setMenuOpen(!menuOpen);
+  };
 
   const handleMainPageClick = () => {
     setMainContent(HomePage);
@@ -154,19 +160,48 @@ function App() {
     setMainContent(NotifPage);
   }
 
+  const [showSearchBox, setShowSearchBox] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const toggleSearch = () => {
+    setShowSearchBox(!showSearchBox);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    // Perform search action with searchTerm, e.g., fetch data or navigate to search results page
+    console.log('Search term:', searchTerm);
+  };
+
   return (
     <html>
       <head>
         <title>TrackMy</title>
       </head>
       <body>
-        <div className="content-container">
-          <nav>
-            <div id="title">
-              <h1>TrackMy</h1>
+        <div className={`content-container${menuOpen ? '2' : '1'}`}>
+          <div id="title">
+            <div id="menu" onClick={toggleFilter}>
+              <div id="menu-button" className={`menu-button ${menuOpen ? 'change' : ''}`} >
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+              </div>
             </div>
+            <h1>TrackMy</h1>
+            <div className="search-container">
+              <button className="search-button" onClick={toggleSearch}>
+                <span className="icon"></span>
+              </button>
+            </div>
+          </div>
+          <nav className={menuOpen ? '' : 'hide-nav'}>
             <div className="go" id="graph">
-              <button onClick={handleMainPageClick}>Main</button>
+              <button onClick={handleMainPageClick}>Home</button>
             </div>
             <div className="go" id="about">
               <button onClick={handleAboutUsPageClick}>About Us</button>
@@ -174,11 +209,9 @@ function App() {
             <div className="go" id="login">
               <button onClick={handleLoginPageClick}>Log In | Register</button>
             </div>
-            <p>(the below should only be available when signed in)</p>
             <div className="go" id="settings">
               <button onClick={handleAccountSettingsPageClick}>Account Settings</button>
             </div>
-            <p>^ replaces login </p>
             <div className="go" id="notif">
               <button onClick={handleNotifPageClick}>Edit Notifications</button>
             </div>
@@ -193,6 +226,7 @@ function App() {
               <dd>Times: 9:00 - 15:00</dd>
             </dl>
           </nav>
+
           {mainContent}
         </div>
       </body>
