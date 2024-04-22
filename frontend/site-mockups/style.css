@@ -171,6 +171,7 @@ main{
     width: 98%;
     height: 98%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
 }
 
 .general-panel h1{
