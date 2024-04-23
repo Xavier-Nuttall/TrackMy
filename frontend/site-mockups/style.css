@@ -81,6 +81,7 @@ main{
     height: 98%;
     margin: 1%;
     display:grid;
+    grid-template-columns: 50% 50%;
     gap: 1%;
 }
 
@@ -92,6 +93,8 @@ main{
     height: 100%;
     grid-row-start: 1;
     grid-row-end: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
     
 }
 
@@ -103,6 +106,20 @@ main{
     height: 100%;
     grid-row-start: 3;
     grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+#room-graph-show{
+    padding: 0%;
+    margin:0 auto;
+    background-color: whitesmoke;
+    width: 100%;
+    height: 100%;
+    grid-row-start: 3;
+    grid-row-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 #login-panel{
