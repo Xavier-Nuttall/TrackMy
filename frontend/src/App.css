@@ -1,17 +1,13 @@
-html, body{
-  height:100%;
-  padding: 0%;
-  margin: 0%;
-}
-
 .content-container1{
   display: grid;
   grid-template-areas: 
   " title " 
   " main ";
-  grid-template-rows: 75px auto; 
-  grid-template-columns: auto; 
+  grid-template-rows: 80px 1fr; 
+  grid-template-columns: 1fr; 
   min-height: 100vh;
+  min-width: 100vw;
+  transition: margin-left 0.3s ease;
 }
 
 .content-container2{
@@ -19,24 +15,32 @@ html, body{
   grid-template-areas: 
   "title title" 
   "sidebar main";
-  grid-template-rows: 75px auto; 
-  grid-template-columns: 247px auto; 
+  grid-template-rows: 80px 1fr; 
+  grid-template-columns: 252px 1fr; 
   min-height: 100vh;
+  min-width: 100vw;
 }
 
 nav{
   position: relative;
   float:left;
-  background-color: whitesmoke;
-  width: 100%;
-  height:100%;
+  background-color: rgba(47, 85, 107, 1);
+  width: 247px;
+  height: 100%;
   padding: 0%;
   margin: 0%;
   grid-area: sidebar;
+  transition: transform 0.3s ease;
+  transform: translateX(-100%);
+  display: none;
+  border-right: 5px solid black;
 }
 
-.hide-nav {
-  display: none;
+.nav.open {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  transform: translateX(0);
 }
 
 #title{
@@ -50,6 +54,7 @@ nav{
   "menu name welcome";
   grid-template-columns: 60px auto 60px; 
   background-image: linear-gradient(to right, darkolivegreen, #000000);
+  border-bottom: 5px solid black;
 }
 
 #title h1{
@@ -104,12 +109,12 @@ nav{
 .search-button {
   position: relative;
   width: 100%;
-  height: 90%;
+  height: 100%;
   background-color: transparent;
   border: none;
   cursor: pointer;
   padding: 5px;
-
+  align-content: center;
 }
 
 .search-button .icon {
@@ -118,6 +123,8 @@ nav{
   height: 30px;
   background-image: url('../public/mgicon.png'); /* Replace with your icon image */
   background-size: cover;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 .search-box {
@@ -129,18 +136,15 @@ nav{
   display: none;
 }
 
-.go {
-  padding: 2.5% 0;
-  margin: 2.5%;
-  text-align: center;
-  background-color:rgb(71, 111, 60);
-  
-}
-.go a {
+.go button {
+  position: relative;
+  width: 100%;
+  height: 100%;
   text-decoration: none;
   color:whitesmoke;
   font-size: 15pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: none;
 }
 
 #curr-notifs {
@@ -168,11 +172,10 @@ nav{
 
 main{
   position: relative;
-  background-color: rgb(8, 65, 26);
+  background-color: rgba(107, 85, 47, 1);
   width: 100%;
   height: 100%;
   padding: 0%;
-  /*margin-left: 247px;*/
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   grid-area: main;
 }
@@ -249,11 +252,8 @@ main{
 }
 
 #full-list{
-  padding: 0%;
-  margin: 0%;
   background-color: whitesmoke;
   width: 100%;
-  height: 100%;
 }
 
 #full-list dt {
@@ -262,7 +262,6 @@ main{
   border-top: 2px solid rgb(8, 65, 26);
   padding: 5px;
 }
-
 
 .general-panel{
   padding: 0%;
@@ -325,12 +324,47 @@ legend{
 }
 
 button{
-  background-color:rgb(71, 111, 60);
+  position: relative;
+  background: rgba(47, 85, 107, 1);
   color:whitesmoke;
   font-size: 12pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  border: 2px solid whitesmoke;
-  border-radius: 3px;
   padding: 5px;
-  margin: 3px 0;
+  width: 100%;
+  height: 10%;
+  border: none;
+}
+
+button:hover{
+  position: relative;
+  background: rgba(47, 85, 107, 0.8);
+  color:whitesmoke;
+  font-size: 12pt;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 5px;
+  width: 100%;
+  height: 10%;
+}
+
+.sidebar-button{
+  position: relative;
+  background: rgba(47, 85, 107, 1);
+  color:whitesmoke;
+  font-size: 12pt;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 5px;
+  width: 100%;
+  height: 10%;
+  border: none;
+}
+
+.sidebar-button:hover{
+  position: relative;
+  background: rgba(255, 255, 255, 0.2);
+  color:whitesmoke;
+  font-size: 12pt;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 5px;
+  width: 100%;
+  height: 10%;
 }
