@@ -186,6 +186,10 @@ function App() {
     setMainContent(NotifPage);
   }
 
+  const handleRoomInformationPageClick = () => {
+    setMainContent(RoomInformationPage);
+  }
+
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -224,12 +228,25 @@ function App() {
         <button className="sidebar-button" onClick={handleLoginPageClick}>Log In | Register</button>
         <button className="sidebar-button" onClick={handleAccountSettingsPageClick}>Account Settings</button>
         <button className="sidebar-button" onClick={handleNotifPageClick}>Edit Notifications</button>
+        <button className="sidebar-button" onClick={handleRoomInformationPageClick}>Room Information</button>
+
 
 
       </nav>
 
       {mainContent}
     </div>
+  );
+}
+
+function RoomInformationPage() {
+  return (
+    <main>
+      <div className="general-panel">
+        <h1>Room information</h1>
+        <p>This will be where all the graphs and such for each room will be</p>
+      </div>
+    </main>
   );
 }
 

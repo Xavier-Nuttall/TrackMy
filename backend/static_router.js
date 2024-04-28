@@ -13,8 +13,13 @@ router.get('/trackmy/', async (req, res) => {
     res.status(404).send("oops");
 });
 
+router.post('/register/', async (req, res) => {
+
+})
+
 // User log in page
 router.get('/login/', async (req, res) => {
+    //check credentials then fetch page
     res.render('login')
 })
 
@@ -37,6 +42,10 @@ router.get('/Profile/', async (req, res) => {
 router.get('/About/', async (req, res) => {
     res.render('about');
 });
+
+router.get('/settings/', async (req, res) => {
+    res.render('settings')
+})
 
 // Room information
 router.get('/Rooms/', async (req, res) => {
