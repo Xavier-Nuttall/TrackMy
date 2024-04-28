@@ -34,7 +34,9 @@ async function generateRandomData() {
         const timestamp = `${currentDate} ${time}:00`;
         //console.log(timestamp);
 
-        data.push({ room_id: 1, change: change, date: currentDate, time: timestamp });
+        for(let i = 1; i < 3; i++){
+            data.push({ room_id: i, change: change, date: currentDate, time: timestamp });
+        }
         currentTime.setMinutes(currentTime.getMinutes() + Math.floor(Math.random() * 10)); // Add random minutes
     }
 
@@ -66,7 +68,7 @@ async function generateRandomData() {
         }
 
         i++; // Increment i after each request
-    }, 5000); // Set interval to 5 seconds
+    }, 2000); // Set interval to 5 seconds
 
 
 }

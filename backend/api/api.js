@@ -18,15 +18,17 @@ router.get('/heatmap-data/', async (req, res) => {
     try {
         // Query data from the PostgreSQL database using pool.query
         const queryResult = await pool.query(`
-            SELECT r.room_name, r.threshold, rt.occupancy
+            SELECT r.room_id, r.room_name, r.threshold, rt.occupancy
             FROM tracking.Room r
             JOIN (
-                SELECT room_id, occupancy
+                SELECT room_id, MAX(date || ' ' || time) AS latest_timestamp
                 FROM tracking.RoomTime
-                ORDER BY date DESC, time DESC
-                LIMIT 1
-            ) rt ON r.room_id = rt.room_id;
-            `);
+                GROUP BY room_id
+            ) latest_rt
+            ON r.room_id = latest_rt.room_id
+            JOIN tracking.RoomTime rt
+            ON rt.room_id = latest_rt.room_id AND (rt.date || ' ' || rt.time) = latest_rt.latest_timestamp;
+        `);
 
 
         let obj = {
@@ -35,10 +37,10 @@ router.get('/heatmap-data/', async (req, res) => {
         }
         // Send data through WebSocket
         wss.broadcast(JSON.stringify(obj));
-        
+
 
         // Respond to the client with a success message
-        res.status(200).send({message : 'Data sent through WebSocket.'});
+        res.status(200).send({ message: 'Data sent through WebSocket.' });
     } catch (error) {
         // Handle any errors that occur during the process
         console.error('Error:', error);
@@ -62,17 +64,18 @@ router.post('/heatmap-update/', async (req, res) => {
     try {
 
         const queryResult = await pool.query(`
-                SELECT rt.occupancy
-                FROM tracking.Room r
-                JOIN (
-                    SELECT room_id, occupancy
-                    FROM tracking.RoomTime
-                    ORDER BY date DESC, time DESC
-                    LIMIT 1
-                ) rt ON r.room_id = rt.room_id;
-            `);
+            SELECT rt.occupancy
+            FROM tracking.Room r
+            JOIN (
+                SELECT room_id, occupancy
+                FROM tracking.RoomTime
+                WHERE room_id = $1
+                ORDER BY date DESC, time DESC
+                LIMIT 1
+            ) rt ON r.room_id = rt.room_id;
+        `, [room_id]);
 
-        //console.log(queryResult.rows);
+        console.log(queryResult.rows);
         //console.log(queryResult.rows.length);
 
         let occupancyValue;
@@ -83,11 +86,11 @@ router.post('/heatmap-update/', async (req, res) => {
             occupancyValue = 1;
         }
 
-        if(occupancyValue >= 0){
+        if (occupancyValue >= 0) {
 
-        
-        // Query data from the PostgreSQL database using pool.query
-        const query = `
+
+            // Query data from the PostgreSQL database using pool.query
+            const query = `
         INSERT INTO tracking.RoomTime (room_id, occupancy, time, date)
         VALUES ($1, $2, $3, $4)
         ON CONFLICT (room_id, time, date)
@@ -95,7 +98,7 @@ router.post('/heatmap-update/', async (req, res) => {
             occupancy = EXCLUDED.occupancy
         `;
 
-        const sendQuery = await pool.query(query, [room_id, parseInt(occupancyValue), time, date]);
+            const sendQuery = await pool.query(query, [room_id, parseInt(occupancyValue), time, date]);
         }
 
         res.redirect('/api/heatmap-data/');

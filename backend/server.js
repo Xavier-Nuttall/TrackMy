@@ -1,9 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 /* create the server */
 const app = express();
+
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const PORT = 3001;

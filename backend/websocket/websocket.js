@@ -22,8 +22,6 @@ wss.broadcast = function broadcast(data) {
     });
 };
 
-
-
 function print(ws, data) {
     console.log(data);
 
