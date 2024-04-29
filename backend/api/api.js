@@ -8,7 +8,7 @@ const schemaRoomtime = {
     type: "object",
     properties: {
         room_id: { type: "number" },
-        time: { type: "string"},
+        time: { type: "string" },
         occupancy: { type: "number" }
     }
 }
@@ -58,7 +58,7 @@ router.get('/rooms/', async (req, res) => {
         `);
 
         // Respond to the client with a success message
-        res.status(200).send(queryResult[0]);
+        res.status(200).send(queryResult.rows);
     } catch (error) {
         // Handle any errors that occur during the process
         console.error('Error:', error);
@@ -72,7 +72,7 @@ router.get('/rooms/occupancy/', async (req, res) => {
             SELECT t.room_id, t.time, t.occupancy
             FROM tracking.RoomTime t;
         `);
-        res.status(200).send(queryResult[0]);
+        res.status(200).send(queryResult.rows);
     } catch (error) {
         res.status(500).send("Internal Server Error");
     }
@@ -80,16 +80,18 @@ router.get('/rooms/occupancy/', async (req, res) => {
 
 // get information about a specific room
 router.get('/rooms/:id/', async (req, res) => {
+    console.log(req.params.id);
     try {
         const queryResult = await pool.query(`
-    SELECT r.room_id, r.room_name, r.threshold
-    FROM tracking.Room r
-    WHERE r.room_id = $1;
-`, [req.params.id]);
-        if (queryResult[0].length === 0) {
+            SELECT r.room_id, r.room_name, r.threshold
+            FROM tracking.Room r
+            WHERE r.room_id = $1;
+        `, [req.params.id]);
+        console.log(queryResult.rows);
+        if (queryResult.rows.length === 0) {
             res.status(404).send("Room not found");
         }
-        res.status(200).send(queryResult[0]);
+        res.status(200).send(queryResult.rows);
     } catch (error) {
         res.status(500).send("Internal Server Error");
     }
@@ -105,10 +107,10 @@ router.get('/rooms/:id/occupancy/', async (req, res) => {
         FROM tracking.RoomTime t
         WHERE t.room_id = $1;
     `, [req.params.id]);
-        if (queryResult[0].length === 0) {
+        if (queryResult.rows.length === 0) {
             res.status(404).send("Room not found");
         }
-        res.status(200).send(queryResult[0]);
+        res.status(200).send(queryResult.rows);
     } catch (error) {
         res.status(500).send("Internal Server Error");
     }
@@ -118,7 +120,7 @@ router.get('/rooms/:id/occupancy/', async (req, res) => {
 
 // post information about room occupancy
 router.post('/rooms/occupancy/', async (req, res) => {
-    
+
     try {
         // check the post message for the correct fields
         obj = JSON.parse(req.body);
@@ -134,7 +136,7 @@ router.post('/rooms/occupancy/', async (req, res) => {
         }
 
         ws.send(JSON.stringify({ type: "update", data: req.body }));
-        
+
         // adds the data to the database.
 
         const queryResult = await pool.query(`
