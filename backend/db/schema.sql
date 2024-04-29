@@ -42,7 +42,6 @@ CREATE TABLE tracking.RoomTime(
     room_id INT NOT NULL,
     occupancy INT NOT NULL,
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    date DATE NOT NULL,
 
     CONSTRAINT fk_roomtime FOREIGN KEY (room_id) REFERENCES tracking.Room(room_id),
 

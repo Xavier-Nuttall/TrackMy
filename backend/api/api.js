@@ -2,6 +2,19 @@ const express = require('express');
 const pool = require('./db');
 const router = express.Router();
 const { WebSocket } = require('ws');
+const Ajv = require("ajv")
+const ajv = new Ajv();
+const schemaRoomtime = {
+    type: "object",
+    properties: {
+        room_id: { type: "number" },
+        time: { type: "string"},
+        occupancy: { type: "number" }
+    }
+}
+
+const validateRoomtime = ajv.compile(schemaRoomtime);
+
 // // Create a WebSocket connection outside of route handlers
 
 let ws;
@@ -108,7 +121,11 @@ router.post('/rooms/occupancy/', async (req, res) => {
     
     try {
         // check the post message for the correct fields
-        
+        obj = JSON.parse(req.body);
+        if (!validateRoomtime(obj)) {
+            res.status(400).send("Bad Request");
+            return;
+        }
         // sends out the data to the websocket
         // if ws is not attempted wait 
         if (ws.readyState !== WebSocket.OPEN) {
@@ -120,6 +137,12 @@ router.post('/rooms/occupancy/', async (req, res) => {
         
         // adds the data to the database.
 
+        const queryResult = await pool.query(`
+            INSERT INTO tracking.RoomTime (room_id, time, occupancy)
+            VALUES ($1, $2, $3);
+        `, [obj.room_id, obj.time, obj.occupancy]);
+
+        // if the query failed send an error message
 
         res.status(204).send('');
     } catch (error) {
