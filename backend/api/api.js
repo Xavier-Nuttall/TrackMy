@@ -3,6 +3,8 @@ const pool = require('./db');
 const router = express.Router();
 const { WebSocket } = require('ws');
 const Ajv = require("ajv")
+
+
 const ajv = new Ajv();
 const schemaRoomtime = {
     type: "object",
@@ -10,7 +12,9 @@ const schemaRoomtime = {
         room_id: { type: "number" },
         time: { type: "string" },
         occupancy: { type: "number" }
-    }
+    },
+    required: ["room_id", "time", "occupancy"],
+    additionalProperties: false
 }
 
 const validateRoomtime = ajv.compile(schemaRoomtime);
@@ -22,7 +26,7 @@ let ws;
 connect();
 
 function connect() {
-    console.log('Attempting WebSocket connection')
+    console.log('Attempting WebSocket connection...')
     ws = new WebSocket('ws://localhost:8081');
     ws.on('open', () => {
         console.log('WebSocket connection established');
@@ -122,12 +126,13 @@ router.get('/rooms/:id/occupancy/', async (req, res) => {
 router.post('/rooms/occupancy/', async (req, res) => {
 
     try {
+        const obj = req.body;
         // check the post message for the correct fields
-        obj = JSON.parse(req.body);
         if (!validateRoomtime(obj)) {
             res.status(400).send("Bad Request");
             return;
         }
+        
         // sends out the data to the websocket
         // if ws is not attempted wait 
         if (ws.readyState !== WebSocket.OPEN) {
@@ -135,7 +140,7 @@ router.post('/rooms/occupancy/', async (req, res) => {
             return;
         }
 
-        ws.send(JSON.stringify({ type: "update", data: req.body }));
+        ws.send(JSON.stringify({ type: "update", data: obj }));
 
         // adds the data to the database.
 
