@@ -23,19 +23,27 @@ function HomePage() {
           <div id="room-show">
             <p>this is room information for selected room in overhead panel heatmap. that functions as the room list. information here will be basic statistics for each room throughout the week</p>
             <h1>Room X</h1>
+            <p>short description of currently selected room</p>
             <table>
               <tr>
-                <th>Variable</th> {/**what do i call this anyways  */}
+                <th>Current Stats</th> {/**what do i call this anyways  */}
                 <th>Value</th>
               </tr>
               <tr>
-                <td>Current Present</td>
+                <td>Amount Present</td>
+                <td>[number]</td>
               </tr>
               <tr>
-                <td>Maximum this week</td>
+                <td>Average</td>
+                <td>[number]</td>
               </tr>
               <tr>
-                <td>Minimum this week</td>
+                <td>Maximum</td>
+                <td>[number]</td>
+              </tr>
+              <tr>
+                <td>Minimum</td>
+                <td>[number]</td>
               </tr>
             </table>
           </div>

@@ -259,6 +259,30 @@ main{
   overflow: auto;
 }
 
+#room-show h1{
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+#room-show p {
+  margin:0;
+  text-align: center;
+  font-size: 16pt;
+}
+
+#room-show table{
+  width:80%;
+  margin: 0 auto;
+  font-size: 18pt;
+  text-align: center;
+}
+
+#room-show th{
+  background-color: gainsboro;
+  width: 50%;
+}
+
 #login-panel{
   background-color: whitesmoke;
   width: 100%;
