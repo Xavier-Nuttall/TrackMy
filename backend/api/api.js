@@ -1,10 +1,33 @@
 const express = require('express');
 const pool = require('./db');
 const router = express.Router();
-
-
+const { WebSocket } = require('ws');
 // // Create a WebSocket connection outside of route handlers
-// const ws = new WebSocket('ws://localhost:8081/');
+
+let ws;
+
+connect();
+
+function connect() {
+    console.log('Attempting WebSocket connection')
+    ws = new WebSocket('ws://localhost:8081');
+    ws.on('open', () => {
+        console.log('WebSocket connection established');
+    });
+
+    ws.on('message', (data) => {
+        console.log('Received:', data);
+    });
+
+    ws.onclose = () => {
+        console.log('Attempting Reconnect');
+        setTimeout(connect, 2000);
+    };
+    ws.onerror = (error) => {
+        console.error(`WebSocket error: ${error}`);
+        ws.terminate();
+    }
+}
 
 router.get('/', async (req, res) => {
     console.log('api hit');
@@ -29,61 +52,40 @@ router.get('/rooms/', async (req, res) => {
     }
 });
 
+router.get('/rooms/occupancy/', async (req, res) => {
+
+});
+
+// get information about a specific room
+router.get('/rooms/:id/', async (req, res) => {
+    const queryResult = await pool.query(`
+    SELECT r.room_id, r.room_name, r.threshold
+    FROM tracking.Room r
+    WHERE r.room_id = $1;
+`, [req.params.id]);
+});
+
+
+
+// get occupancy of a specific room
+router.get('/rooms/:id/occupancy/', async (req, res) => {
+
+    const queryResult = await pool.query(`
+    SELECT t.time, t.occupancy
+    FROM tracking.RoomTime t
+    WHERE t.room_id = $1;
+`, [req.params.id]);
+});
+
+
+
 // post information about room occupancy
 router.post('/rooms/occupancy/', async (req, res) => {
-    // Get the JSON string from the object keys
-    const jsonString = Object.keys(req.body)[0];
+    // sends out the data to the websocket
+    ws.send(JSON.stringify({type: "update", data: req.body}));
 
-    // Parse the JSON string to extract the data
-    const parsedData = JSON.parse(jsonString);
-
-    // Access the properties of the parsed data
-    const room_id = parsedData.room_id; // 1
-    const change = parsedData.change; // -1
-    const date = parsedData.date; // "2024-04-20"
-    const time = parsedData.time; // "12:00:00"
-    //console.log(room_id + " " + change + " " + date + " " + time);
+    // adds the data to the database.
     try {
-
-        const queryResult = await pool.query(`
-            SELECT rt.occupancy
-            FROM tracking.Room r
-            JOIN (
-                SELECT room_id, occupancy
-                FROM tracking.RoomTime
-                WHERE room_id = $1
-                ORDER BY date DESC, time DESC
-                LIMIT 1
-            ) rt ON r.room_id = rt.room_id;
-        `, [room_id]);
-
-        console.log(queryResult.rows);
-        //console.log(queryResult.rows.length);
-
-        let occupancyValue;
-        if (queryResult.rows.length > 0) {
-            occupancyValue = parseInt(queryResult.rows[0].occupancy) + parseInt(change);
-        } else {
-            //console.log('not good');
-            occupancyValue = 1;
-        }
-
-        if (occupancyValue >= 0) {
-
-
-            // Query data from the PostgreSQL database using pool.query
-            const query = `
-        INSERT INTO tracking.RoomTime (room_id, occupancy, time, date)
-        VALUES ($1, $2, $3, $4)
-        ON CONFLICT (room_id, time, date)
-        DO UPDATE SET
-            occupancy = EXCLUDED.occupancy
-        `;
-
-            const sendQuery = await pool.query(query, [room_id, parseInt(occupancyValue), time, date]);
-        }
-
-        res.redirect('/api/heatmap-data/');
     } catch (error) {
         // Handle any errors that occur during the process
         console.error('Error:', error);

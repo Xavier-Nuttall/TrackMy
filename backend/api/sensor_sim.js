@@ -49,7 +49,7 @@ async function generateRandomData() {
         }
 
         try {
-            const response = await fetch('http://localhost:3001/api/heatmap-update', {
+            const response = await fetch('http://localhost:3001/api/rooms/occapancy', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
