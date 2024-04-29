@@ -1,8 +1,6 @@
 const express = require('express');
 const pool = require('./db');
-const WebSocket = require('ws');
 const router = express.Router();
-const wss = require('../websocket/websocket.js');
 
 
 // // Create a WebSocket connection outside of route handlers
@@ -10,37 +8,20 @@ const wss = require('../websocket/websocket.js');
 
 router.get('/', async (req, res) => {
     console.log('api hit');
-    res.redirect('/api/heatmap-data');
 });
 
-router.get('/heatmap-data/', async (req, res) => {
+// returns information about the rooms
+router.get('/rooms/', async (req, res) => {
 
     try {
-        // Query data from the PostgreSQL database using pool.query
         const queryResult = await pool.query(`
-            SELECT r.room_id, r.room_name, r.threshold, rt.occupancy
-            FROM tracking.Room r
-            JOIN (
-                SELECT room_id, MAX(date || ' ' || time) AS latest_timestamp
-                FROM tracking.RoomTime
-                GROUP BY room_id
-            ) latest_rt
-            ON r.room_id = latest_rt.room_id
-            JOIN tracking.RoomTime rt
-            ON rt.room_id = latest_rt.room_id AND (rt.date || ' ' || rt.time) = latest_rt.latest_timestamp;
+            SELECT r.room_id, r.room_name, r.threshold
+            FROM tracking.Room r;
+        
         `);
 
-
-        let obj = {
-            message: 'update',
-            data: JSON.stringify(queryResult.rows)
-        }
-        // Send data through WebSocket
-        wss.broadcast(JSON.stringify(obj));
-
-
         // Respond to the client with a success message
-        res.status(200).send({ message: 'Data sent through WebSocket.' });
+        res.status(200).send(queryResult[0]);
     } catch (error) {
         // Handle any errors that occur during the process
         console.error('Error:', error);
@@ -48,7 +29,8 @@ router.get('/heatmap-data/', async (req, res) => {
     }
 });
 
-router.post('/heatmap-update/', async (req, res) => {
+// post information about room occupancy
+router.post('/rooms/occupancy/', async (req, res) => {
     // Get the JSON string from the object keys
     const jsonString = Object.keys(req.body)[0];
 
