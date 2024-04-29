@@ -21,8 +21,7 @@ function HomePage() {
               <p>this panel is for selecting a specific room and showing the trends for a set time frame. will also test js graphs here.</p>
           </div>
           <div id="room-show">
-            <p>this is room information for selected room in overhead panel heatmap. that functions as the room list</p>
-            
+            <p>this is room information for selected room in overhead panel heatmap. that functions as the room list. information here will be basic statistics for each room throughout the week</p>
           </div>
           
         </div>

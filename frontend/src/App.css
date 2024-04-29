@@ -235,7 +235,7 @@ main{
   text-align: center;
 }
 
-#room-show{
+#room-graph-show{
   padding: 0%;
   margin:0 auto;
   background-color: whitesmoke;
@@ -245,17 +245,8 @@ main{
   grid-row-end: 4;
   grid-column-start: 1;
   grid-column-end: 2;
-  overflow: auto;
 }
-
-#room-show dt{
-  text-decoration: underline;
-  font-weight: bold;
-  border-top: 2px solid rgb(8, 65, 26);
-  padding: 5px;
-}
-
-#room-graph-show{
+#room-show{
   padding: 0%;
   margin:0 auto;
   background-color: whitesmoke;
