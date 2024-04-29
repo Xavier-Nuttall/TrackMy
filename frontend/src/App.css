@@ -246,6 +246,13 @@ main{
   grid-column-end: 2;
 }
 
+#room-show dt{
+  text-decoration: underline;
+  font-weight: bold;
+  border-top: 2px solid rgb(8, 65, 26);
+  padding: 5px;
+}
+
 #room-graph-show{
   padding: 0%;
   margin:0 auto;
