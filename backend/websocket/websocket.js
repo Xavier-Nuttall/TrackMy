@@ -22,14 +22,14 @@ const wss = new WebSocketServer({ server: server });
 
 console.log("Starting WebSocketServer")
 const handlers = {
-    "update": function update(ws, data) {
+    "update": function update(data) {
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(data));
             }
         });
     },
-    "print": function print(ws, data) {
+    "print": function print(data) {
         let obj;
         try {
             obj = JSON.parse(data);
@@ -40,7 +40,7 @@ const handlers = {
     }
 };
 
-function messageHandler(ws, data) {
+function messageHandler(data) {
     let obj;
     try {
         obj = JSON.parse(data);
@@ -49,13 +49,13 @@ function messageHandler(ws, data) {
     }
     if (!validateMessage(obj)) { return };
 
-    handlers[obj.type](ws, obj.data);
+    handlers[obj.type](obj.data);
 }
 
 wss.on('connection', (ws) => {
     ws.on('error', console.error);
 
-    ws.on('message', (data) => messageHandler(ws, data));
+    ws.on('message', messageHandler);
 
     ws.on('close', () => {
 
