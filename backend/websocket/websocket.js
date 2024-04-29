@@ -1,6 +1,8 @@
-const { WebSocket } = require('ws');
+const { WebSocketServer } = require('ws');
+const { createServer } = require('http');
 
-const wss = new WebSocket.Server({ port: 8081 });
+const server = createServer({port: 8081});
+const wss = new WebSocketServer({server: server});
 // Store active WebSocket connections
 
 console.log("Starting WebSocketServer")
@@ -81,4 +83,4 @@ wss.on('connection', (ws) => {
 
 console.log("Created WebSocketServer on port 8081");
 
-module.exports = wss;
+server.listen(8081);
