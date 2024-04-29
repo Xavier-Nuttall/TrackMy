@@ -33,7 +33,13 @@ function connect() {
     });
 
     ws.on('message', (data) => {
-        console.log('Received:', data);
+        let obj;
+        try {
+            obj = JSON.parse(data);
+        } catch (error) {
+            console.warn("Invalid JSON", error);
+        }
+        console.log('Received Message:', JSON.stringify(obj));
     });
 
     ws.onclose = () => {

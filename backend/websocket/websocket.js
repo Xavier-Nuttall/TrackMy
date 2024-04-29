@@ -1,76 +1,58 @@
-const { WebSocketServer } = require('ws');
+const { WebSocket, WebSocketServer } = require('ws');
 const { createServer } = require('http');
+const Ajv = require("ajv");
+const ajv = new Ajv();
 
-const server = createServer({port: 8081});
-const wss = new WebSocketServer({server: server});
+const schemaMessage = {
+    type: "object",
+    properties: {
+        type: { type: "string", enum: ["update", "print"] },
+        data: { type: "object" }
+    },
+
+    required: ["type", "data"],
+    additionalProperties: false
+};
+
+const validateMessage = ajv.compile(schemaMessage);
+
+const server = createServer({ port: 8081 });
+const wss = new WebSocketServer({ server: server });
 // Store active WebSocket connections
 
 console.log("Starting WebSocketServer")
-handlers = {
-    "update": update,
-    "print": print
-};
-function update(ws, data) {
-    broadcast("update" + data)
-    console.log('backend says hi');
-}
+const handlers = {
+    "update": function update(ws, data) {
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify(data));
+            }
+        });
+    },
+    "print": function print(ws, data) {
+        let obj;
+        try {
+            obj = JSON.parse(data);
+        } catch (error) {
 
-// Function to broadcast messages to all clients
-wss.broadcast = function broadcast(data) {
-    wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(data);
         }
-    });
+        console.log("Websocket Server Printing: " + JSON.stringify(obj));
+    }
 };
-
-function print(ws, data) {
-    console.log(data);
-
-}
 
 function messageHandler(ws, data) {
-    // Parse it
     let obj;
     try {
         obj = JSON.parse(data);
     } catch (error) {
-        console.error("Websocket parsing error")
-        ws.terminate();
-        return;
+        console.warn("Invalid JSON", error);
     }
+    if (!validateMessage(obj)) { return };
 
-    // this is just an example
-    if ("message" in obj && "data" in obj && obj.message in handlers) {
-        handlers[obj.message](ws, obj.data);
-    } else{
-        console.log("invalid handler");
-    }
-
-
+    handlers[obj.type](ws, obj.data);
 }
 
 wss.on('connection', (ws) => {
-    try {
-        const response = fetch('http://localhost:3001/api/heatmap-data', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const responseData = response.json();
-        console.log('Success:', responseData);
-    } catch (error) {
-        console.error('Error:', error.message);
-    }
-
-    console.log('Connection');
-
     ws.on('error', console.error);
 
     ws.on('message', (data) => messageHandler(ws, data));
