@@ -136,7 +136,7 @@ p{
     text-align: center;
 }
 
-#room-show{
+#room-graph-show{
     padding: 0%;
     margin:0 auto;
     background-color: whitesmoke;
@@ -147,8 +147,7 @@ p{
     grid-column-start: 1;
     grid-column-end: 2;
 }
-
-#room-graph-show{
+#room-show{
     padding: 0%;
     margin:0 auto;
     background-color: whitesmoke;
@@ -159,6 +158,7 @@ p{
     grid-column-start: 2;
     grid-column-end: 3;
 }
+
 
 #login-panel{
     background-color: whitesmoke;
