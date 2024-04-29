@@ -80,18 +80,17 @@ router.get('/rooms/occupancy/', async (req, res) => {
 
 // get information about a specific room
 router.get('/rooms/:id/', async (req, res) => {
-    console.log(req.params.id);
     try {
         const queryResult = await pool.query(`
             SELECT r.room_id, r.room_name, r.threshold
             FROM tracking.Room r
-            WHERE r.room_id = $1;
+            WHERE r.room_id = $1 LIMIT 1;
         `, [req.params.id]);
-        console.log(queryResult.rows);
         if (queryResult.rows.length === 0) {
             res.status(404).send("Room not found");
+            return;
         }
-        res.status(200).send(queryResult.rows);
+        res.status(200).send(queryResult.rows[0]);
     } catch (error) {
         res.status(500).send("Internal Server Error");
     }
@@ -109,6 +108,7 @@ router.get('/rooms/:id/occupancy/', async (req, res) => {
     `, [req.params.id]);
         if (queryResult.rows.length === 0) {
             res.status(404).send("Room not found");
+            return;
         }
         res.status(200).send(queryResult.rows);
     } catch (error) {
