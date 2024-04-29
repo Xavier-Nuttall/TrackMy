@@ -23,7 +23,7 @@ const validateRoomtime = ajv.compile(schemaRoomtime);
 
 let ws;
 // let ws = new WebSocket('ws://localhost:8081');
-connect();
+
 
 function connect() {
     console.log('Attempting WebSocket connection...')
@@ -43,14 +43,17 @@ function connect() {
     });
 
     ws.onclose = () => {
+        console.log('WebSocket connection closed');
         console.log('Attempting Reconnect');
         setTimeout(connect, 2000);
     };
     ws.onerror = (error) => {
         console.error(`WebSocket error: ${error}`);
-        ws.terminate();
+        ws.close();
     }
 }
+
+connect();
 
 router.get('/', async (req, res) => {
     console.log('api hit');
