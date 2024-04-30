@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
-import { useMainContent, useMenuOpen, useFloor } from './CustomHooks';
+import { useMainContent, useMenuOpen, useFloor, useRoom } from './CustomHooks';
 import '../FloorMap.css';
 import { Link } from 'react-router-dom';
+import Chart from 'chart.js/auto';
 
 
 let displayedRoomID;
@@ -18,12 +19,12 @@ let floorInfo = {
         occupancy: [],
         threshold: ""
     },
-    3: {
+    2: {
         name: "Room 3",
         occupancy: [],
         threshold: ""
     },
-    4: {
+    3: {
         name: "Room 4",
         occupancy: [],
         threshold: ""
@@ -44,7 +45,6 @@ async function fetchRoomData() {
         }
 
         const responseData = await response.json(); // assume responseData is an array of objects
-        console.log(responseData);
 
         // Update floorInfo based on responseData
         responseData.forEach(room => {
@@ -56,52 +56,48 @@ async function fetchRoomData() {
 
             if (floorInfo[roomId]) {
                 floorInfo[roomId].occupancy = room.occupancy; // assuming room.occupancy is an array
-                floorInfo[roomId].threshold = room.threshold; // assuming room.threshold is a string
             }
         });
-
-        console.log('Updated floorInfo:', floorInfo);
     } catch (error) {
         console.error('Error:', error.message);
     }
 }
 
-function GetFirstFloor() {
+async function fetchRoomThresholdData() {
+    try {
+        const response = await fetch('http://localhost:3001/api/rooms/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
-    const handleR1Click = () => {
-        displayedRoomID = 1;
-        console.log(displayedRoomID);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json(); // assume responseData is an array of objects
+
+        // Update floorInfo based on responseData
+        responseData.forEach(room => {
+            const roomId = room.room_id; // assuming each room object has a room_id
+            if (roomId === null) {
+                console.log("was null");
+                return;
+            }
+
+            if (floorInfo[roomId]) { // assuming room.occupancy is an array
+                floorInfo[roomId].name = room.room_name;
+                floorInfo[roomId].threshold = room.threshold; // assuming room.threshold is a string
+            }
+        });
+
+    } catch (error) {
+        console.error('Error:', error.message);
     }
-
-    const handleR2Click = () => {
-        displayedRoomID = 2;
-        console.log(displayedRoomID);
-
-    }
-
-    const handleR3Click = () => {
-        displayedRoomID = 3;
-        console.log(displayedRoomID);
-
-    }
-
-    const handleR4Click = () => {
-        displayedRoomID = 4;
-        console.log(displayedRoomID);
-
-    }
-
-    return (
-        <div className="floor">
-            <div className="room1" onClick={handleR1Click}><p></p></div>
-            <div className="room2" onClick={handleR2Click}></div>
-            <div className="room3" onClick={handleR3Click}></div>
-            <div className="room4" onClick={handleR4Click}></div>
-            <div className="untracked1"></div>
-            <div className="stairs1"></div>
-        </div>
-    );
 }
+
+
 
 function GetSecondFloor() {
 
@@ -141,12 +137,99 @@ function GetThirdFloor() {
     );
 }
 
+function generateLineGraph(roomId) {
+    const room = floorInfo[roomId];
+  
+    // Check if the room exists in floorInfo
+    if (!room) {
+      console.error(`Room ${roomId} not found in floorInfo`);
+      return;
+    }
+  
+    // Get the canvas element for the line graph
+    const canvas = document.getElementById('lineChart');
+  
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+  
+      // Destroy existing chart if it exists
+      if (window.chartInstance) {
+        window.chartInstance.destroy();
+      }
+
+      // Create the line chart for the specified room
+      window.chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: room.occupancy.map(data => data.value),
+          datasets: [{
+            label: `Occupancy for Room ${room.name}`,
+            data: room.occupancy.map(data => data.value),
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            },
+            x: {
+              display: false // Hide x-axis labels
+            }
+          }
+        }
+      });
+    }
+  }
+  
+
 const HomePage = () => {
-    fetchRoomData();
-    console.log(floorInfo);
 
     const [menuOpen, setMenuOpen] = useMenuOpen(true); // Set default menu open state to true
     const [floor, setFloor] = useFloor(<GetFirstFloor />);
+    const [room, setRoom] = useRoom(1);
+
+    function GetFirstFloor() {
+
+        const handleR1Click = () => {
+            setRoom(0);
+        }
+    
+        const handleR2Click = () => {
+            setRoom(1);
+        }
+    
+        const handleR3Click = () => {
+            setRoom(2);
+        }
+    
+        const handleR4Click = () => {
+            setRoom(3);
+        }
+    
+        return (
+            <div className="floor">
+                <div className="room1" onClick={handleR1Click}><p></p></div>
+                <div className="room2" onClick={handleR2Click}></div>
+                <div className="room3" onClick={handleR3Click}></div>
+                <div className="room4" onClick={handleR4Click}></div>
+                <div className="untracked1"></div>
+                <div className="stairs1"></div>
+            </div>
+        );
+    }
+
+    useEffect(() => {
+        console.log('Updated room:', room); // Log the updated room state
+        const fetchData = async () => {
+            await fetchRoomData();
+            await fetchRoomThresholdData();
+            generateLineGraph(room); // Generate graph after fetching data
+        };
+        fetchData();
+    }, [room]);
 
     const toggleFilter = () => {
         setMenuOpen(!menuOpen);
@@ -167,7 +250,6 @@ const HomePage = () => {
                 setFloor(null)
         }
     };
-
 
     return (
         <div className={`content-container${menuOpen ? '2' : '1'}`}>
@@ -208,23 +290,7 @@ const HomePage = () => {
                     </div>
 
                     <div id="room-show">
-                        <p>this is room information for selected room in overhead panel heatmap. that functions as the room list. information here will be basic statistics for each room throughout the week</p>
-                        <h1>Room X</h1>
-                        <table>
-                            <tr>
-                                <th>Variable</th> {/**what do i call this anyways  */}
-                                <th>Value</th>
-                            </tr>
-                            <tr>
-                                <td>Current Present</td>
-                            </tr>
-                            <tr>
-                                <td>Maximum this week</td>
-                            </tr>
-                            <tr>
-                                <td>Minimum this week</td>
-                            </tr>
-                        </table>
+                    <canvas id="lineChart"></canvas>
                     </div>
 
                 </div>
@@ -234,5 +300,7 @@ const HomePage = () => {
 
     );
 }
+
+
 
 export default HomePage;

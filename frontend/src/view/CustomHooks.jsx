@@ -14,3 +14,8 @@ export function useFloor(defaultFloor) {
     const [floor, setFloor] = useState(() => defaultFloor);
     return [floor, setFloor];
   }
+
+  export function useRoom(roomId) {
+    const [room, setRoom] = useState(() => roomId);
+    return [room, setRoom];
+  }
