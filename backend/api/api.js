@@ -207,15 +207,6 @@ router.post('/users/notifications/', async (req, res) => {
             return;
         }
         
-        // sends out the data to the websocket
-        // if ws is not attempted wait 
-        if (ws.readyState !== WebSocket.OPEN) {
-            res.status(500).send("Internal Server Error");
-            return;
-        }
-
-        ws.send(JSON.stringify({ type: "update", data: obj }));
-
         // adds the data to the database.
 
         const queryResult = await pool.query(`
