@@ -196,6 +196,25 @@ router.post('/rooms/occupancy/', async (req, res) => {
 
 });
 
+// gets info about notifications set up
+router.get('/users/notifications/', async (req, res) => {
+
+    try {
+        const queryResult = await pool.query(`
+            SELECT ut.user_id, ut.room_id, ut.room_threshold, ut.start_time, ut.end_time
+            FROM tracking.UserTimes ut;
+        
+        `);
+
+        // Respond to the client with a success message
+        res.status(200).send(queryResult.rows);
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error('Error:', error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 // posting a new notification
 router.post('/users/notifications/', async (req, res) => {
 
