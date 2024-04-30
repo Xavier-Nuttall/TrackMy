@@ -7,8 +7,68 @@ import NotifPage from './NotifPage';
 import RoomInformationPage from './RoomInformationPage';
 import {useMainContent, useMenuOpen, useFloor} from './CustomHooks';
 import '../FloorMap.css';
+import WebSocketComponent from './websocketcomponent';
 
 let displayedRoomID;
+
+let floorInfo = {
+  0: {
+    name: "Room 1",
+    occupancy: [],
+    threshold: ""
+  },
+  1: {
+    name: "Room 2",
+    occupancy: [],
+    threshold: ""
+  },
+  3: {
+    name: "Room 3",
+    occupancy: [],
+    threshold: ""
+  },
+  4: {
+    name: "Room 4",
+    occupancy: [],
+    threshold: ""
+  },
+};
+
+async function fetchRoomData() {
+  try {
+    const response = await fetch('http://localhost:3001/api/rooms/occupancy', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json(); // assume responseData is an array of objects
+    console.log(responseData);
+
+    // Update floorInfo based on responseData
+    responseData.forEach(room => {
+      const roomId = room.room_id; // assuming each room object has a room_id
+      if (roomId === null){
+        console.log("was null");
+        return; 
+      } 
+
+      if (floorInfo[roomId]) {
+        floorInfo[roomId].occupancy = room.occupancy; // assuming room.occupancy is an array
+        floorInfo[roomId].threshold = room.threshold; // assuming room.threshold is a string
+      }
+    });
+
+    console.log('Updated floorInfo:', floorInfo);
+  } catch (error) {
+     console.error('Error:', error.message);
+  }
+}
 
 function GetFirstFloor() {
 
@@ -92,7 +152,8 @@ function App() {
 
   
   const HomePage = () => {  
-    // Render the selected floor based on the state
+    fetchRoomData();
+    console.log(floorInfo);
    
     return (
       <main>
@@ -102,7 +163,7 @@ function App() {
   
             <div id="floor-select" >
               <dl>
-                <div onClick={() => handleFloorClick('F1')}><dt>F1</dt></div>
+                <dt onClick={() => handleFloorClick('F1')}>F1</dt>
                 <dt onClick={() => handleFloorClick('F2')}>F2</dt>
                 <dt onClick={() => handleFloorClick('F3')}>F3</dt>
               </dl>
@@ -147,11 +208,9 @@ function App() {
   const handleFloorClick = (floorNumber) => {
     switch (floorNumber) {
         case 'F1':
-          console.log("Yo1");
           setFloor(<GetFirstFloor />)
           break;
         case 'F2':
-          console.log("Yo");
           setFloor(<GetSecondFloor />)
           break;
         case 'F3':
@@ -163,10 +222,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log('Component rendered or count changed.');
-    // Any code you want to run as a side effect can go here
-    // For example, fetching data, subscribing to a service, etc.
-    console.log(floor);
     handleMainPageClick();
   }, [floor]);
 
@@ -213,9 +268,6 @@ function App() {
         <button className="sidebar-button" onClick={handleAccountSettingsPageClick}>Account Settings</button>
         <button className="sidebar-button" onClick={handleNotifPageClick}>Edit Notifications</button>
         <button className="sidebar-button" onClick={handleRoomInformationPageClick}>Room Information</button>
-
-
-
       </nav>
 
       {mainContent}
