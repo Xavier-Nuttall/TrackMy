@@ -1,0 +1,403 @@
+.floor {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    background: wheat;
+    display: flexbox;
+  }
+
+  .room1,
+  .room2,
+  .room3,
+  .room4,
+  .room5,
+  .room6,
+  .room7,
+  .room8,
+  .room9,
+  .untracked1,
+  .untracked2,
+  .untracked3,
+  .stairs1,
+  .stairs2,
+  .stairs3,
+  .stairs4,
+  .stairs5,
+  .stairs6,
+  .corridor1 {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+  }
+  
+  .room1:hover,
+  .room2:hover,
+  .room3:hover,
+  .room4:hover,
+  .room5:hover,
+  .room6:hover,
+  .room7:hover,
+  .room8:hover,
+  .room9:hover {
+    background: blue;
+  }
+  
+  .room1::after,
+  .room2::after,
+  .room3::after,
+  .room4::after,
+  .room5::after,
+  .room6::after,
+  .room7::after,
+  .room8::after,
+  .room9::after {
+    position: absolute;
+    background: grey;
+    clip-path: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .room1 {
+    width: 20%;
+    height: 80%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); 
+  }
+
+  .room1::after {
+    content: 'Room1';
+    width: 98%;
+    height: 98%;
+    left: 1.2%;
+  }
+  
+  .room2 {
+    width: 50%;
+    height:70%;
+    bottom: 0%;
+    margin-left: 20%;
+    clip-path: polygon(0% 0%, 30% 0%, 30% 30%, 80% 30%, 80% 0%, 100% 0%, 100% 71%, 70% 71%, 70% 100%, 50% 100%, 50% 71%, 0% 71%); 
+  }
+  
+  .room2::after {
+    content: 'Room2';
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+  
+  .room3 {
+    width: 30%;
+    height: 40%;
+    top: 0%;
+    margin-left: 70%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  
+  .room3::after {
+    content: 'Room3';
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .room4 {
+    width: 30%;
+    height: 40%;
+    top: 40%;
+    margin-left: 70%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .room4::after {
+    content: 'Room4';
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .room5 {
+    width: 30%;
+    height: 100%;
+    top: 0%;
+    margin-left: 0%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .room5::after {
+    content: 'Room5';
+    width: 96%;
+    height: 98%;
+    left: 2%;
+    top: 1%;
+  }
+
+  .room6 {
+    width: 30%;
+    height: 100%;
+    top: 0%;
+    margin-left: 70%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  
+  .room6::after {
+    content: 'Room7';
+    width: 96%;
+    height: 98%;
+    left: 2%;
+    top: 1%;
+  }
+
+  .room7 {
+    width: 40%;
+    height: 30%;
+    top: 0%;
+    margin-left: 0%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  
+  .room7::after {
+    content: 'Room7';
+    width: 96%;
+    height: 98%;
+    left: 2%;
+    top: 1%;
+  }
+
+  .room8 {
+    width: 40%;
+    height: 30%;
+    top: 70%;
+    margin-left: 0%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  
+  .room8::after {
+    content: 'Room8';
+    width: 96%;
+    height: 98%;
+    left: 2%;
+    top: 1%;
+  }
+
+  .room9 {
+    width: 60%;
+    height: 100%;
+    top: 0%;
+    margin-left: 40%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  
+  .room9::after {
+    content: 'Room8';
+    width: 96%;
+    height: 98%;
+    left: 2%;
+    top: 1%;
+  }
+
+  .untracked1::after,
+  .untracked2::after,
+  .untracked3::after{
+    position: absolute;
+    background: rgb(122, 21, 210);
+    clip-path: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .untracked1 {
+    width: 50%;
+    height: 30%;
+    top: 0%;
+    margin-left: 20%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .untracked1::after {
+    content: 'Untracked Facilities';
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .untracked2 {
+    width: 20%;
+    height: 60%;
+    top: 0%;
+    margin-left: 40%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .untracked2::after {
+    content: 'Untracked Facilities';
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .untracked3 {
+    width: 20%;
+    height: 40%;
+    top: 30%;
+    margin-left: 0%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .untracked3::after {
+    content: 'Untracked Facilities';
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .stairs1::after,
+  .stairs2::after,
+  .stairs3::after,
+  .stairs4::after,
+  .stairs5::after,
+  .stairs6::after {
+    position: absolute;
+    background: rgb(21, 119, 210);
+    clip-path: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stairs1 {
+    width: 25%;
+    height: 21%;
+    top: 30%;
+    margin-left: 35%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .stairs1::after {
+    content: 'Stairs'; /* Add your desired text here */
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .stairs2 {
+    width: 12%;
+    height: 12%;
+    top: 74%;
+    margin-left: 30%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .stairs2::after {
+    content: 'Stairs'; /* Add your desired text here */
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .stairs3 {
+    width: 12%;
+    height: 12%;
+    top: 74%;
+    margin-left: 58%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .stairs3::after {
+    content: 'Stairs'; /* Add your desired text here */
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .stairs4 {
+    width: 10%;
+    height: 60%;
+    top: 0%;
+    margin-left: 30%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .stairs4::after {
+    content: 'Stairs'; /* Add your desired text here */
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .stairs5 {
+    width: 10%;
+    height: 60%;
+    top: 0%;
+    margin-left: 60%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .stairs5::after {
+    content: 'Stairs'; /* Add your desired text here */
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .stairs6 {
+    width: 20%;
+    height: 40%;
+    top: 30%;
+    margin-left: 20%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  
+  .stairs6::after {
+    content: 'Stairs'; /* Add your desired text here */
+    width: 98%;
+    height: 97%;
+    left: 1.2%;
+    top: 0.8%;
+  }
+
+  .corridor1::after {
+    position: absolute;
+    background: green;
+    clip-path: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .corridor1 {
+    width: 41%;
+    height: 40%;
+    margin-left: 29.5%;
+    bottom: 0;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 35%, 70% 35%, 70% 65%, 100% 65%, 100% 100%, 0% 100%, 0% 65%, 30% 65%, 30% 35%, 0% 35%); 
+  }
+
+  .corridor1::after {
+    content: 'Corridor1';
+    width: 98%;
+    height: 98%;
+    left: 1.2%;
+  }
+  
+  

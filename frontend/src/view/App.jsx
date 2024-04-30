@@ -1,15 +1,126 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css';
-import HomePage from './home'
 import AboutUsPage from './AboutUs';
 import LoginPage from './Login';
 import AccountPage from './AccountPage';
 import NotifPage from './NotifPage';
 import RoomInformationPage from './RoomInformationPage';
+import {useMainContent, useMenuOpen, useFloor} from './CustomHooks';
+import '../FloorMap.css';
+
+let displayedRoomID;
+
+function GetFirstFloor() {
+
+  const handleR1Click = () => {
+    displayedRoomID = 1;
+  }
+
+
+  return (
+    <div className="floor">
+      <div className="room1" onClick={handleR1Click}><p></p></div>
+      <div className="room2" onClick={handleR1Click}></div>
+      <div className="room3" onClick={handleR1Click}></div>
+      <div className="room4" onClick={handleR1Click}></div>
+      <div className="untracked1"></div>
+      <div className="stairs1"></div>
+    </div>
+  );
+}
+
+function GetSecondFloor() {
+
+  const handleR1Click = () => {
+    displayedRoomID = 1;
+  }
+
+
+  return (
+    <div className="floor">
+      <div className="room5" onClick={handleR1Click}><p></p></div>
+      <div className="room6" onClick={handleR1Click}></div>
+      <div className="untracked2"></div>
+      <div className="corridor1"></div>
+      <div className="stairs2"></div>
+      <div className="stairs3"></div>
+      <div className="stairs4"></div>
+      <div className="stairs5"></div>
+      
+    </div>
+  );
+}
+
+function GetThirdFloor() {
+  const handleR1Click = () => {
+    displayedRoomID = 1;
+  }
+
+  return (
+    <div className="floor">
+      <div className="room7" onClick={handleR1Click}><p></p></div>
+      <div className="room8" onClick={handleR1Click}></div>
+      <div className="room9" onClick={handleR1Click}></div>
+      <div className="untracked3"></div>
+      <div className="stairs6"></div>
+    </div>
+  );
+}
+
 
 function App() {
-  const [mainContent, setMainContent] = useState(HomePage);
-  const [menuOpen, setMenuOpen] = useState(true);
+  const [menuOpen, setMenuOpen] = useMenuOpen(true); // Set default menu open state to true
+  const [floor, setFloor] = useFloor(<GetFirstFloor />);
+
+  
+  const HomePage = () => {  
+    // Render the selected floor based on the state
+   
+    return (
+      <main>
+        <div className="grid-contain" id="main-show">
+          <div id="graph-show">
+            {floor}
+  
+            <div id="floor-select" >
+              <dl>
+                <div onClick={() => handleFloorClick('F1')}><dt>F1</dt></div>
+                <dt onClick={() => handleFloorClick('F2')}>F2</dt>
+                <dt onClick={() => handleFloorClick('F3')}>F3</dt>
+              </dl>
+            </div>
+          </div>
+  
+          <div id="room-graph-show">
+            <p>this panel is for selecting a specific room and showing the trends for a set time frame. will also test js graphs here.</p>
+          </div>
+  
+          <div id="room-show">
+            <p>this is room information for selected room in overhead panel heatmap. that functions as the room list. information here will be basic statistics for each room throughout the week</p>
+            <h1>Room X</h1>
+            <table>
+              <tr>
+                <th>Variable</th> {/**what do i call this anyways  */}
+                <th>Value</th>
+              </tr>
+              <tr>
+                <td>Current Present</td>
+              </tr>
+              <tr>
+                <td>Maximum this week</td>
+              </tr>
+              <tr>
+                <td>Minimum this week</td>
+              </tr>
+            </table>
+          </div>
+  
+        </div>
+      </main>
+    );
+  }
+
+  const [mainContent, setMainContent] = useMainContent(HomePage); // Set default content to HomePage
 
   const toggleFilter = () => {
     setMenuOpen(!menuOpen);
@@ -18,6 +129,33 @@ function App() {
   const handleMainPageClick = () => {
     setMainContent(HomePage);
   }
+
+  const handleFloorClick = (floorNumber) => {
+    switch (floorNumber) {
+        case 'F1':
+          console.log("Yo1");
+          setFloor(<GetFirstFloor />)
+          break;
+        case 'F2':
+          console.log("Yo");
+          setFloor(<GetSecondFloor />)
+          break;
+        case 'F3':
+          setFloor(<GetThirdFloor />)
+          break;
+        default:
+          setFloor(null)
+    }
+  };
+
+  useEffect(() => {
+    console.log('Component rendered or count changed.');
+    // Any code you want to run as a side effect can go here
+    // For example, fetching data, subscribing to a service, etc.
+    console.log(floor);
+    handleMainPageClick();
+  }, [floor]);
+
 
   const handleAboutUsPageClick = () => {
     setMainContent(AboutUsPage);
@@ -39,23 +177,6 @@ function App() {
     setMainContent(RoomInformationPage);
   }
 
-  const [showSearchBox, setShowSearchBox] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const toggleSearch = () => {
-    setShowSearchBox(!showSearchBox);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    // Perform search action with searchTerm, e.g., fetch data or navigate to search results page
-    console.log('Search term:', searchTerm);
-  };
-
   return (
     <div className={`content-container${menuOpen ? '2' : '1'}`}>
       <div id="title">
@@ -67,9 +188,9 @@ function App() {
           </div>
         </div>
         <h1>TrackMy</h1>
-        <div className="search-button" onClick={toggleSearch}>
+        {/* <div className="search-button" onClick={toggleSearch}>
           <span className="icon"></span>
-        </div>
+        </div> */}
       </div>
       <nav className={`nav ${menuOpen ? 'open' : ''}`}>
         <button className="sidebar-button" onClick={handleMainPageClick}>Home</button>

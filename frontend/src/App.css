@@ -1,29 +1,29 @@
-.content-container1{
+.content-container1 {
   display: grid;
-  grid-template-areas: 
-  " title " 
-  " main ";
-  grid-template-rows: 80px 1fr; 
-  grid-template-columns: 1fr; 
+  grid-template-areas:
+    " title "
+    " main ";
+  grid-template-rows: 80px 1fr;
+  grid-template-columns: 1fr;
   min-height: 100vh;
   min-width: 100vw;
   transition: margin-left 0.3s ease;
 }
 
-.content-container2{
+.content-container2 {
   display: grid;
-  grid-template-areas: 
-  "title title" 
-  "sidebar main";
-  grid-template-rows: 80px 1fr; 
-  grid-template-columns: 252px 1fr; 
+  grid-template-areas:
+    "title title"
+    "sidebar main";
+  grid-template-rows: 80px 1fr;
+  grid-template-columns: 252px 1fr;
   min-height: 100vh;
   min-width: 100vw;
 }
 
-nav{
+nav {
   position: relative;
-  float:left;
+  float: left;
   background-color: rgba(47, 85, 107, 1);
   width: 247px;
   height: 100%;
@@ -43,27 +43,27 @@ nav{
   transform: translateX(0);
 }
 
-#title{
+#title {
   position: relative;
   background-color: darkolivegreen;
   width: 100%;
   height: 75px;
   grid-area: title;
   display: grid;
-  grid-template-areas: 
-  "menu name welcome";
-  grid-template-columns: 60px auto 60px; 
+  grid-template-areas:
+    "menu name welcome";
+  grid-template-columns: 60px auto 60px;
   background-image: linear-gradient(to right, darkolivegreen, #000000);
   border-bottom: 5px solid black;
 }
 
-#title h1{
+#title h1 {
   position: relative;
   text-align: center;
   padding: 0%;
   margin: 0%;
-  color:whitesmoke;
-  font-family:'Courier New', Courier, monospace;
+  color: whitesmoke;
+  font-family: 'Courier New', Courier, monospace;
   font-size: 36pt;
   line-height: 75px;
   text-decoration: underline;
@@ -73,31 +73,31 @@ nav{
 .bar1,
 .bar2,
 .bar3 {
-    width: 40px;
-    height: 5px;
-    background-color: white;
-    border-radius: 5px;
-    margin: 6px 0;
-    transition: 0.4s;
+  width: 40px;
+  height: 5px;
+  background-color: white;
+  border-radius: 5px;
+  margin: 6px 0;
+  transition: 0.4s;
 }
 
 #menu {
-    margin-top: 7px;
-    margin-left: 10px;
-    width: 40px;
-    height: 40px;
+  margin-top: 7px;
+  margin-left: 10px;
+  width: 40px;
+  height: 40px;
 }
 
 .change .bar1 {
-    transform: translate(0, 11px) rotate(-45deg);
+  transform: translate(0, 11px) rotate(-45deg);
 }
 
 .change .bar2 {
-    opacity: 0;
+  opacity: 0;
 }
 
 .change .bar3 {
-    transform: translate(0, -11px) rotate(45deg);
+  transform: translate(0, -11px) rotate(45deg);
 }
 
 #menu-button {
@@ -121,7 +121,8 @@ nav{
   display: inline-block;
   width: 35px;
   height: 30px;
-  background-image: url('../public/mgicon.png'); /* Replace with your icon image */
+  background-image: url('../public/mgicon.png');
+  /* Replace with your icon image */
   background-size: cover;
   margin-left: 10px;
   margin-bottom: 10px;
@@ -141,7 +142,7 @@ nav{
   width: 100%;
   height: 100%;
   text-decoration: none;
-  color:whitesmoke;
+  color: whitesmoke;
   font-size: 15pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   border: none;
@@ -170,7 +171,7 @@ nav{
   max-height: auto;
 }
 
-main{
+main {
   position: relative;
   background-color: rgba(107, 85, 47, 1);
   width: 100%;
@@ -180,21 +181,22 @@ main{
   grid-area: main;
 }
 
-.grid-contain{
+.grid-contain {
   height: 98%;
   margin: 1%;
-  display:grid;
+  display: grid;
   gap: 1%;
 }
 
-#main-show{
+#main-show {
   grid-template-columns: 50% 50%;
-  grid-template-rows: 10% 50%; /*???*/
+  grid-template-rows: 10% 50%;
+  /*???*/
 }
 
-#graph-show{
+#graph-show {
   padding: 0%;
-  margin:0 auto;
+  margin: 0 auto;
   background-color: whitesmoke;
   width: 100%;
   height: 100%;
@@ -203,29 +205,31 @@ main{
   grid-row-end: 3;
   grid-column-start: 1;
   grid-column-end: 3;
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#floor-select{
+#floor-select {
   padding: 0%;
-  margin:0;
+  margin: 0;
   background-color: rgb(36, 48, 16);
   position: absolute;
-  right:10px;
-  bottom:10px;
+  right: 10px;
+  bottom: 10px;
   width: 50px;
   height: 128px;
 
 }
 
-#floor-select dl{
+#floor-select dl {
   padding: 0%;
-  margin:2px auto;
-  width:75%;
-  
+  margin: 2px auto;
+  width: 75%;
+
 }
 
-#floor-select dt{
+#floor-select dt {
   margin: 2px 2px;
   height: 40px;
   background-color: whitesmoke;
@@ -235,9 +239,9 @@ main{
   text-align: center;
 }
 
-#room-graph-show{
+#room-graph-show {
   padding: 0%;
-  margin:0 auto;
+  margin: 0 auto;
   background-color: whitesmoke;
   width: 100%;
   height: 100%;
@@ -246,9 +250,10 @@ main{
   grid-column-start: 1;
   grid-column-end: 2;
 }
-#room-show{
+
+#room-show {
   padding: 0%;
-  margin:0 auto;
+  margin: 0 auto;
   background-color: whitesmoke;
   width: 100%;
   height: 100%;
@@ -259,7 +264,7 @@ main{
   overflow: auto;
 }
 
-#login-panel{
+#login-panel {
   background-color: whitesmoke;
   width: 100%;
   height: 99%;
@@ -267,7 +272,7 @@ main{
   grid-row-end: 2;
 }
 
-#register-panel{
+#register-panel {
   background-color: whitesmoke;
   width: 100%;
   height: 99%;
@@ -275,7 +280,7 @@ main{
   grid-row-end: 3;
 }
 
-#top-set{
+#top-set {
   padding: 0%;
   margin: 0%;
   background-color: transparent;
@@ -286,7 +291,7 @@ main{
   gap: 1%;
 }
 
-#new-notif{
+#new-notif {
   padding: 0;
   margin: 0;
   background-color: whitesmoke;
@@ -294,7 +299,7 @@ main{
   width: 100%;
 }
 
-#mini-map{
+#mini-map {
   padding: 0;
   margin: 0;
   background-color: whitesmoke;
@@ -302,7 +307,7 @@ main{
   width: 100%;
 }
 
-#full-list{
+#full-list {
   background-color: whitesmoke;
   width: 100%;
   height: 98%;
@@ -316,7 +321,7 @@ main{
   padding: 5px;
 }
 
-.general-panel{
+.general-panel {
   padding: 0%;
   margin: 1%;
   background-color: whitesmoke;
@@ -325,26 +330,26 @@ main{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.general-panel h1{
+.general-panel h1 {
   padding: 0%;
   margin: 0%;
   text-align: center;
-  
+
 }
 
-.general-panel p{
+.general-panel p {
   margin: 0 5px;
 }
 
-input{
+input {
   width: 100%;
   border: 2px solid rgb(71, 111, 60);
   border-radius: 2px;
 }
 
-input[type=submit]{
-  background-color:rgb(71, 111, 60);
-  color:whitesmoke;
+input[type=submit] {
+  background-color: rgb(71, 111, 60);
+  color: whitesmoke;
   font-size: 12pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   border: 2px solid whitesmoke;
@@ -360,26 +365,26 @@ select {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#new-notif fieldset{
+#new-notif fieldset {
   height: 92.5%;
 }
 
-#login-panel fieldset{
+#login-panel fieldset {
   height: 92.5%;
 }
 
-#register-panel fieldset{
+#register-panel fieldset {
   height: 92.5%;
 }
 
-legend{
+legend {
   font-weight: bold;
 }
 
-button{
+button {
   position: relative;
   background: rgba(47, 85, 107, 1);
-  color:whitesmoke;
+  color: whitesmoke;
   font-size: 12pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
@@ -388,10 +393,10 @@ button{
   border: none;
 }
 
-button:hover{
+button:hover {
   position: relative;
   background: rgba(47, 85, 107, 0.8);
-  color:whitesmoke;
+  color: whitesmoke;
   font-size: 12pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
@@ -399,10 +404,10 @@ button:hover{
   height: 10%;
 }
 
-.sidebar-button{
+.sidebar-button {
   position: relative;
   background: rgba(47, 85, 107, 1);
-  color:whitesmoke;
+  color: whitesmoke;
   font-size: 12pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
@@ -411,10 +416,10 @@ button:hover{
   border: none;
 }
 
-.sidebar-button:hover{
+.sidebar-button:hover {
   position: relative;
   background: rgba(255, 255, 255, 0.2);
-  color:whitesmoke;
+  color: whitesmoke;
   font-size: 12pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
