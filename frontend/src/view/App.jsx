@@ -14,15 +14,33 @@ function GetFirstFloor() {
 
   const handleR1Click = () => {
     displayedRoomID = 1;
+    console.log(displayedRoomID);
   }
 
+  const handleR2Click = () => {
+    displayedRoomID = 2;
+    console.log(displayedRoomID);
+
+  }
+
+  const handleR3Click = () => {
+    displayedRoomID = 3;
+    console.log(displayedRoomID);
+
+  }
+
+  const handleR4Click = () => {
+    displayedRoomID = 4;
+    console.log(displayedRoomID);
+
+  }
 
   return (
     <div className="floor">
       <div className="room1" onClick={handleR1Click}><p></p></div>
-      <div className="room2" onClick={handleR1Click}></div>
-      <div className="room3" onClick={handleR1Click}></div>
-      <div className="room4" onClick={handleR1Click}></div>
+      <div className="room2" onClick={handleR2Click}></div>
+      <div className="room3" onClick={handleR3Click}></div>
+      <div className="room4" onClick={handleR4Click}></div>
       <div className="untracked1"></div>
       <div className="stairs1"></div>
     </div>
@@ -89,10 +107,6 @@ function App() {
                 <dt onClick={() => handleFloorClick('F3')}>F3</dt>
               </dl>
             </div>
-          </div>
-  
-          <div id="room-graph-show">
-            <p>this panel is for selecting a specific room and showing the trends for a set time frame. will also test js graphs here.</p>
           </div>
   
           <div id="room-show">
