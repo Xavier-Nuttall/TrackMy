@@ -10,13 +10,24 @@ const schemaRoomtime = {
     type: "object",
     properties: {
         room_id: { type: "number" },
-        time: { type: "string" },
+        time: { type: "number" },
         occupancy: { type: "number" }
     },
     required: ["room_id", "time", "occupancy"],
     additionalProperties: false
 }
 
+const schemaRoom = {
+    type: "object",
+    properties: {
+        room_name: { type: "string" },
+        threshold: { type: "number" }
+    },
+    required: ["room_name", "threshold"],
+    additionalProperties: false
+}
+
+const validateRoom = ajv.compile(schemaRoom);
 const schemaUsertime = {
     type: "object",
     properties: {
@@ -53,7 +64,7 @@ function connect() {
         } catch (error) {
             console.warn("Invalid JSON", error);
         }
-        console.log('Received Message:', JSON.stringify(obj));
+        // console.log('Received Message:', JSON.stringify(obj));
     });
 
     ws.onclose = () => {
@@ -168,7 +179,7 @@ router.post('/rooms/occupancy/', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        
+
         // sends out the data to the websocket
         // if ws is not attempted wait 
         if (ws.readyState !== WebSocket.OPEN) {
@@ -182,8 +193,8 @@ router.post('/rooms/occupancy/', async (req, res) => {
 
         const queryResult = await pool.query(`
             INSERT INTO tracking.RoomTime (room_id, time, occupancy)
-            VALUES ($1, $2, $3);
-        `, [obj.room_id, obj.time, obj.occupancy]);
+            VALUES ($1, to_timestamp($2), $3);
+        `, [obj.room_id, obj.time / 1000, obj.occupancy]);
 
         // if the query failed send an error message
 
@@ -196,6 +207,28 @@ router.post('/rooms/occupancy/', async (req, res) => {
 
 });
 
+router.post('/rooms/', async (req, res) => {
+    try {
+        const obj = req.body;
+        if (!validateRoom(obj)) {
+            console.error("Failed to create room")
+            res.status(400).send("Bad Request");
+            return;
+        }
+
+        const queryResult = await pool.query(`
+            INSERT INTO tracking.Room (room_name, threshold)
+            VALUES ($1, $2)
+            RETURNING room_id;
+        `, [obj.room_name, obj.threshold]);
+        ret = queryResult.rows[0];
+        console.log(ret)
+        res.status(201).send(ret);
+    } catch (error) {
+
+
+    }
+});
 // gets info about notifications set up
 router.get('/users/notifications/', async (req, res) => {
 
@@ -257,7 +290,7 @@ router.post('/users/notifications/:', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        
+
         // adds the data to the database.
 
         const queryResult = await pool.query(`
