@@ -85,8 +85,21 @@ router.get('/rooms/occupancy/', async (req, res) => {
             SELECT t.room_id, t.time, t.occupancy
             FROM tracking.RoomTime t;
         `);
-        res.status(200).send(queryResult.rows);
+
+
+        // reduce the return from the database into something more readable
+        let returnArray = [];
+        for (l in queryResult.rows) {
+            obj = queryResult.rows[l];
+            console.log(obj);
+            if (!returnArray[obj.room_id]) {
+                returnArray[obj.room_id] = { room_id: obj.room_id, occupancy: [] };
+            }
+            returnArray[obj.room_id].occupancy.push({ time: obj.time, value: obj.occupancy });
+        }
+        res.status(200).send(returnArray);
     } catch (error) {
+        console.error('Error:', error);
         res.status(500).send("Internal Server Error");
     }
 });

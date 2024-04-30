@@ -1,0 +1,20 @@
+[
+  {
+    "name": "The Big Room",
+    "occupancy": [
+      { "time": 12879378912938, "value": 12 },
+      { "time": 12879378912938, "value": 12 }
+    ],
+    "threshhold": 123
+  },
+  {
+    "room0002": {
+      "name": "The Small Room",
+      "occupancy": [
+        { "time": 12879378912938, "value": 12 },
+        { "time": 12879378912938, "value": 12 }
+      ],
+      "threshhold": 123
+    }
+  }
+]
