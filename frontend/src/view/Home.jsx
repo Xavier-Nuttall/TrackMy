@@ -57,6 +57,13 @@ async function fetchRoomData() {
             if (floorInfo[roomId]) {
                 floorInfo[roomId].occupancy = room.occupancy; // assuming room.occupancy is an array
             }
+            else{
+                floorInfo[roomId] = {
+                    name: "",
+                    occupancy: room.occupancy,
+                    threshold: ""
+                };
+            }
         });
     } catch (error) {
         console.error('Error:', error.message);
@@ -97,46 +104,6 @@ async function fetchRoomThresholdData() {
     }
 }
 
-
-
-function GetSecondFloor() {
-
-    const handleR1Click = () => {
-        displayedRoomID = 1;
-    }
-
-
-    return (
-        <div className="floor">
-            <div className="room5" onClick={handleR1Click}><p></p></div>
-            <div className="room6" onClick={handleR1Click}></div>
-            <div className="untracked2"></div>
-            <div className="corridor1"></div>
-            <div className="stairs2"></div>
-            <div className="stairs3"></div>
-            <div className="stairs4"></div>
-            <div className="stairs5"></div>
-
-        </div>
-    );
-}
-
-function GetThirdFloor() {
-    const handleR1Click = () => {
-        displayedRoomID = 1;
-    }
-
-    return (
-        <div className="floor">
-            <div className="room7" onClick={handleR1Click}><p></p></div>
-            <div className="room8" onClick={handleR1Click}></div>
-            <div className="room9" onClick={handleR1Click}></div>
-            <div className="untracked3"></div>
-            <div className="stairs6"></div>
-        </div>
-    );
-}
-
 function generateLineGraph(roomId) {
     const room = floorInfo[roomId];
   
@@ -161,7 +128,7 @@ function generateLineGraph(roomId) {
       window.chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: room.occupancy.map(data => data.value),
+          labels: room.occupancy.map(data => data.time),
           datasets: [{
             label: `Occupancy for Room ${room.name}`,
             data: room.occupancy.map(data => data.value),
@@ -183,7 +150,7 @@ function generateLineGraph(roomId) {
       });
     }
   }
-  
+
 
 const HomePage = () => {
 
@@ -217,6 +184,54 @@ const HomePage = () => {
                 <div className="room4" onClick={handleR4Click}></div>
                 <div className="untracked1"></div>
                 <div className="stairs1"></div>
+            </div>
+        );
+    }
+
+    function GetSecondFloor() {
+
+        const handleR5Click = () => {
+            setRoom(4);
+        }
+        
+        const handleR6Click = () => {
+            setRoom(5);
+        }
+        return (
+            <div className="floor">
+                <div className="room5" onClick={handleR5Click}><p></p></div>
+                <div className="room6" onClick={handleR6Click}></div>
+                <div className="untracked2"></div>
+                <div className="corridor1"></div>
+                <div className="stairs2"></div>
+                <div className="stairs3"></div>
+                <div className="stairs4"></div>
+                <div className="stairs5"></div>
+    
+            </div>
+        );
+    }
+
+    function GetThirdFloor() {
+        const handleR7Click = () => {
+            setRoom(6);
+        }
+
+        const handleR8Click = () => {
+            setRoom(7);
+        }
+
+        const handleR9Click = () => {
+            setRoom(8);
+        }
+    
+        return (
+            <div className="floor">
+                <div className="room7" onClick={handleR7Click}><p></p></div>
+                <div className="room8" onClick={handleR8Click}></div>
+                <div className="room9" onClick={handleR9Click}></div>
+                <div className="untracked3"></div>
+                <div className="stairs6"></div>
             </div>
         );
     }
