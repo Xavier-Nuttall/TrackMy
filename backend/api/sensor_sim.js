@@ -1,77 +1,81 @@
+const startTime = Date.parse("1970-01-01T08:00:00Z");
+const endTime = Date.parse("1970-01-01T18:00:00Z");
+const days = 7;
+const steps = 10;
 
-async function generateRandomData() {
-    const startTime = new Date();
-    startTime.setHours(1, 0, 0, 0); // Set start time to 12:00 am
 
-    const endTime = new Date();
-    endTime.setHours(23, 59, 59, 999); // Set end time to 11:59 pm
+function generateRandomFunction() {
+    const numFunctions = 100;
+    const functions = [];
+    const mean = 0.2;
+    const std = 0.8;
 
-    const data = [];
-    let currentTime = new Date(startTime);
+    for (let i = 0; i < numFunctions; i++) {
+        const amplitude = 1 / ((Math.random() * std + mean) * (i + 1) ** 2);
+        const frequency = (Math.random() * std + mean) * i;
 
-    // Get the current date and time in YYYY-MM-DD HH:mm:ss format
-    const currentDate = new Date().toISOString().slice(0, 10);
-
-    while (currentTime <= endTime) {
-        const time = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-        let change = Math.random() < 0.2 ? 1 : -1;
-
-        // Adjust change probability based on time
-        if (currentTime.getHours() >= 7 && currentTime.getHours() < 12) {
-            change = Math.random() < 0.7 ? 1 : -1; // Higher chance of +1 between 7 am and 12 pm
-        }
-
-        // Adjust change probability based on time
-        if (currentTime.getHours() >= 12 && currentTime.getHours() < 15) {
-            change = Math.random() < 0.3 ? 1 : -1; // Higher chance of +1 between 7 am and 12 pm
-        }
-
-        // Adjust change probability based on time
-        if (currentTime.getHours() >= 15 && currentTime.getHours() < 19) {
-            change = Math.random() < 0.7 ? 1 : -1; // Higher chance of +1 between 7 am and 12 pm
-        }
-
-        const timestamp = `${currentDate} ${time}:00`;
-        //console.log(timestamp);
-
-        for(let i = 1; i < 3; i++){
-            data.push({ room_id: i, change: change, date: currentDate, time: timestamp });
-        }
-        currentTime.setMinutes(currentTime.getMinutes() + Math.floor(Math.random() * 10)); // Add random minutes
+        functions.push((x) => amplitude * Math.sin(frequency * x));
     }
 
-    let i = 0; // Initialize i outside of setInterval
+    return (x) => functions.reduce((sum, func) => sum + func(x), 0);
+}
 
-    const intervalId = setInterval(async () => {
-        if (i >= data.length) {
-            clearInterval(intervalId); // Stop interval when all requests are sent
-            return;
-        }
+function generateDay(startTime, endTime, steps) {
+    const data = [];
+    const N = 1/steps; // out x values
+    const duration = (endTime - startTime)
+    const randomFunction = generateRandomFunction();
 
-        try {
-            const response = await fetch('http://localhost:3001/api/rooms/occapancy', {
+
+
+    for (let i = 0; i < steps + 1; i++) {
+        data.push({ time: startTime + duration * i * N, value: randomFunction(N*i * Math.PI) });
+    }
+
+    const endValue = data[data.length - 1].value;
+    // subtract off x*endValue from each and take the absolute value
+    for (let i = 0; i < data.length; i++) {
+        data[i].value = Math.round(Math.abs(data[i].value-i*N*endValue) * 20);
+    }
+
+    return data;
+}
+
+async function generateRoom(days, startTime, endTime, steps, name) {
+    const threshold = Math.floor(Math.random() * 20 + 4);
+    // add the room to the database
+    ret = await fetch('http://localhost:3001/api/rooms',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({room_name: name, threshold: threshold})
+    })
+
+    // get the body of the fetch back and save it as room id
+    const room_id = await ret.json();
+    rId = room_id.room_id;
+
+
+    // generate the data for each day
+    for (let i = 0; i < 7; i++) {
+        const data = generateDay(startTime + i * 24 * 60 * 60 * 1000, endTime + i * 24 * 60 * 60 * 1000, steps);
+        console.log(data)
+        for (j in data){
+            ret = await fetch('http://localhost:3001/api/rooms/occupancy',{
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data[i]),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const responseData = await response.json();
-            console.log('Success:', responseData);
-        } catch (error) {
-            console.error('Error:', error.message);
+                body: JSON.stringify({room_id: rId, time: data[j].time, occupancy: data[j].value})
+            })
         }
 
-        i++; // Increment i after each request
-    }, 2000); // Set interval to 5 seconds
-
+    }
 
 }
 
-generateRandomData();
+generateRoom(days, startTime, endTime, steps, 'Room 1')
+
+
 

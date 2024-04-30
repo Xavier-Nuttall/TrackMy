@@ -10,7 +10,7 @@ const schemaRoomtime = {
     type: "object",
     properties: {
         room_id: { type: "number" },
-        time: { type: "string" },
+        time: { type: "number" },
         occupancy: { type: "number" }
     },
     required: ["room_id", "time", "occupancy"],
@@ -50,7 +50,7 @@ function connect() {
         } catch (error) {
             console.warn("Invalid JSON", error);
         }
-        console.log('Received Message:', JSON.stringify(obj));
+        // console.log('Received Message:', JSON.stringify(obj));
     });
 
     ws.onclose = () => {
@@ -179,8 +179,8 @@ router.post('/rooms/occupancy/', async (req, res) => {
 
         const queryResult = await pool.query(`
             INSERT INTO tracking.RoomTime (room_id, time, occupancy)
-            VALUES ($1, $2, $3);
-        `, [obj.room_id, obj.time, obj.occupancy]);
+            VALUES ($1, to_timestamp($2), $3);
+        `, [obj.room_id, obj.time/1000, obj.occupancy]);
 
         // if the query failed send an error message
 
@@ -207,7 +207,9 @@ router.post('/rooms/', async (req, res) => {
             VALUES ($1, $2)
             RETURNING room_id;
         `, [obj.room_name, obj.threshold]);
-        res.status(204).send(queryResult.rows[0]);
+        ret = queryResult.rows[0];
+        console.log(ret)
+        res.status(201).send(ret);
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send("Internal Server Error");
