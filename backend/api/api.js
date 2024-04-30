@@ -17,6 +17,17 @@ const schemaRoomtime = {
     additionalProperties: false
 }
 
+const schemaRoom = {
+    type: "object",
+    properties: {
+        room_name: { type: "string" },
+        threshold: { type: "number" }
+    },
+    required: ["room_name", "threshold"],
+    additionalProperties: false
+}
+
+const validateRoom = ajv.compile(schemaRoom);
 const validateRoomtime = ajv.compile(schemaRoomtime);
 
 // // Create a WebSocket connection outside of route handlers
@@ -154,7 +165,7 @@ router.post('/rooms/occupancy/', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        
+
         // sends out the data to the websocket
         // if ws is not attempted wait 
         if (ws.readyState !== WebSocket.OPEN) {
@@ -180,6 +191,27 @@ router.post('/rooms/occupancy/', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 
+});
+
+router.post('/rooms/', async (req, res) => { 
+    try {
+        const obj = req.body;
+        if (!validateRoom(obj)) {
+            console.error("Failed to create room")
+            res.status(400).send("Bad Request");
+            return;
+        }
+
+        const queryResult = await pool.query(`
+            INSERT INTO tracking.Room (room_name, threshold)
+            VALUES ($1, $2)
+            RETURNING room_id;
+        `, [obj.room_name, obj.threshold]);
+        res.status(204).send(queryResult.rows[0]);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 module.exports = router; 
