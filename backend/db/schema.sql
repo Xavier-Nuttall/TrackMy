@@ -45,7 +45,7 @@ CREATE TABLE tracking.RoomTime(
 
     CONSTRAINT fk_roomtime FOREIGN KEY (room_id) REFERENCES tracking.Room(room_id),
 
-    PRIMARY KEY (room_id, date, time)
+    PRIMARY KEY (room_id, time)
 );
 
 
