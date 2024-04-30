@@ -17,7 +17,21 @@ const schemaRoomtime = {
     additionalProperties: false
 }
 
+const schemaUsertime = {
+    type: "object",
+    properties: {
+        user_id: { type: "number" },
+        room_id: { type: "number" },
+        room_threshold: { type: "number" },
+        start_time: { type: "string" },
+        end_time: { type: "string" }
+    },
+    required: ["room_id", "time", "occupancy"],
+    additionalProperties: false
+}
+
 const validateRoomtime = ajv.compile(schemaRoomtime);
+const validateUsertime = ajv.compile(schemaUsertime);
 
 // // Create a WebSocket connection outside of route handlers
 
@@ -181,5 +195,7 @@ router.post('/rooms/occupancy/', async (req, res) => {
     }
 
 });
+
+
 
 module.exports = router; 
