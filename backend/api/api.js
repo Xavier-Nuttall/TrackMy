@@ -196,6 +196,42 @@ router.post('/rooms/occupancy/', async (req, res) => {
 
 });
 
+// posting a new notification
+router.post('/users/notifications/', async (req, res) => {
 
+    try {
+        const obj = req.body;
+        // check the post message for the correct fields
+        if (!validateUsertime(obj)) {
+            res.status(400).send("Bad Request");
+            return;
+        }
+        
+        // sends out the data to the websocket
+        // if ws is not attempted wait 
+        if (ws.readyState !== WebSocket.OPEN) {
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+
+        ws.send(JSON.stringify({ type: "update", data: obj }));
+
+        // adds the data to the database.
+
+        const queryResult = await pool.query(`
+            INSERT INTO tracking.UserTimes (user_id, room_id, start_time, end_time)
+            VALUES ($1, $2, $3, $4);
+        `, [obj.user_id, obj.room_id, obj.start_time, obj.end_time]);
+
+        // if the query failed send an error message
+
+        res.status(204).send('');
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error('Error:', error);
+        res.status(500).send("Internal Server Error");
+    }
+
+});
 
 module.exports = router; 
