@@ -128,7 +128,7 @@ router.get('/rooms/:id/', async (req, res) => {
 router.get('/rooms/:id/occupancy/', async (req, res) => {
     try {
         const queryResult = await pool.query(`
-        SELECT t.time, t.occupancy
+        SELECT t.time, t.occupancy as value
         FROM tracking.RoomTime t
         WHERE t.room_id = $1;
     `, [req.params.id]);
