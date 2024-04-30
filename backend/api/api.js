@@ -28,7 +28,21 @@ const schemaRoom = {
 }
 
 const validateRoom = ajv.compile(schemaRoom);
+const schemaUsertime = {
+    type: "object",
+    properties: {
+        user_id: { type: "number" },
+        room_id: { type: "number" },
+        room_threshold: { type: "number" },
+        start_time: { type: "string" },
+        end_time: { type: "string" }
+    },
+    required: ["user_id", "room_id", "room_threshold", "start_time", "end-time"],
+    additionalProperties: false
+}
+
 const validateRoomtime = ajv.compile(schemaRoomtime);
+const validateUsertime = ajv.compile(schemaUsertime);
 
 // // Create a WebSocket connection outside of route handlers
 
@@ -180,7 +194,7 @@ router.post('/rooms/occupancy/', async (req, res) => {
         const queryResult = await pool.query(`
             INSERT INTO tracking.RoomTime (room_id, time, occupancy)
             VALUES ($1, to_timestamp($2), $3);
-        `, [obj.room_id, obj.time/1000, obj.occupancy]);
+        `, [obj.room_id, obj.time / 1000, obj.occupancy]);
 
         // if the query failed send an error message
 
@@ -193,7 +207,7 @@ router.post('/rooms/occupancy/', async (req, res) => {
 
 });
 
-router.post('/rooms/', async (req, res) => { 
+router.post('/rooms/', async (req, res) => {
     try {
         const obj = req.body;
         if (!validateRoom(obj)) {
@@ -211,9 +225,56 @@ router.post('/rooms/', async (req, res) => {
         console.log(ret)
         res.status(201).send(ret);
     } catch (error) {
+
+
+    }
+});
+// gets info about notifications set up
+router.get('/users/notifications/', async (req, res) => {
+
+    try {
+        const queryResult = await pool.query(`
+            SELECT ut.user_id, ut.room_id, ut.room_threshold, ut.start_time, ut.end_time
+            FROM tracking.UserTimes ut;
+        
+        `);
+
+        // Respond to the client with a success message
+        res.status(200).send(queryResult.rows);
+    } catch (error) {
+        // Handle any errors that occur during the process
         console.error('Error:', error);
         res.status(500).send("Internal Server Error");
     }
+});
+
+// posting a new notification
+router.post('/users/notifications/', async (req, res) => {
+
+    try {
+        const obj = req.body;
+        // check the post message for the correct fields
+        if (!validateUsertime(obj)) {
+            res.status(400).send("Bad Request");
+            return;
+        }
+
+        // adds the data to the database.
+
+        const queryResult = await pool.query(`
+            INSERT INTO tracking.UserTimes (user_id, room_id, room_threshold, start_time, end_time)
+            VALUES ($1, $2, $3, $4);
+        `, [obj.user_id, obj.room_id, obj.room_threshold, obj.start_time, obj.end_time]);
+
+        // if the query failed send an error message
+
+        res.status(204).send('');
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error('Error:', error);
+        res.status(500).send("Internal Server Error");
+    }
+
 });
 
 module.exports = router; 

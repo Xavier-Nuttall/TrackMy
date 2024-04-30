@@ -9,7 +9,8 @@ const WebSocketComponent = () => {
 
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:3001/api/heatmap-data');
+                const response = await fetch('http://localhost:3001/api/rooms/1/occupancy/');
+                console.log('trying');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -72,20 +73,7 @@ const WebSocketComponent = () => {
         }
     };
 
-    return (
-        <div>
-            <h1>Data from Database (Updates dynamically)</h1>
-            <ul>
-            {Array.isArray(rooms) && rooms.map((room, index) => (
-                    <li key={index}>
-                        Room Name: {room.room_name}<br></br>
-                        Threshold: {room.threshold}<br></br>
-                        Occupancy: {room.occupancy}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+    return Array.from(rooms.values());
 };
 
 export default WebSocketComponent;

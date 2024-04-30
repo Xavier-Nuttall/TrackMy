@@ -7,7 +7,7 @@
   "scripts": {
     "init-install": "npm install && ./backend/secrets/create.sh && npm run docker-install && npm run front-install && npm run back-install",
     "uninstall": "npm run docker-uninstall && npm run front-uninstall",
-    "start": "concurrently \"npm run websocket-start\" \"npm run docker-start\" \"npm run front-start\"  \"npm run back-start\"" ,
+    "start": "concurrently \"npm run websocket-start\" \"npm run docker-start\" \"npm run front-start\"  \"npm run back-start\"",
     "front-install": "cd frontend && npm install",
     "front-uninstall": "",
     "front-start": "cd frontend && npm start",

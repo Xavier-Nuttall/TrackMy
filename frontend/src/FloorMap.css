@@ -42,6 +42,7 @@
   .room8:hover,
   .room9:hover {
     background: blue;
+    cursor: pointer;
   }
   
   .room1::after,
