@@ -1,7 +1,7 @@
 const startTime = Date.parse("1970-01-01T08:00:00Z");
 const endTime = Date.parse("1970-01-01T18:00:00Z");
 const days = 7;
-const steps = 1440;
+const steps = 600;
 
 
 function generateRandomFunction() {
