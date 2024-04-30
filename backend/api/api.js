@@ -210,9 +210,9 @@ router.post('/users/notifications/', async (req, res) => {
         // adds the data to the database.
 
         const queryResult = await pool.query(`
-            INSERT INTO tracking.UserTimes (user_id, room_id, start_time, end_time)
+            INSERT INTO tracking.UserTimes (user_id, room_id, room_threshold, start_time, end_time)
             VALUES ($1, $2, $3, $4);
-        `, [obj.user_id, obj.room_id, obj.start_time, obj.end_time]);
+        `, [obj.user_id, obj.room_id, obj.room_threshold, obj.start_time, obj.end_time]);
 
         // if the query failed send an error message
 
