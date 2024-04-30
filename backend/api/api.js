@@ -26,7 +26,7 @@ const schemaUsertime = {
         start_time: { type: "string" },
         end_time: { type: "string" }
     },
-    required: ["room_id", "time", "occupancy"],
+    required: ["user_id", "room_id", "room_threshold", "start_time", "end-time"],
     additionalProperties: false
 }
 
