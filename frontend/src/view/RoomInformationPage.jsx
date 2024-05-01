@@ -26,11 +26,11 @@ function updateFloorInfo(setOccupancyData){
         throw new Error('Failed to fetch occupancy data');
       }
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       data.forEach(room => {
         const roomId = room.room_id; // assuming each room object has a room_id
         if (roomId === null) {
-          console.log("was null");
+          //console.log("was null");
           return;
         }
 
@@ -40,7 +40,7 @@ function updateFloorInfo(setOccupancyData){
 
       });
 
-      console.log(floorInfo);
+      //console.log(floorInfo);
       setOccupancyData(data);
     } catch (error) {
       console.error('Error fetching occupancy data:', error);
@@ -60,11 +60,11 @@ function updateFloorInfo(setOccupancyData){
         throw new Error('Failed to fetch occupancy data');
       }
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       data.forEach(room => {
         const roomId = room.room_id; // assuming each room object has a room_id
         if (roomId === null) {
-          console.log("was null");
+          //console.log("was null");
           return;
         }
 

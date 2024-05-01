@@ -14,7 +14,7 @@ export function useFloor(initialContent) {
   const [content, setContent] = useState(initialContent);
 
   const changeContent = (newContent) => {
-    console.log("NewFloor " + (newContent));
+    // console.log("NewFloor " + (newContent));
     setContent(newContent);
   };
 
@@ -35,8 +35,8 @@ export function useColor(currColor) {
   }, [color]);
 
   const updateColors = (newColors) => {
-    console.log('Updated Colors');
-    console.log(newColors);
+    //console.log('Updated Colors');
+    //console.log(newColors);
     setColor(newColors);
   };
 

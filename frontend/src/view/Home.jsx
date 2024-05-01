@@ -50,7 +50,7 @@ async function fetchRoomData() {
         responseData.forEach(room => {
             const roomId = room.room_id; // assuming each room object has a room_id
             if (roomId === null) {
-                console.log("was null");
+                // console.log("was null");
                 return;
             }
 
@@ -85,7 +85,7 @@ async function fetchRoomThresholdData() {
         responseData.forEach(room => {
             const roomId = room.room_id; // assuming each room object has a room_id
             if (roomId === null) {
-                console.log("was null");
+                // console.log("was null");
                 return;
             }
 
@@ -157,13 +157,13 @@ function generateLineGraph(roomId) {
 }
 
 function updateFloorArr(data) {
-    console.log(data);
+    // console.log(data);
 }
 
 
 function updateColors(colors, setColor, floor, handleFloorClick) {
-    console.log(floorInfo);
-    console.log(floorInfo[0].occupancy[floorInfo[0].occupancy.length - 1]);
+    // console.log(floorInfo);
+    // console.log(floorInfo[0].occupancy[floorInfo[0].occupancy.length - 1]);
     let newColors = colors;
     for (let roomID in floorInfo) {
         const threshold = floorInfo[roomID].threshold;
@@ -176,7 +176,7 @@ function updateColors(colors, setColor, floor, handleFloorClick) {
 
         const diff = threshold - occupancy;
         const tenPercent = threshold / 10;
-        console.log("RoomID: " + roomID + "Diff" + diff + "ThresholdP" + tenPercent);
+        // console.log("RoomID: " + roomID + "Diff" + diff + "ThresholdP" + tenPercent);
         if (diff <= tenPercent * 2) {
             newColors[roomID] = 'red';
         }
@@ -325,7 +325,7 @@ const HomePage = () => {
     }
 
     useEffect(() => {
-        console.log('Updated room:', room); // Log the updated room state
+        //console.log('Updated room:', room); // Log the updated room state
         const fetchData = async () => {
             await fetchRoomData();
             await fetchRoomThresholdData();
@@ -355,10 +355,10 @@ const HomePage = () => {
         };
         const update = (newData) => {
             try {
-                console.log(newData);
+                // console.log(newData);
                 // Parse the received data (assuming it's in the correct JSON format)
                 const parsedData = JSON.parse(newData);
-                console.log(parsedData);
+                // console.log(parsedData);
                 if (Array.isArray(parsedData)) {
                     updateFloorArr(parsedData);
                 } else {

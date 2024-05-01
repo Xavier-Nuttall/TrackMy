@@ -48,13 +48,13 @@ async function fetchRoomData() {
     }
 
     const responseData = await response.json(); // assume responseData is an array of objects
-    console.log(responseData);
+    // console.log(responseData);
 
     // Update floorInfo based on responseData
     responseData.forEach(room => {
       const roomId = room.room_id; // assuming each room object has a room_id
       if (roomId === null){
-        console.log("was null");
+        // console.log("was null");
         return; 
       } 
 
@@ -64,7 +64,7 @@ async function fetchRoomData() {
       }
     });
 
-    console.log('Updated floorInfo:', floorInfo);
+    // console.log('Updated floorInfo:', floorInfo);
   } catch (error) {
      console.error('Error:', error.message);
   }
@@ -74,24 +74,24 @@ function GetFirstFloor() {
 
   const handleR1Click = () => {
     displayedRoomID = 1;
-    console.log(displayedRoomID);
+    // console.log(displayedRoomID);
   }
 
   const handleR2Click = () => {
     displayedRoomID = 2;
-    console.log(displayedRoomID);
+    // console.log(displayedRoomID);
 
   }
 
   const handleR3Click = () => {
     displayedRoomID = 3;
-    console.log(displayedRoomID);
+    // console.log(displayedRoomID);
 
   }
 
   const handleR4Click = () => {
     displayedRoomID = 4;
-    console.log(displayedRoomID);
+    // console.log(displayedRoomID);
 
   }
 
@@ -153,7 +153,7 @@ function App() {
   
   const HomePage = () => {  
     fetchRoomData();
-    console.log(floorInfo);
+    // console.log(floorInfo);
    
     return (
       <main>
