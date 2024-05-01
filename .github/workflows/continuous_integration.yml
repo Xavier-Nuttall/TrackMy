@@ -19,7 +19,7 @@ jobs:
         node-version: '20'  # Specify the Node.js version
 
     - name: Install dependencies
-      run: cd backend && npm install # Install project dependencies
+      run: npm install && cd backend && npm install # Install project dependencies
 
     - name: Run Server
       run: npm run test-start
