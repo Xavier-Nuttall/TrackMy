@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function useMainContent(defaultContent) {
   const [mainContent, setMainContent] = useState(defaultContent);
@@ -10,12 +10,35 @@ export function useMenuOpen(defaultValue) {
   return [menuOpen, setMenuOpen];
 }
 
-export function useFloor(defaultFloor) {
-    const [floor, setFloor] = useState(() => defaultFloor);
-    return [floor, setFloor];
-  }
+export function useFloor(initialContent) {
+  const [content, setContent] = useState(initialContent);
 
-  export function useRoom(roomId) {
-    const [room, setRoom] = useState(() => roomId);
-    return [room, setRoom];
-  }
+  const changeContent = (newContent) => {
+    console.log("NewFloor " + (newContent));
+    setContent(newContent);
+  };
+
+  return [content, changeContent];
+}
+
+export function useRoom(roomId) {
+  const [room, setRoom] = useState(() => roomId);
+  return [room, setRoom];
+}
+
+export function useColor(currColor) {
+  const [color, setColor] = useState(() => currColor);
+
+  useEffect(() => {
+    // This effect will run whenever colors change
+    // You can perform any additional logic here if needed
+  }, [color]);
+
+  const updateColors = (newColors) => {
+    console.log('Updated Colors');
+    console.log(newColors);
+    setColor(newColors);
+  };
+
+  return [color, updateColors];
+}

@@ -41,38 +41,14 @@
   .room7:hover,
   .room8:hover,
   .room9:hover {
-    background: blue;
+    opacity: 0.5;
     cursor: pointer;
-  }
-  
-  .room1::after,
-  .room2::after,
-  .room3::after,
-  .room4::after,
-  .room5::after,
-  .room6::after,
-  .room7::after,
-  .room8::after,
-  .room9::after {
-    position: absolute;
-    background: grey;
-    clip-path: inherit;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   .room1 {
     width: 20%;
     height: 80%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); 
-  }
-
-  .room1::after {
-    content: 'Room1';
-    width: 98%;
-    height: 98%;
-    left: 1.2%;
   }
   
   .room2 {
@@ -83,29 +59,12 @@
     clip-path: polygon(0% 0%, 30% 0%, 30% 30%, 80% 30%, 80% 0%, 100% 0%, 100% 71%, 70% 71%, 70% 100%, 50% 100%, 50% 71%, 0% 71%); 
   }
   
-  .room2::after {
-    content: 'Room2';
-    width: 98%;
-    height: 97%;
-    left: 1.2%;
-    top: 0.8%;
-  }
-  
   .room3 {
     width: 30%;
     height: 40%;
     top: 0%;
     margin-left: 70%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-  }
-  
-  
-  .room3::after {
-    content: 'Room3';
-    width: 98%;
-    height: 97%;
-    left: 1.2%;
-    top: 0.8%;
   }
 
   .room4 {
@@ -115,14 +74,6 @@
     margin-left: 70%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   }
-  
-  .room4::after {
-    content: 'Room4';
-    width: 98%;
-    height: 97%;
-    left: 1.2%;
-    top: 0.8%;
-  }
 
   .room5 {
     width: 30%;
@@ -130,14 +81,6 @@
     top: 0%;
     margin-left: 0%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-  }
-  
-  .room5::after {
-    content: 'Room5';
-    width: 96%;
-    height: 98%;
-    left: 2%;
-    top: 1%;
   }
 
   .room6 {
@@ -147,15 +90,6 @@
     margin-left: 70%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   }
-  
-  
-  .room6::after {
-    content: 'Room7';
-    width: 96%;
-    height: 98%;
-    left: 2%;
-    top: 1%;
-  }
 
   .room7 {
     width: 40%;
@@ -163,15 +97,6 @@
     top: 0%;
     margin-left: 0%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-  }
-  
-  
-  .room7::after {
-    content: 'Room7';
-    width: 96%;
-    height: 98%;
-    left: 2%;
-    top: 1%;
   }
 
   .room8 {
@@ -181,15 +106,6 @@
     margin-left: 0%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   }
-  
-  
-  .room8::after {
-    content: 'Room8';
-    width: 96%;
-    height: 98%;
-    left: 2%;
-    top: 1%;
-  }
 
   .room9 {
     width: 60%;
@@ -197,15 +113,6 @@
     top: 0%;
     margin-left: 40%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-  }
-  
-  
-  .room9::after {
-    content: 'Room8';
-    width: 96%;
-    height: 98%;
-    left: 2%;
-    top: 1%;
   }
 
   .untracked1::after,

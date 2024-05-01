@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
-import { useMainContent, useMenuOpen, useFloor, useRoom } from './CustomHooks';
+import { useMainContent, useMenuOpen, useFloor, useRoom, useColor } from './CustomHooks';
 import '../FloorMap.css';
 import { Link } from 'react-router-dom';
 import Chart from 'chart.js/auto';
+import { createUseStyles } from 'react-jss';
 
-
-let displayedRoomID;
+const ws = new WebSocket('ws://localhost:8081/');
 
 let floorInfo = {
     0: {
@@ -57,7 +57,7 @@ async function fetchRoomData() {
             if (floorInfo[roomId]) {
                 floorInfo[roomId].occupancy = room.occupancy; // assuming room.occupancy is an array
             }
-            else{
+            else {
                 floorInfo[roomId] = {
                     name: "",
                     occupancy: room.occupancy,
@@ -70,6 +70,9 @@ async function fetchRoomData() {
     }
 }
 
+/** Function that fetches and assigns room threshold data and room name
+ * to the floor Info variable
+ */
 async function fetchRoomThresholdData() {
     try {
         const response = await fetch('http://localhost:3001/api/rooms/', {
@@ -106,82 +109,137 @@ async function fetchRoomThresholdData() {
 
 function generateLineGraph(roomId) {
     const room = floorInfo[roomId];
-  
+
     // Check if the room exists in floorInfo
     if (!room) {
-      console.error(`Room ${roomId} not found in floorInfo`);
-      return;
+        console.error(`Room ${roomId} not found in floorInfo`);
+        return;
     }
-  
+
     // Get the canvas element for the line graph
     const canvas = document.getElementById('lineChart');
-  
+
     if (canvas) {
-      const ctx = canvas.getContext('2d');
-  
-      // Destroy existing chart if it exists
-      if (window.chartInstance) {
-        window.chartInstance.destroy();
-      }
+        const ctx = canvas.getContext('2d');
 
-      // Create the line chart for the specified room
-      window.chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: room.occupancy.map(data => data.time),
-          datasets: [{
-            label: `Occupancy for Room ${room.name}`,
-            data: room.occupancy.map(data => data.value),
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            },
-            x: {
-              display: false // Hide x-axis labels
-            }
-          }
+        // Destroy existing chart if it exists
+        if (window.chartInstance) {
+            window.chartInstance.destroy();
         }
-      });
-    }
-  }
 
+        // Create the line chart for the specified room
+        window.chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: room.occupancy.map(data => data.time),
+                datasets: [{
+                    label: `Occupancy for Room ${room.name}`,
+                    data: room.occupancy.map(data => data.value),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+                    x: {
+                        display: false // Hide x-axis labels
+                    }
+                }
+            }
+        });
+    }
+}
+
+function updateFloorArr(data) {
+    console.log(data);
+}
+
+
+function updateColors(colors, setColor, floor, handleFloorClick) {
+    console.log(floorInfo);
+    console.log(floorInfo[0].occupancy[floorInfo[0].occupancy.length - 1]);
+    let newColors = colors;
+    for (let roomID in floorInfo) {
+        const threshold = floorInfo[roomID].threshold;
+        let occupancy;
+        if (!floorInfo[roomID].occupancy || floorInfo[roomID].occupancy.length === 0) {
+            occupancy = 0;
+        } else {
+            occupancy = floorInfo[roomID].occupancy[floorInfo[roomID].occupancy.length - 1].value;
+        }
+
+        const diff = threshold - occupancy;
+        const tenPercent = threshold / 10;
+        console.log("RoomID: " + roomID + "Diff" + diff + "ThresholdP" + tenPercent);
+        if (diff <= tenPercent * 2) {
+            newColors[roomID] = 'red';
+        }
+        else if (diff >= tenPercent * 2 && diff <= tenPercent * 5) {
+            newColors[roomID] = 'orange';
+        }
+        else if (diff > tenPercent * 5 && diff <= tenPercent * 8) {
+            newColors[roomID] = 'yellow';
+        }
+        else {
+            newColors[roomID] = 'green';
+        }
+    }
+    setColor(newColors);
+    handleFloorClick(floor);
+}
 
 const HomePage = () => {
 
     const [menuOpen, setMenuOpen] = useMenuOpen(true); // Set default menu open state to true
-    const [floor, setFloor] = useFloor(<GetFirstFloor />);
-    const [room, setRoom] = useRoom(1);
+    const [floor, setFloor] = useFloor('F1');
+    const [room, setRoom] = useRoom(0);
+    const [color, setColor] = useColor(['green', 'green', 'green', 'green', 'green', 'green', 'green', 'green', 'green']);
 
     function GetFirstFloor() {
+        const useStyles = createUseStyles({
+            roomColor1: {
+                background: (prop) => prop.color1
+            },
+            roomColor2: {
+                background: (prop) => prop.color2
+            },
+            roomColor3: {
+                background: (prop) => prop.color3
+            },
+            roomColor4: {
+                background: (prop) => prop.color4
+            }
+        });
 
+        let prop = {
+            color1: color[0],
+            color2: color[1],
+            color3: color[2],
+            color4: color[3]
+        };
         const handleR1Click = () => {
             setRoom(0);
         }
-    
         const handleR2Click = () => {
             setRoom(1);
         }
-    
         const handleR3Click = () => {
             setRoom(2);
         }
-    
         const handleR4Click = () => {
             setRoom(3);
         }
-    
+        const classes = useStyles(prop);
         return (
             <div className="floor">
-                <div className="room1" onClick={handleR1Click}><p></p></div>
-                <div className="room2" onClick={handleR2Click}></div>
-                <div className="room3" onClick={handleR3Click}></div>
-                <div className="room4" onClick={handleR4Click}></div>
+                <div className={`room1 ${classes.roomColor1}`} onClick={handleR1Click}>Room1</div>
+                <div className={`room2 ${classes.roomColor2}`} onClick={handleR2Click}>Room2</div>
+                <div className={`room3 ${classes.roomColor3}`} onClick={handleR3Click}>Room3</div>
+                <div className={`room4 ${classes.roomColor4}`} onClick={handleR4Click}>Room4</div>
                 <div className="untracked1"></div>
                 <div className="stairs1"></div>
             </div>
@@ -189,25 +247,37 @@ const HomePage = () => {
     }
 
     function GetSecondFloor() {
-
         const handleR5Click = () => {
             setRoom(4);
         }
-        
         const handleR6Click = () => {
             setRoom(5);
         }
+        const useStyles = createUseStyles({
+            roomColor1: {
+                background: (prop) => prop.color1
+            },
+            roomColor2: {
+                background: (prop) => prop.color2
+            }
+        });
+
+        let prop = {
+            color1: color[4],
+            color2: color[5],
+        };
+        const classes = useStyles(prop);
         return (
             <div className="floor">
-                <div className="room5" onClick={handleR5Click}><p></p></div>
-                <div className="room6" onClick={handleR6Click}></div>
+                <div className={`room5 ${classes.roomColor1}`} onClick={handleR5Click}><p></p></div>
+                <div className={`room6 ${classes.roomColor2}`} onClick={handleR6Click}></div>
                 <div className="untracked2"></div>
                 <div className="corridor1"></div>
                 <div className="stairs2"></div>
                 <div className="stairs3"></div>
                 <div className="stairs4"></div>
                 <div className="stairs5"></div>
-    
+
             </div>
         );
     }
@@ -216,20 +286,36 @@ const HomePage = () => {
         const handleR7Click = () => {
             setRoom(6);
         }
-
         const handleR8Click = () => {
             setRoom(7);
         }
-
         const handleR9Click = () => {
             setRoom(8);
         }
-    
+        const useStyles = createUseStyles({
+            roomColor1: {
+                background: (prop) => prop.color1
+            },
+            roomColor2: {
+                background: (prop) => prop.color2
+            },
+            roomColor3: {
+                background: (prop) => prop.color3
+            }
+        });
+
+        let prop = {
+            color1: color[6],
+            color2: color[7],
+            color3: color[8]
+        };
+
+        const classes = useStyles(prop);
         return (
             <div className="floor">
-                <div className="room7" onClick={handleR7Click}><p></p></div>
-                <div className="room8" onClick={handleR8Click}></div>
-                <div className="room9" onClick={handleR9Click}></div>
+                <div className={`room7 ${classes.roomColor1}`} onClick={handleR7Click}><p></p></div>
+                <div className={`room8 ${classes.roomColor2}`} onClick={handleR8Click}></div>
+                <div className={`room9 ${classes.roomColor3}`} onClick={handleR9Click}></div>
                 <div className="untracked3"></div>
                 <div className="stairs6"></div>
             </div>
@@ -242,9 +328,46 @@ const HomePage = () => {
             await fetchRoomData();
             await fetchRoomThresholdData();
             generateLineGraph(room); // Generate graph after fetching data
+            updateColors(color, setColor, floor, handleFloorClick);
         };
         fetchData();
-    }, [room]);
+    }, [room, color]);
+
+    useEffect(() => {
+        ws.onopen = () => {
+            console.log('WebSocket connected');
+        };
+        ws.onmessage = (event) => {
+            console.log('Received Socket Home:', event);
+            const fetchData = async () => {
+                await fetchRoomData();
+                await fetchRoomThresholdData();
+                generateLineGraph(room); // Generate graph after fetching data
+                updateColors(color, setColor, floor, handleFloorClick);
+            };
+            fetchData();
+            //update(event.data);
+        };
+        ws.onclose = () => {
+            console.log('WebSocket disconnected');
+        };
+        const update = (newData) => {
+            try {
+                console.log(newData);
+                // Parse the received data (assuming it's in the correct JSON format)
+                const parsedData = JSON.parse(newData);
+                console.log(parsedData);
+                if (Array.isArray(parsedData)) {
+                    updateFloorArr(parsedData);
+                } else {
+                    console.error('Invalid data format:', parsedData);
+                }
+
+            } catch (error) {
+                console.error('Error parsing WebSocket data Update Method Home:', error);
+            }
+        };
+    }, []);
 
     const toggleFilter = () => {
         setMenuOpen(!menuOpen);
@@ -253,16 +376,17 @@ const HomePage = () => {
     const handleFloorClick = (floorNumber) => {
         switch (floorNumber) {
             case 'F1':
-                setFloor(<GetFirstFloor />)
+                setFloor(<GetFirstFloor />);
                 break;
             case 'F2':
-                setFloor(<GetSecondFloor />)
+                setFloor(<GetSecondFloor />);
                 break;
             case 'F3':
-                setFloor(<GetThirdFloor />)
+                setFloor(<GetThirdFloor />);
                 break;
             default:
-                setFloor(null)
+                console.error('Invalid floor identifier:', floorNumber);
+                break;
         }
     };
 
@@ -293,6 +417,7 @@ const HomePage = () => {
             <main>
                 <div className="grid-contain" id="main-show">
                     <div id="graph-show">
+
                         {floor}
 
                         <div id="floor-select" >
@@ -305,14 +430,12 @@ const HomePage = () => {
                     </div>
 
                     <div id="room-show">
-                    <canvas id="lineChart"></canvas>
+                        <canvas id="lineChart"></canvas>
                     </div>
 
                 </div>
             </main>
-
         </div>
-
     );
 }
 
