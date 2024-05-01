@@ -1,9 +1,10 @@
 const express = require('express');
-const dao = require('./db');
+const dao = process.argv[2] == 'false' ? require('../../test/mock_db') : require('./db');
 const router = express.Router();
 const { WebSocket } = require('ws');
 const Ajv = require("ajv")
 
+console.log();
 
 const ajv = new Ajv();
 const schemaRoomtime = {
