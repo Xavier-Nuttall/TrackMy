@@ -54,7 +54,7 @@ nav {
   grid-template-areas:
     "menu name welcome";
   grid-template-columns: 60px auto 60px;
-  background-image: linear-gradient(to right, darkolivegreen, #000000);
+  background-image: linear-gradient(to right, darkolivegreen, rgb(47, 63, 22));
   border-radius: 10px;
 }
 
@@ -174,7 +174,7 @@ nav {
 
 main {
   position: relative;
-  background-color: rgb(29, 56, 17);
+  background: linear-gradient(to bottom, rgb(29, 56, 17), rgb(8, 10, 4));
   width: 100%;
   height: 100%;
   padding: 0%;
@@ -480,7 +480,7 @@ button:hover {
 
 .sidebar-button {
   position: relative;
-  background: rgb(71, 111, 60);
+  background: linear-gradient(to right, rgb(71, 111, 60), rgb(59, 78, 27));
   margin: 5px 0;
   color: whitesmoke;
   font-size: 20pt;
@@ -497,10 +497,9 @@ button:hover {
 
 .sidebar-button:hover {
   position: relative;
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(to right, rgb(71, 111, 60), rgb(59, 78, 27));
   color: whitesmoke;
-  font-size: 18pt;
+  font-size: 19pt;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
-  width: 100%;
 }
