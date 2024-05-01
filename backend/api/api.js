@@ -131,7 +131,7 @@ router.get('/rooms/:id/', async (req, res) => {
             res.status(404).send("Room not found");
             return;
         }
-        res.status(200).send(data[0]);
+        res.status(200).send(data);
     }).catch((err) => {
         res.status(500).send("Internal Server Error");
     });
@@ -143,7 +143,7 @@ router.get('/rooms/:id/', async (req, res) => {
 router.get('/rooms/:id/occupancy/', async (req, res) => {
     const result = dao.getOccupancyByRoomId(req.params.id);
     result.then((data) => {
-        if (queryResult.rows.length === 0) {
+        if (data.length === 0) {
             res.status(404).send("Room not found");
             return;
         }
