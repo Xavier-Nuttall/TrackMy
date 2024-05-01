@@ -1,5 +1,5 @@
 const express = require('express');
-const pool = require('./db');
+const dao = require('./db');
 const router = express.Router();
 const { WebSocket } = require('ws');
 const Ajv = require("ajv")
@@ -88,34 +88,23 @@ router.get('/', async (req, res) => {
 // returns information about the rooms
 router.get('/rooms/', async (req, res) => {
 
-    try {
-        const queryResult = await pool.query(`
-            SELECT r.room_id, r.room_name, r.threshold
-            FROM tracking.Room r;
-        
-        `);
+    const result = dao.getRooms();
 
-        // Respond to the client with a success message
-        res.status(200).send(queryResult.rows);
-    } catch (error) {
-        // Handle any errors that occur during the process
-        console.error('Error:', error);
+    result.then((data) => {
+        res.status(200).send(data);
+    }).catch((err) => {
         res.status(500).send("Internal Server Error");
-    }
+    })
 });
 
 router.get('/rooms/occupancy/', async (req, res) => {
-    try {
-        const queryResult = await pool.query(`
-            SELECT t.room_id, t.time, t.occupancy
-            FROM tracking.RoomTime t;
-        `);
+    const result = dao.getOccupancy();
 
-
-        // reduce the return from the database into something more readable
+    result.then((data) => {
+        // reduce the return from the dao into something more readable
         let returnArray = [];
-        for (l in queryResult.rows) {
-            obj = queryResult.rows[l];
+        for (l in data) {
+            obj = data[l];
             // console.log(obj);
             if (!returnArray[obj.room_id]) {
                 returnArray[obj.room_id] = { room_id: obj.room_id, occupancy: [] };
@@ -123,48 +112,44 @@ router.get('/rooms/occupancy/', async (req, res) => {
             returnArray[obj.room_id].occupancy.push({ time: obj.time, value: obj.occupancy });
         }
         res.status(200).send(returnArray);
-    } catch (error) {
+
+
+
+    }).catch((err) => {
+        ;
         console.error('Error:', error);
         res.status(500).send("Internal Server Error");
-    }
+    });
 });
 
 // get information about a specific room
 router.get('/rooms/:id/', async (req, res) => {
-    try {
-        const queryResult = await pool.query(`
-            SELECT r.room_id, r.room_name, r.threshold
-            FROM tracking.Room r
-            WHERE r.room_id = $1 LIMIT 1;
-        `, [req.params.id]);
-        if (queryResult.rows.length === 0) {
+    const result = dao.getRoomById(req.params.id);
+    result.then((data) => {
+        if (data.length === 0) {
             res.status(404).send("Room not found");
             return;
         }
-        res.status(200).send(queryResult.rows[0]);
-    } catch (error) {
+        res.status(200).send(data[0]);
+    }).catch((err) => {
         res.status(500).send("Internal Server Error");
-    }
+    });
 });
 
 
 
 // get occupancy of a specific room
 router.get('/rooms/:id/occupancy/', async (req, res) => {
-    try {
-        const queryResult = await pool.query(`
-        SELECT t.time, t.occupancy as value
-        FROM tracking.RoomTime t
-        WHERE t.room_id = $1;
-    `, [req.params.id]);
+    const result = dao.getOccupancyByRoomId(req.params.id);
+    result.then((data) => {
         if (queryResult.rows.length === 0) {
             res.status(404).send("Room not found");
             return;
         }
-        res.status(200).send(queryResult.rows);
-    } catch (error) {
+        res.status(200).send(data);
+    }).catch((err) => {
         res.status(500).send("Internal Server Error");
-    }
+    });
 });
 
 
@@ -172,80 +157,69 @@ router.get('/rooms/:id/occupancy/', async (req, res) => {
 // post information about room occupancy
 router.post('/rooms/occupancy/', async (req, res) => {
 
-    try {
-        const obj = req.body;
-        // check the post message for the correct fields
-        if (!validateRoomtime(obj)) {
-            res.status(400).send("Bad Request");
-            return;
-        }
-
-        // sends out the data to the websocket
-        // if ws is not attempted wait 
-        if (ws.readyState !== WebSocket.OPEN) {
-            res.status(500).send("Internal Server Error");
-            return;
-        }
-
-        ws.send(JSON.stringify({ type: "update", data: obj }));
-
-        // adds the data to the database.
-
-        const queryResult = await pool.query(`
-            INSERT INTO tracking.RoomTime (room_id, time, occupancy)
-            VALUES ($1, to_timestamp($2), $3);
-        `, [obj.room_id, obj.time / 1000, obj.occupancy]);
-
-        // if the query failed send an error message
-
-        res.status(204).send('');
-    } catch (error) {
-        // Handle any errors that occur during the process
-        console.error('Error:', error);
-        res.status(500).send("Internal Server Error");
+    const obj = req.body;
+    // check the post message for the correct fields
+    if (!validateRoomtime(obj)) {
+        res.status(400).send("Bad Request");
+        return;
     }
+
+    // sends out the data to the websocket
+    // if ws is not attempted wait 
+    if (ws.readyState !== WebSocket.OPEN) {
+        res.status(500).send("Internal Server Error");
+        return;
+    }
+
+    const result = dao.addOccupancy(obj.room_id, obj.time, obj.occupancy);
+    result.then((data) => {
+        if (data) {
+            ws.send(JSON.stringify({ type: "update", data: obj }));
+            res.status(204).send('');
+        } else {
+            res.status(400).send("Internal Server Error");
+        }
+    }).catch((err) => {
+        res.status(500).send("Internal Server Error");
+    });
+
+    // adds the data to the dao.
+
+
+    // if the query failed send an error message
+
 
 });
 
 router.post('/rooms/', async (req, res) => {
-    try {
-        const obj = req.body;
-        if (!validateRoom(obj)) {
-            console.error("Failed to create room")
-            res.status(400).send("Bad Request");
-            return;
-        }
-
-        const queryResult = await pool.query(`
-            INSERT INTO tracking.Room (room_name, threshold)
-            VALUES ($1, $2)
-            RETURNING room_id;
-        `, [obj.room_name, obj.threshold]);
-        ret = queryResult.rows[0];
-        // console.log(ret)
-        res.status(201).send(ret);
-    } catch (error) {
-
-
+    const obj = req.body;
+    if (!validateRoom(obj)) {
+        console.error("Failed to create room")
+        res.status(400).send("Bad Request");
+        return;
     }
+    const result = dao.addRoom(obj.room_name, obj.threshold);
+
+    result.then((data) => {
+
+        res.status(201).send(data);
+    }).catch((err) => {
+        res.status(500).send("Internal Server Error");
+    });
 });
 // gets info about notifications set up
 router.get('/users/notifications/', async (req, res) => {
 
-    try {
-        const queryResult = await pool.query(`
-            SELECT ut.user_id, ut.room_id, ut.room_threshold, ut.start_time, ut.end_time
-            FROM tracking.UserTimes ut;
-        
-        `);
+    const result = dao.getNotifications();
+    result.then((data) => {
 
         // Respond to the client with a success message
-        res.status(200).send(queryResult.rows);
-    } catch (error) {
+        res.status(200).send(data);
+    }).catch((err) => {
         // Handle any errors that occur during the process
         console.error('Error:', error);
         res.status(500).send("Internal Server Error");
-    }
+    });
 });
 
 // deletes a specific notif
@@ -258,19 +232,14 @@ router.delete('/users/:userid/notifications/:roomid', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        
-        // deletes it
 
-        const queryResult = await pool.query(`
-            DELETE ut.user_id, ut.room_id, ut.room_threshold, ut.start_time, ut.end_time
-            FROM tracking.UserTimes ut;
-            WHERE ut.user_id = $1 AND ut.room_id = $2;
-        `[obj.user_id, obj.room_id]);
+        // deletes it
+        const result = dao.removeNotification(obj.user_id, obj.room_id);
         if (queryResult.rows.length === 0) {
             res.status(404).send("Notif not found");
             return;
         }
-        res.status(204).send(queryResult.rows);
+        res.status(204).send(result);
         // if the query failed send an error message
     } catch (error) {
         // Handle any errors that occur during the process
@@ -291,12 +260,9 @@ router.post('/users/notifications/:', async (req, res) => {
             return;
         }
 
-        // adds the data to the database.
+        // adds the data to the dao.
 
-        const queryResult = await pool.query(`
-            INSERT INTO tracking.UserTimes (user_id, room_id, room_threshold, start_time, end_time)
-            VALUES ($1, $2, $3, $4);
-        `, [obj.user_id, obj.room_id, obj.room_threshold, obj.start_time, obj.end_time]);
+        const result = dao.addNotification(obj.user_id, obj.room_id, obj.room_threshold, obj.start_time, obj.end_time);
 
         // if the query failed send an error message
 
