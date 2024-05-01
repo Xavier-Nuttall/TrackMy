@@ -21,8 +21,8 @@ jobs:
     - name: Install dependencies
       run: npm install && cd backend && npm install # Install project dependencies
 
-    # - name: Run Server
-    #   run: nohup npm run test-start > server.log 2>&1 &
+    - name: Run Server
+      run: nohup npm run test-start > server.log 2>&1 &
 
     # - name: Run tests
     #   run: npm run test  # Run tests using npm test script
