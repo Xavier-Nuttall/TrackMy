@@ -65,7 +65,7 @@ async function addRoom(room_name, threshold) {
         VALUES ($1, $2)
         RETURNING room_id;
     `, [room_name, threshold]);
-    return ret.rows[0].room_id;
+    return ret.rows[0];
 }
 
 async function addOccupancy(room_id, time, occupancy) {
