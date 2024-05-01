@@ -216,10 +216,12 @@ main {
   border-radius: 15px;
 }
 
-.room1, .room2, .room3, .room4, .untracked1, .stairs1 ::after{
+/*.room1, .room2, .room3, .room4, .untracked1, .stairs1 ::after{
   border: 5px solid rgb(36, 48, 16);
 
-}
+}*/
+
+/*work on this*/
 
 #floor-select {
   padding: 0%;
