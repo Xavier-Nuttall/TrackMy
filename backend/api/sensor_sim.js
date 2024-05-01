@@ -1,7 +1,7 @@
 const startTime = Date.parse("1970-01-01T08:00:00Z");
 const endTime = Date.parse("1970-01-01T18:00:00Z");
-const days = 7;
-const steps = 6000;
+const days = 1;
+const steps = 10;
 
 
 function generateRandomFunction() {
@@ -58,7 +58,7 @@ async function generateRoom(days, startTime, endTime, steps, name) {
 
 
     // generate the data for each day
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < days; i++) {
         const data = generateDay(startTime + i * 24 * 60 * 60 * 1000, endTime + i * 24 * 60 * 60 * 1000, steps);
         for (j in data){
             ret = await fetch('http://localhost:3001/api/rooms/occupancy',{
@@ -74,29 +74,8 @@ async function generateRoom(days, startTime, endTime, steps, name) {
 
 }
 
-async function updateRoom(days, startTime, endTime, steps, id) {
-
-    // generate the data for each day
-    for (let i = 0; i < 7; i++) {
-        const data = generateDay(startTime + i * 24 * 60 * 60 * 1000, endTime + i * 24 * 60 * 60 * 1000, steps);
-        for (j in data){
-
-            ret = await fetch('http://localhost:3001/api/rooms/occupancy',{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({room_id: id, time: data[j].time, occupancy: data[j].value})
-            })
-
-        }
-
-    }
-
-}
-
-//generateRoom(days, startTime, endTime, steps, 'Room 1')
-updateRoom(days, startTime, endTime, steps, 3)
+generateRoom(days, startTime, endTime, steps, 'Room 1')
+// generateRoom()
 
 
 
