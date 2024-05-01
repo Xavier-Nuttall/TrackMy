@@ -1,8 +1,8 @@
-const time = Date.parse("2024-01-01T13:50:00Z");
-const occupancy = 40;
-const rId = 4;
+const time = Date.parse("1970-01-01T22:00:00Z");
+const occupancy = 2;
+const rId = 0;
 
-async function single(){
+async function single(time, occupancy, rId) {
 
 
     ret = await fetch('http://localhost:3001/api/rooms/occupancy',{
@@ -14,4 +14,5 @@ async function single(){
 })
 }
 
-single();
+
+single(time, occupancy, rId);

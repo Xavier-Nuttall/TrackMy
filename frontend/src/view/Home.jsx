@@ -130,6 +130,7 @@ function generateLineGraph(roomId) {
         // Create the line chart for the specified room
         window.chartInstance = new Chart(ctx, {
             type: 'line',
+
             data: {
                 labels: room.occupancy.map(data => data.time),
                 datasets: [{
@@ -141,6 +142,7 @@ function generateLineGraph(roomId) {
                 }]
             },
             options: {
+                animation: false,
                 scales: {
                     y: {
                         beginAtZero: true

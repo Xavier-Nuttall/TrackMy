@@ -116,7 +116,7 @@ router.get('/rooms/occupancy/', async (req, res) => {
         let returnArray = [];
         for (l in queryResult.rows) {
             obj = queryResult.rows[l];
-            console.log(obj);
+            // console.log(obj);
             if (!returnArray[obj.room_id]) {
                 returnArray[obj.room_id] = { room_id: obj.room_id, occupancy: [] };
             }
@@ -222,7 +222,7 @@ router.post('/rooms/', async (req, res) => {
             RETURNING room_id;
         `, [obj.room_name, obj.threshold]);
         ret = queryResult.rows[0];
-        console.log(ret)
+        // console.log(ret)
         res.status(201).send(ret);
     } catch (error) {
 
