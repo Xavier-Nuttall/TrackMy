@@ -57,13 +57,6 @@ async function fetchRoomData() {
             if (floorInfo[roomId]) {
                 floorInfo[roomId].occupancy = room.occupancy; // assuming room.occupancy is an array
             }
-            else {
-                floorInfo[roomId] = {
-                    name: "",
-                    occupancy: room.occupancy,
-                    threshold: ""
-                };
-            }
         });
     } catch (error) {
         console.error('Error:', error.message);
@@ -99,6 +92,13 @@ async function fetchRoomThresholdData() {
             if (floorInfo[roomId]) { // assuming room.occupancy is an array
                 floorInfo[roomId].name = room.room_name;
                 floorInfo[roomId].threshold = room.threshold; // assuming room.threshold is a string
+            }
+            else {
+                floorInfo[roomId] = {
+                    name: room.room_name,
+                    occupancy: [],
+                    threshold: room.threshold
+                };
             }
         });
 
@@ -236,10 +236,10 @@ const HomePage = () => {
         const classes = useStyles(prop);
         return (
             <div className="floor">
-                <div className={`room1 ${classes.roomColor1}`} onClick={handleR1Click}>Room1</div>
-                <div className={`room2 ${classes.roomColor2}`} onClick={handleR2Click}>Room2</div>
-                <div className={`room3 ${classes.roomColor3}`} onClick={handleR3Click}>Room3</div>
-                <div className={`room4 ${classes.roomColor4}`} onClick={handleR4Click}>Room4</div>
+                <div className={`room1 ${classes.roomColor1}`} onClick={handleR1Click}>{floorInfo[0].name}</div>
+                <div className={`room2 ${classes.roomColor2}`} onClick={handleR2Click}>{floorInfo[1].name}</div>
+                <div className={`room3 ${classes.roomColor3}`} onClick={handleR3Click}>{floorInfo[2].name}</div>
+                <div className={`room4 ${classes.roomColor4}`} onClick={handleR4Click}>{floorInfo[3].name}</div>
                 <div className="untracked1"></div>
                 <div className="stairs1"></div>
             </div>
@@ -269,8 +269,8 @@ const HomePage = () => {
         const classes = useStyles(prop);
         return (
             <div className="floor">
-                <div className={`room5 ${classes.roomColor1}`} onClick={handleR5Click}><p></p></div>
-                <div className={`room6 ${classes.roomColor2}`} onClick={handleR6Click}></div>
+                <div className={`room5 ${classes.roomColor1}`} onClick={handleR5Click}>{floorInfo[4].name}</div>
+                <div className={`room6 ${classes.roomColor2}`} onClick={handleR6Click}>{floorInfo[5].name}</div>
                 <div className="untracked2"></div>
                 <div className="corridor1"></div>
                 <div className="stairs2"></div>
@@ -313,9 +313,9 @@ const HomePage = () => {
         const classes = useStyles(prop);
         return (
             <div className="floor">
-                <div className={`room7 ${classes.roomColor1}`} onClick={handleR7Click}><p></p></div>
-                <div className={`room8 ${classes.roomColor2}`} onClick={handleR8Click}></div>
-                <div className={`room9 ${classes.roomColor3}`} onClick={handleR9Click}></div>
+                <div className={`room7 ${classes.roomColor1}`} onClick={handleR7Click}>{floorInfo[6].name}</div>
+                <div className={`room8 ${classes.roomColor2}`} onClick={handleR8Click}>{floorInfo[7].name}</div>
+                <div className={`room9 ${classes.roomColor3}`} onClick={handleR9Click}>{floorInfo[8].name}</div>
                 <div className="untracked3"></div>
                 <div className="stairs6"></div>
             </div>
@@ -409,9 +409,9 @@ const HomePage = () => {
                 <Link to="/" className="sidebar-button">Home</Link>
                 <Link to="/about" className="sidebar-button">About Us</Link>
                 <Link to="/login" className="sidebar-button">Log In | Register</Link>
-                <Link to="/account" className="sidebar-button">Account Settings</Link>
-                <Link to="/notifications" className="sidebar-button">Edit Notifications</Link>
-                <Link to="/room-information" className="sidebar-button">Room Information</Link>
+                {/* <Link to="/account" className="sidebar-button">Account Settings</Link>
+                <Link to="/notifications" className="sidebar-button">Edit Notifications</Link> */}
+                {/* <Link to="/room-information" className="sidebar-button">Room Information</Link> */}
             </nav>
 
             <main>

@@ -10,6 +10,8 @@ function NotifPage() {
         setMenuOpen(!menuOpen);
     };
 
+
+
   return (
     <div className={`content-container${menuOpen ? '2' : '1'}`}>
       <div id="title">
@@ -29,9 +31,9 @@ function NotifPage() {
         <Link to="/" className="sidebar-button">Home</Link>
         <Link to="/about" className="sidebar-button">About Us</Link>
         <Link to="/login" className="sidebar-button">Log In | Register</Link>
-        <Link to="/account" className="sidebar-button">Account Settings</Link>
+        {/* <Link to="/account" className="sidebar-button">Account Settings</Link>
         <Link to="/notifications" className="sidebar-button">Edit Notifications</Link>
-        <Link to="/room-information" className="sidebar-button">Room Information</Link>
+        <Link to="/room-information" className="sidebar-button">Room Information</Link> */}
       </nav>
       <main>
         {/* Probably a minimap on the side of the floor plan to have a reference to which room you're going for */}

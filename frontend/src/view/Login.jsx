@@ -30,9 +30,9 @@ function LoginPage() {
         <Link to="/" className="sidebar-button">Home</Link>
         <Link to="/about" className="sidebar-button">About Us</Link>
         <Link to="/login" className="sidebar-button">Log In | Register</Link>
-        <Link to="/account" className="sidebar-button">Account Settings</Link>
+        {/* <Link to="/account" className="sidebar-button">Account Settings</Link>
         <Link to="/notifications" className="sidebar-button">Edit Notifications</Link>
-        <Link to="/room-information" className="sidebar-button">Room Information</Link>
+        <Link to="/room-information" className="sidebar-button">Room Information</Link> */}
       </nav>
       <main>
         <div className="grid-contain">

@@ -10,22 +10,83 @@ let floorInfo = {
     occupancy: [],
     threshold: ""
   },
-  1: {
-    name: "Room 2",
-    occupancy: [],
-    threshold: ""
-  },
-  2: {
-    name: "Room 3",
-    occupancy: [],
-    threshold: ""
-  },
-  3: {
-    name: "Room 4",
-    occupancy: [],
-    threshold: ""
-  },
 };
+
+function updateFloorInfo(setOccupancyData){
+  // Fetch room occupancy data for a specific time interval
+  const fetchOccupancyData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/rooms/occupancy', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch occupancy data');
+      }
+      const data = await response.json();
+      console.log(data);
+      data.forEach(room => {
+        const roomId = room.room_id; // assuming each room object has a room_id
+        if (roomId === null) {
+          console.log("was null");
+          return;
+        }
+
+        if (floorInfo[roomId]) {
+          floorInfo[roomId].occupancy = room.occupancy; // assuming room.occupancy is an array
+        }
+
+      });
+
+      console.log(floorInfo);
+      setOccupancyData(data);
+    } catch (error) {
+      console.error('Error fetching occupancy data:', error);
+    }
+  };
+  fetchOccupancyData();
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/rooms', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch occupancy data');
+      }
+      const data = await response.json();
+      console.log(data);
+      data.forEach(room => {
+        const roomId = room.room_id; // assuming each room object has a room_id
+        if (roomId === null) {
+          console.log("was null");
+          return;
+        }
+
+        if (floorInfo[roomId]) {
+          floorInfo[roomId].name = room.room_name; // assuming room.occupancy is an array
+          floorInfo[roomId].threshold = room.threshold; // assuming room.occupancy is an array
+        }
+        else {
+          floorInfo[roomId] = {
+              name: room.room_name,
+              occupancy: [],
+              threshold: room.threshold
+          };
+      }
+      });
+      fetchData();
+      setOccupancyData(data);
+    } catch (error) {
+      console.error('Error fetching occupancy data:', error);
+    }
+  };
+}
 
 function RoomInformationPage() {
   const [menuOpen, setMenuOpen] = useMenuOpen(true);
@@ -36,89 +97,24 @@ function RoomInformationPage() {
   const endTime = '2024-04-030T23:59:59';
 
   useEffect(() => {
-    // Fetch room occupancy data for a specific time interval
-    const fetchOccupancyData = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/rooms/occupancy', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch occupancy data');
-        }
-        const data = await response.json();
-        console.log(data);
-        data.forEach(room => {
-          const roomId = room.room_id; // assuming each room object has a room_id
-          if (roomId === null) {
-            console.log("was null");
-            return;
-          }
-
-          if (floorInfo[roomId]) {
-            floorInfo[roomId].occupancy = room.occupancy; // assuming room.occupancy is an array
-          }
-        });
-
-        console.log(floorInfo);
-        setOccupancyData(data);
-      } catch (error) {
-        console.error('Error fetching occupancy data:', error);
-      }
-    };
-
-    fetchOccupancyData();
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/rooms', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch occupancy data');
-        }
-        const data = await response.json();
-        console.log(data);
-        data.forEach(room => {
-          const roomId = room.room_id; // assuming each room object has a room_id
-          if (roomId === null) {
-            console.log("was null");
-            return;
-          }
-
-          if (floorInfo[roomId]) {
-            floorInfo[roomId].name = room.room_name; // assuming room.occupancy is an array
-            floorInfo[roomId].threshold = room.threshold; // assuming room.occupancy is an array
-
-          }
-        });
-        fetchData();
-
-        console.log(floorInfo);
-        setOccupancyData(data);
-      } catch (error) {
-        console.error('Error fetching occupancy data:', error);
-      }
-    };
+    updateFloorInfo(setOccupancyData);
   }, []);
 
+  function getChatData(rId) {
 
-
-  const chartData = {
-    labels: floorInfo[1].occupancy.map(entry => entry.time),
-    datasets: [{
-      label: 'Occupancy',
-      data: floorInfo[1].occupancy.map(entry => entry.value),
-    }],
+    const cartData = {
+      labels: floorInfo[rId].occupancy.map(entry => entry.time),
+      datasets: [{
+        label: 'Occupancy',
+        data: floorInfo[rId].occupancy.map(entry => entry.value),
+      }],
+    };
+    return cartData
   };
 
   const chartOptions = {
     options: {
+      animation: false,
       scales: {
         y: {
           beginAtZero: true
@@ -130,8 +126,7 @@ function RoomInformationPage() {
     }
   }
 
-
-
+  updateFloorInfo(setOccupancyData);
 
   const toggleFilter = () => {
     setMenuOpen(!menuOpen);
@@ -157,16 +152,16 @@ function RoomInformationPage() {
         <Link to="/" className="sidebar-button">Home</Link>
         <Link to="/about" className="sidebar-button">About Us</Link>
         <Link to="/login" className="sidebar-button">Log In | Register</Link>
-        <Link to="/account" className="sidebar-button">Account Settings</Link>
+        {/* <Link to="/account" className="sidebar-button">Account Settings</Link>
         <Link to="/notifications" className="sidebar-button">Edit Notifications</Link>
-        <Link to="/room-information" className="sidebar-button">Room Information</Link>
+        <Link to="/room-information" className="sidebar-button">Room Information</Link> */}
       </nav>
       <main>
         <div className="general-panel">
           <h1>Room information</h1>
           <p>This will be where all the graphs and such for each room will be</p>
 
-          <Line data={chartData} options={chartOptions} />
+          <Line data={getChatData(0)} options={chartOptions} />
         </div>
       </main>
     </div>

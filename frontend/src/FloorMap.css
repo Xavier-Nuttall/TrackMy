@@ -286,7 +286,7 @@
 
   .corridor1::after {
     position: absolute;
-    background: green;
+    background: wheat;
     clip-path: inherit;
     display: flex;
     justify-content: center;
