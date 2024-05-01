@@ -193,6 +193,8 @@ main {
 #main-show {
   grid-template-columns: 50% 50%;
   grid-template-rows: 10% 50%;
+  
+  
   /*???*/
 }
 
@@ -211,6 +213,12 @@ main {
   justify-content: center;
   align-items: center;
   font-size: 36pt;
+  border-radius: 15px;
+}
+
+.room1, .room2, .room3, .room4, .untracked1, .stairs1 ::after{
+  border: 5px solid rgb(36, 48, 16);
+
 }
 
 #floor-select {
@@ -222,14 +230,14 @@ main {
   bottom: 10px;
   width: 50px;
   height: 128px;
-
+  border-radius: 5px;
 }
 
 #floor-select dl {
   padding: 0%;
   margin: 2px auto;
   width: 75%;
-
+  
 }
 
 #floor-select dt {
@@ -240,6 +248,7 @@ main {
   font-weight: bold;
   line-height: 40px;
   text-align: center;
+  border-radius: 5px;
 }
 
 #floor-select dt:hover {
@@ -270,6 +279,7 @@ main {
   grid-column-start: 1;
   grid-column-end: 3;
   overflow: auto;
+  border-radius: 15px;
 }
 
 #room-show h1{
@@ -326,6 +336,7 @@ main {
   height: 99%;
   grid-row-start: 1;
   grid-row-end: 2;
+  border-radius: 15px;
 }
 
 #register-panel {
@@ -334,6 +345,7 @@ main {
   height: 99%;
   grid-row-start: 2;
   grid-row-end: 3;
+  border-radius: 15px;
 }
 
 #top-set {
@@ -353,6 +365,7 @@ main {
   background-color: whitesmoke;
   height: 100%;
   width: 100%;
+  border-radius: 15px;
 }
 
 #mini-map {
@@ -361,6 +374,7 @@ main {
   background-color: whitesmoke;
   height: 100%;
   width: 100%;
+  border-radius: 15px;
 }
 
 #full-list {
@@ -368,6 +382,7 @@ main {
   width: 100%;
   height: 98%;
   overflow: scroll;
+  border-radius: 15px;
 }
 
 #full-list dt {
@@ -384,6 +399,7 @@ main {
   width: 98%;
   height: 98%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 15px;
 }
 
 .general-panel h1 {
