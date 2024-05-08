@@ -8,16 +8,18 @@ Requirements:
 
 Config file: backend/secrets/secrets.ini
 
-* `db_port` - port for the database to run on
-* `db_host` - ip of the database probably localhost
-* `db_admin_user` - username for the database admin user
-* `db_admin_password` - password for the database admin user
-* `db_database` - database name trackmy
+* `db_port` - port for the database to run on. default: `5432`
+* `db_host` - ip of the database probably localhost. default: `localhost`
+* `db_admin_user` - username for the database admin user. CHANGE THIS! default: `admin`
+* `db_admin_password` - password for the database admin user. CHANGE THIS! default `pw`
+* `db_database` - database name. default: `trackmy`
 
 Launch Instructions: 
 
-1. `npm run init-install` 
-2. `npm run start`
+1. Install requirements
+2. Set up configuration file located at `backend/secrets/secrets.ini` or leave default
+3. Run `npm run init-install` sets up the docker containers and creates secrets from config.
+4. Run `npm run start` this runs the server.
 
 Connect:
 
