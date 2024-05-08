@@ -1,9 +1,12 @@
 # TrackMy
 
+Expected:
+* [Ubuntu Server LTS 24.04](https://releases.ubuntu.com/noble/) - other os will probably work but are not officially supported.
+
 Requirements: 
-* [Docker](https://www.docker.com/) - hosts the database
-* [npm](https://www.npmjs.com/) -  installs dependencies/manages the packages
-* [node](https://nodejs.org/en) - runs the services
+* [Docker](https://docs.docker.com/engine/install/ubuntu/) - hosts the database
+* [npm](https://nodejs.org/en/download/package-manager) -  installs dependencies/manages the packages
+* [node](https://nodejs.org/en/download/package-manager) - runs the services
 * [bash](https://www.gnu.org/software/bash/) - automatically creates config for docker
 
 Config file: backend/secrets/secrets.ini
