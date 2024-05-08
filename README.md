@@ -4,6 +4,7 @@ Expected:
 * [Ubuntu Server LTS 24.04](https://releases.ubuntu.com/noble/) - other os will probably work but are not officially supported.
 
 Requirements: 
+* [Git](https://git-scm.com/download/linux) - allows cloning of the repository
 * [Docker](https://docs.docker.com/engine/install/ubuntu/) - hosts the database
 * [npm](https://nodejs.org/en/download/package-manager) -  installs dependencies/manages the packages
 * [node](https://nodejs.org/en/download/package-manager) - runs the services
@@ -18,15 +19,17 @@ Config file: backend/secrets/secrets.ini
 * `db_database` - database name. default: `trackmy`
 
 Launch Instructions: 
-
 1. Install requirements
-2. Set up configuration file located at `backend/secrets/secrets.ini` or leave default
-3. Run `npm run init-install` sets up the docker image and creates secrets from config.
-4. Run `npm run start` this runs the server.
+2. Clone the repository `git clone https://github.com/Xavier-Nuttall/TrackMy.git`
+3. Run `cd TrackMy`
+4. Set up configuration file located at `backend/secrets/secrets.ini` or leave default
+5. Run `npm run init-install` sets up the docker image and creates secrets from config.
+6. Run `npm run start` this runs the server.
 
 Connect:
 
-* `localhost:3000`
+* website on: `localhost:3000`
+* adminer on `localhost:8080`
 <details>
  <summary>User Stories</summary>
  
