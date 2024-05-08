@@ -4,6 +4,7 @@ Requirements:
 * [Docker](https://www.docker.com/) - hosts the database
 * [npm](https://www.npmjs.com/) -  installs dependencies/manages the packages
 * [node](https://nodejs.org/en) - runs the services
+* [bash](https://www.gnu.org/software/bash/) - automatically creates config for docker
 
 Config file: backend/secrets/secrets.ini
 
