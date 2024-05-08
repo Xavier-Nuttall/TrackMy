@@ -1,9 +1,26 @@
 # TrackMy
 
-``npm run init-install``
+Requirements: 
+* [Docker](https://www.docker.com/) - hosts the database
+* [npm](https://www.npmjs.com/) -  installs dependencies/manages the packages
+* [node](https://nodejs.org/en) - runs the services
 
-``npm run start``
+Config file: backend/secrets/secrets.ini
 
+* `db_port` - port for the database to run on
+* `db_host` - ip of the database probably localhost
+* `db_admin_user` - username for the database admin user
+* `db_admin_password` - password for the database admin user
+* `db_database` - database name trackmy
+
+Launch Instructions: 
+
+1. `npm run init-install` 
+2. `npm run start`
+
+Connect:
+
+* `localhost:3000`
 <details>
  <summary>User Stories</summary>
  
