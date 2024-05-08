@@ -21,7 +21,7 @@ Launch Instructions:
 
 1. Install requirements
 2. Set up configuration file located at `backend/secrets/secrets.ini` or leave default
-3. Run `npm run init-install` sets up the docker containers and creates secrets from config.
+3. Run `npm run init-install` sets up the docker image and creates secrets from config.
 4. Run `npm run start` this runs the server.
 
 Connect:
