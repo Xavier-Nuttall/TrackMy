@@ -224,7 +224,7 @@ router.post('/rooms/', async (req, res) => {
     const result = dao.addRoom(obj.room_name, obj.threshold);
 
     result.then((data) => {
-        
+
         res.status(201).send(data);
     }).catch((err) => {
         res.status(500).send("Internal Server Error");
@@ -240,7 +240,7 @@ router.post('/users/', async (req, res) => {
         }
         const result = dao.addUser(obj.email, obj.firstName, obj.lastName, obj.otherNames);
         result.then((data) => {
-            res.status(201).send({user_id: data});
+            res.status(201).send({ user_id: data });
         }).catch((err) => {
             console.error(err);
             if (err.code === '23505') {
@@ -262,13 +262,43 @@ router.post('/users/session', async (req, res) => {
         }
         const result = dao.addSession(obj.user_id);
         result.then((data) => {
-            res.status(201).send({session_id: data});
+            res.status(201).send({ session_id: data });
         }).catch((err) => {
             res.status(500).send("Internal Server Error");
         });
 
     } catch (error) {
     }
+});
+
+// delete all the sessions for a user
+router.delete('/users/session/', async (req, res) => {
+    try {
+        const obj = req.body;
+        if (!validateSession(obj)) {
+            res.status(400).send("Bad Request");
+            return;
+        }
+        const result = dao.deleteSessionByUser(obj.user_id);
+        result.then((data) => {
+            res.status(204).send('');
+        }).catch((err) => {
+            res.status(500).send("Internal Server Error");
+        });
+    } catch (error) {
+
+    }
+});
+
+// delete a specific session
+router.delete('/users/session/:id', async (req, res) => {
+    const result = dao.deleteSession(req.params.id);
+    result.then((data) => {
+        res.status(204).send('');
+    }).catch((err) => {
+        res.status(500).send("Internal Server Error");
+    });
+
 });
 
 // gets info about notifications set up
