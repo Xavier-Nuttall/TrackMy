@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const { readFileSync } = require('fs');
 const { parse } = require('ini');
+const { v4: uuidv4 } = require('uuid');
 
 const config = parse(readFileSync('./secrets/secrets.ini', 'utf-8'));
 /*
@@ -27,7 +28,7 @@ async function getRooms() {
         SELECT r.room_id, r.room_name, r.threshold
         FROM tracking.Room r;
     `);
-    
+
     return ret.rows;
 }
 
@@ -36,7 +37,7 @@ async function getOccupancy() {
         SELECT t.room_id, t.time, t.occupancy
         FROM tracking.RoomTime t;
     `);
-    
+
     return ret.rows;
 }
 
@@ -70,7 +71,7 @@ async function addRoom(room_name, threshold) {
 
 async function addOccupancy(room_id, time, occupancy) {
     time /= 1000;
-    const res = pool.query(`
+    const res = await pool.query(`
         INSERT INTO tracking.RoomTime (room_id, time, occupancy)
         VALUES ($1, to_timestamp($2), $3);
     `, [room_id, time, occupancy]);
@@ -78,7 +79,7 @@ async function addOccupancy(room_id, time, occupancy) {
 }
 
 async function getNotifications() {
-    const res = pool.query(`
+    const res = await pool.query(`
         SELECT ut.user_id, ut.room_id, ut.room_threshold, ut.start_time, ut.end_time
         FROM tracking.UserTimes ut;
     `);
@@ -86,7 +87,7 @@ async function getNotifications() {
 }
 
 async function addNotification(user_id, room_id, room_threshold, start_time, end_time) {
-    const res = pool.query(`
+    const res = await pool.query(`
         INSERT INTO tracking.UserTimes (user_id, room_id, room_threshold, start_time, end_time)
         VALUES ($1, $2, $3, $4, $5);
     `, [user_id, room_id, room_threshold, start_time, end_time]);
@@ -94,11 +95,56 @@ async function addNotification(user_id, room_id, room_threshold, start_time, end
 }
 
 async function removeNotification(user_id, room_id) {
-    const res = pool.query(`
+    const res = await pool.query(`
         DELETE FROM tracking.UserTimes
         WHERE user_id = $1 AND room_id = $2;
     `, [user_id, room_id]);
     return true;
+}
+
+async function addUser(email, firstName, lastName, otherNames) {
+    //generate a user id slug
+    const user_id = uuidv4();
+
+    const res = await pool.query(`
+        INSERT INTO pii.User (email_address, firstname, lastname, othernames, user_id) 
+        VALUES ($1, $2, $3, $4, $5);
+    `, [email, firstName, lastName, otherNames, user_id]);
+    return user_id;
+
+}
+
+async function addSession(user_id) {
+    const session_id = uuidv4();
+    const res = await pool.query(`
+        INSERT INTO pii.login (session_token, user_id)
+        VALUES ($1, $2);
+    `, [session_id, user_id]);
+    return session_id;
+}
+
+async function deleteSession(session_id) {
+    const res = await pool.query(`
+        DELETE FROM pii.login 
+        WHERE session_token = $1;
+    `, [session_id]);
+}
+
+async function deleteSessionByUser(user_id) {
+    const res = await pool.query(`
+        DELETE FROM pii.login 
+        WHERE user_id = $1;
+    `, [user_id]);
+}
+
+async function getUserBySession(session_id) {
+    const res = await pool.query(`
+        SELECT user_id
+        FROM pii.login
+        WHERE session_token = $1;
+    `, [session_id]);
+    return res.rows[0];
+
 }
 
 
@@ -112,6 +158,11 @@ const dao = {
     getNotifications,
     addNotification,
     removeNotification,
+    addUser,
+    addSession,
+    deleteSession,
+    deleteSessionByUser,
+    getUserBySession
 };
 
 module.exports = dao;
