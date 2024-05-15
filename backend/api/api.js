@@ -54,10 +54,19 @@ const schemaUser = {
     additionalProperties: false
 }
 
+const schemaSession = {
+    type: "object",
+    properties: {
+        user_id: { type: "string" },
+    },
+    required: ["user_id"],
+    additionalProperties: false
+}
+
 const validateRoomtime = ajv.compile(schemaRoomtime);
 const validateUsertime = ajv.compile(schemaUsertime);
 const validateUser = ajv.compile(schemaUser);
-
+const validateSession = ajv.compile(schemaSession);
 // // Create a WebSocket connection outside of route handlers
 
 let ws;
@@ -221,7 +230,7 @@ router.post('/rooms/', async (req, res) => {
         res.status(500).send("Internal Server Error");
     });
 });
-router.post('/users/login/', async (req, res) => {
+router.post('/users/', async (req, res) => {
     try {
         const obj = req.body;
         // validate
@@ -231,7 +240,7 @@ router.post('/users/login/', async (req, res) => {
         }
         const result = dao.addUser(obj.email, obj.firstName, obj.lastName, obj.otherNames);
         result.then((data) => {
-            res.status(201).send({session_token: data});
+            res.status(201).send({user_id: data});
         }).catch((err) => {
             console.error(err);
             if (err.code === '23505') {
@@ -240,12 +249,28 @@ router.post('/users/login/', async (req, res) => {
             }
             res.status(500).send("Internal Server Error");
         });
-
-        
     } catch (error) {
-
     }
 });
+
+router.post('/users/session', async (req, res) => {
+    try {
+        const obj = req.body;
+        if (!validateSession(obj)) {
+            res.status(400).send("Bad Request");
+            return;
+        }
+        const result = dao.addSession(obj.user_id);
+        result.then((data) => {
+            res.status(201).send({session_id: data});
+        }).catch((err) => {
+            res.status(500).send("Internal Server Error");
+        });
+
+    } catch (error) {
+    }
+});
+
 // gets info about notifications set up
 router.get('/users/notifications/', async (req, res) => {
 
