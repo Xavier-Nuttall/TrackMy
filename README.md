@@ -1,9 +1,35 @@
 # TrackMy
 
-``npm run init-install``
+Expected:
+* [Ubuntu Server LTS 24.04](https://releases.ubuntu.com/noble/) - other os will probably work but are not officially supported.
 
-``npm run start``
+Requirements: 
+* [Git](https://git-scm.com/download/linux) - allows cloning of the repository
+* [Docker](https://docs.docker.com/engine/install/ubuntu/) - hosts the database
+* [npm](https://nodejs.org/en/download/package-manager) -  installs dependencies/manages the packages
+* [node](https://nodejs.org/en/download/package-manager) - runs the services
+* [bash](https://www.gnu.org/software/bash/) - automatically creates config for docker
 
+Config file: backend/secrets/secrets.ini
+
+* `db_port` - port for the database to run on. default: `5432`
+* `db_host` - ip of the database probably localhost. default: `localhost`
+* `db_admin_user` - username for the database admin user. CHANGE THIS! default: `admin`
+* `db_admin_password` - password for the database admin user. CHANGE THIS! default `pw`
+* `db_database` - database name. default: `trackmy`
+
+Launch Instructions: 
+1. Install requirements
+2. Clone the repository `git clone https://github.com/Xavier-Nuttall/TrackMy.git`
+3. Run `cd TrackMy`
+4. Set up configuration file located at `backend/secrets/secrets.ini` or leave default
+5. Run `npm run init-install` sets up the docker image and creates secrets from config.
+6. Run `npm run start` this runs the server.
+
+Connect:
+
+* website on: `localhost:3000`
+* adminer on `localhost:8080`
 <details>
  <summary>User Stories</summary>
  
