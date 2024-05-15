@@ -2,8 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './view/Home';
 import Login from './view/Login';
 import AboutUs from './view/AboutUs';
-import Title from './view/Title';
-import Navigation from './view/Navigation';
+import Title from './components/Title';
+import Navigation from './components/Navigation';
 import { useState } from 'react';
 function App() {
     const [isMenuOpen, setMenuOpen] = useState(true);

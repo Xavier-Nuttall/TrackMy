@@ -1,4 +1,3 @@
-import { useMenuOpen } from '../view/CustomHooks';
 import { Link } from 'react-router-dom';
 
 function Navigation({isOpen}) {
