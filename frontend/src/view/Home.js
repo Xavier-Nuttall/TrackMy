@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
-import { useMainContent, useMenuOpen, useFloor, useRoom, useColor } from './CustomHooks';
+import { useMainContent, useFloor, useRoom, useColor } from './CustomHooks';
 import '../FloorMap.css';
-import { Link } from 'react-router-dom';
 import Chart from 'chart.js/auto';
 import { createUseStyles } from 'react-jss';
 
@@ -195,8 +194,6 @@ function updateColors(colors, setColor, floor, handleFloorClick) {
 }
 
 const HomePage = () => {
-
-    const [menuOpen, setMenuOpen] = useMenuOpen(true); // Set default menu open state to true
     const [floor, setFloor] = useFloor('F1');
     const [room, setRoom] = useRoom(0);
     const [color, setColor] = useColor(['green', 'green', 'green', 'green', 'green', 'green', 'green', 'green', 'green']);
@@ -371,9 +368,6 @@ const HomePage = () => {
         };
     }, []);
 
-    const toggleFilter = () => {
-        setMenuOpen(!menuOpen);
-    };
 
     const handleFloorClick = (floorNumber) => {
         switch (floorNumber) {
@@ -393,30 +387,27 @@ const HomePage = () => {
     };
 
     return (
-        <div className={`content-container${menuOpen ? '2' : '1'}`}>
+        <main>
+            <div className="grid-contain" id="main-show">
+                <div id="graph-show">
 
-            <main>
-                <div className="grid-contain" id="main-show">
-                    <div id="graph-show">
+                    {floor}
 
-                        {floor}
-
-                        <div id="floor-select" >
-                            <dl>
-                                <dt onClick={() => handleFloorClick('F1')}>F1</dt>
-                                <dt onClick={() => handleFloorClick('F2')}>F2</dt>
-                                <dt onClick={() => handleFloorClick('F3')}>F3</dt>
-                            </dl>
-                        </div>
+                    <div id="floor-select" >
+                        <dl>
+                            <dt onClick={() => handleFloorClick('F1')}>F1</dt>
+                            <dt onClick={() => handleFloorClick('F2')}>F2</dt>
+                            <dt onClick={() => handleFloorClick('F3')}>F3</dt>
+                        </dl>
                     </div>
-
-                    <div id="room-show">
-                        <canvas id="lineChart"></canvas>
-                    </div>
-
                 </div>
-            </main>
-        </div>
+
+                <div id="room-show">
+                    <canvas id="lineChart"></canvas>
+                </div>
+
+            </div>
+        </main>
     );
 }
 
