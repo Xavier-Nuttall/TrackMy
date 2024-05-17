@@ -9,6 +9,7 @@ import { useState } from "react";
 import HomePage from "./view/TempHome";
 import GetRoom from "./view/Rooms";
 import 'bootstrap/dist/css/bootstrap.css';
+import AccountPage from "./view/AccountPage";
 
 const ws = new WebSocket("ws://localhost:8081/");
 
@@ -87,6 +88,8 @@ function App() {
                 />
                 <Route path="/login" element={<Login isOpen={isMenuOpen} />} />
                 <Route path="/about" element={<AboutUs isOpen={isMenuOpen} />} />
+                <Route path="/account" element={<AccountPage />} />
+                <Route path="/account/notifications" element={<AccountPage />} />
             </Routes>
         </>
     );
