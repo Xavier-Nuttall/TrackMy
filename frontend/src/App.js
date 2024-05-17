@@ -19,7 +19,7 @@ function App() {
         0: {
             name: "",
             occupancy: [],
-            threshold: 0,
+            threshold: -1,
         },
     });
     const [dataFetched, setDataFetched] = useState(false);
@@ -119,6 +119,10 @@ function getRoomInfo(floorInfo) {
                 rooms[roomID].color = "yellow";
             } else {
                 rooms[roomID].color = "green";
+            }
+
+            if (threshold === -1 || threshold === null) {
+                rooms[roomID].color = "black";
             }
         }
     }

@@ -1,6 +1,8 @@
 const GetFloor = ({ floorNum, rooms, setCurrRoom }) => {
+    const defaultColor = "black";
+
     const getRoomStyle = (roomId) => {
-        const color = rooms[roomId]?.color || "default-color";
+        const color = rooms[roomId]?.color || defaultColor;
         return { backgroundColor: color };
     };
 
@@ -8,20 +10,29 @@ const GetFloor = ({ floorNum, rooms, setCurrRoom }) => {
         setCurrRoom(roomId)
     };
 
+
+    let roomIds = Object.keys(rooms).map(Number);
+    roomIds.sort((a, b) => a - b);
+
+    let index = roomIds[roomIds.length];
+    for (let i = roomIds.length; i < 9; i++) {
+        roomIds.push(++index);
+    }
+
     if (floorNum === 1) {
         return (
             <div className="floor">
-                <div className="room1" style={getRoomStyle(0)} onClick={() => handleRoomClick(0)}>
-                    {rooms[0]?.name || "Default Name 1"}
+                <div className="room1" style={getRoomStyle(roomIds[0])} onClick={() => handleRoomClick(roomIds[0])}>
+                    {rooms[roomIds[0]]?.name || "No Data"}
                 </div>
-                <div className="room2" style={getRoomStyle(1)} onClick={() => handleRoomClick(1)}>
-                    {rooms[1]?.name || "Default Name 2"}
+                <div className="room2" style={getRoomStyle(roomIds[1])} onClick={() => handleRoomClick(roomIds[1])}>
+                    {rooms[roomIds[1]]?.name || "No Data"}
                 </div>
-                <div className="room3" style={getRoomStyle(2)} onClick={() => handleRoomClick(2)}>
-                    {rooms[2]?.name || "Default Name 3"}
+                <div className="room3" style={getRoomStyle(roomIds[2])} onClick={() => handleRoomClick(roomIds[2])}>
+                    {rooms[roomIds[2]]?.name || "No Data"}
                 </div>
-                <div className="room4" style={getRoomStyle(3)} onClick={() => handleRoomClick(3)}>
-                    {rooms[3]?.name || "Default Name 4"}
+                <div className="room4" style={getRoomStyle(roomIds[3])} onClick={() => handleRoomClick(roomIds[3])}>
+                    {rooms[roomIds[3]]?.name || "No Data"}
                 </div>
                 <div className="untracked1"></div>
                 <div className="stairs1"></div>
@@ -31,9 +42,9 @@ const GetFloor = ({ floorNum, rooms, setCurrRoom }) => {
         return (
             <div className="floor">
                 <div className="room5" style={getRoomStyle(4)} onClick={() => handleRoomClick(4)}>
-                    {rooms[4]?.name || "Default Name 1"}</div>
+                    {rooms[4]?.name || "No Data"}</div>
                 <div className="room6" style={getRoomStyle(5)} onClick={() => handleRoomClick(5)}>
-                    {rooms[5]?.name || "Default Name 1"}</div>
+                    {rooms[5]?.name || "No Data"}</div>
                 <div className="untracked2"></div>
                 <div className="corridor1"></div>
                 <div className="stairs2"></div>
@@ -46,11 +57,11 @@ const GetFloor = ({ floorNum, rooms, setCurrRoom }) => {
         return (
             <div className="floor">
                 <div className="room7" style={getRoomStyle(6)} onClick={() => handleRoomClick(6)}>
-                    {rooms[6]?.name || "Default Name 1"}</div>
+                    {rooms[6]?.name || "No Data"}</div>
                 <div className="room8" style={getRoomStyle(7)} onClick={() => handleRoomClick(7)}>
-                    {rooms[7]?.name || "Default Name 1"}</div>
+                    {rooms[7]?.name || "No Data"}</div>
                 <div className="room9" style={getRoomStyle(8)} onClick={() => handleRoomClick(8)}>
-                    {rooms[8]?.name || "Default Name 1"}</div>
+                    {rooms[8]?.name || "No Data"}</div>
                 <div className="untracked3"></div>
                 <div className="stairs6"></div>
             </div>

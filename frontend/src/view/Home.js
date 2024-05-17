@@ -350,22 +350,6 @@ const HomePage = () => {
         ws.onclose = () => {
             console.log('WebSocket disconnected');
         };
-        const update = (newData) => {
-            try {
-                // console.log(newData);
-                // Parse the received data (assuming it's in the correct JSON format)
-                const parsedData = JSON.parse(newData);
-                // console.log(parsedData);
-                if (Array.isArray(parsedData)) {
-                    updateFloorArr(parsedData);
-                } else {
-                    console.error('Invalid data format:', parsedData);
-                }
-
-            } catch (error) {
-                console.error('Error parsing WebSocket data Update Method Home:', error);
-            }
-        };
     }, []);
 
 
