@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import { useState } from "react";
 import HomePage from "./view/TempHome";
 import GetRoom from "./view/Rooms";
+import 'bootstrap/dist/css/bootstrap.css';
 
 const ws = new WebSocket("ws://localhost:8081/");
 
@@ -74,6 +75,7 @@ function App() {
                     path="/"
                     element={
                         <HomePage
+                            isOpen={isMenuOpen}
                             floorNum={currFloor}
                             setCurrFloor={setCurrFloor}
                             floorInfo={floorInfo}

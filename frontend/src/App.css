@@ -1,31 +1,13 @@
-nav {
-  background-color: rgb(34, 36, 50);
-  width: 250px;
-  padding: 0%;
-  margin: 0%;
-  grid-area: menu;
-  transition: transform 0.3s ease;
-  transform: translateX(-100%);
-  display: none;
-}
-
-.nav.open {
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-  transform: translateX(0);
-}
-
 #root {
   display: grid;
   grid-template-areas:
-    "title main"
-    "menu main";
-  grid-template-columns: 250px 1fr; /* Adjust as needed */
+    "title "
+    "content";
+  grid-template-columns: 1fr; /* Adjust as needed */
   grid-template-rows: auto 1fr;
   height: 100%;
   width: 100%;
-  background: black;
+  background: rgb(34, 36, 50);
 }
 
 body {
@@ -34,13 +16,49 @@ body {
   margin: 0;
 }
 
+.map-container {
+  position: relative;
+  width: 85%;
+  height: 80%;
+  background: wheat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 10px solid #966f33;
+}
+
 #title {
   background-color: rgb(34, 36, 50);
   grid-area: title;
   display: grid;
   grid-template-areas: "menu name welcome";
-  border-radius: 10px;
   width: 250px;
+}
+
+.prev-button {
+  background-image: url("../public/downarrow.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.next-button {
+  background-image: url("../public/uparrow.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.cycle-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 #title h1 {
@@ -157,25 +175,53 @@ body {
 }
 
 .chart {
+  background-image: url("../public/cork.png");
   position: relative;
   width: 90%;
-  height: 45%;
+  height: 50%;
+  margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: whitesmoke;
-  padding: 10px;
+  border: 10px solid #966f33;
 }
 
 main {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  grid-area: main;
-  background-color: white;
+  grid-area: content;
+  background-color: whitesmoke;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: transform 0.3s ease;
+  transform: translateX(250px);
+  width: calc(100% - 250px);
+}
+
+main.open {
+  transition: transform 0.3s ease;
+  transform: translateX(0px);
+  width: 100%;
+}
+
+nav {
+  background-color: rgb(34, 36, 50);
+  width: 250px;
+  padding: 0%;
+  margin: 0%;
+  grid-area: content;
+  transition: transform 0.3s ease;
+  transform: translateX(-100%);
+  display: none;
+}
+
+.nav.open {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  transform: translateX(0);
 }
 
 .grid-contain {
@@ -192,10 +238,7 @@ main {
 }
 
 #graph-show {
-  padding: 0%;
-  margin: 0 auto;
-  background-color: whitesmoke;
-  width: 100%;
+  width: 90%;
   height: 50%;
   position: relative;
   grid-row-start: 1;
@@ -203,16 +246,11 @@ main {
   grid-column-start: 1;
   grid-column-end: 3;
   display: flex;
-  justify-content: center;
+  gap: 5.5%;
+  justify-content: left;
   align-items: center;
   font-size: 36pt;
-  border-radius: 15px;
 }
-
-/*.room1, .room2, .room3, .room4, .untracked1, .stairs1 ::after{
-  border: 5px solid rgb(36, 48, 16);
-
-}*/
 
 /*work on this*/
 
@@ -459,14 +497,7 @@ button {
 }
 
 button:hover {
-  position: relative;
   background: rgba(47, 85, 107, 0.8);
-  color: whitesmoke;
-  font-size: 12pt;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  padding: 5px;
-  width: 100%;
-  height: 10%;
 }
 
 .sidebar-button {

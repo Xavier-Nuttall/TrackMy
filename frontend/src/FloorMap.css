@@ -1,9 +1,8 @@
 .floor {
   position: relative;
-  width: 90%;
+  width: 95%;
   height: 90%;
   background: wheat;
-  display: flexbox;
 }
 
 .room1,
@@ -30,6 +29,19 @@
   justify-content: center;
   align-items: center;
   background: black;
+  font-size: medium;
+}
+
+#lineChart {
+  background: rgb(255, 255, 255);
+}
+
+.chart-container {
+  position: relative;
+  width: 90%;
+  height: 80%;
+  background: white;
+  box-shadow: 0 5px 10px;
 }
 
 .room1:hover,
