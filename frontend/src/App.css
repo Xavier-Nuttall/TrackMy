@@ -1,9 +1,9 @@
 nav {
-  background-color: whitesmoke;
+  background-color: rgb(34, 36, 50);
   width: 250px;
   padding: 0%;
   margin: 0%;
-  grid-area: sidebar;
+  grid-area: menu;
   transition: transform 0.3s ease;
   transform: translateX(-100%);
   display: none;
@@ -16,20 +16,31 @@ nav {
   transform: translateX(0);
 }
 
-#title {
-  /* position: relative; */
-  background-color: darkolivegreen;
-  /* padding: 0%;
-  margin: 0%;
-  width: 100%;
-  height: 75px; */
-  grid-area: title;
+#root {
   display: grid;
   grid-template-areas:
-    "menu name welcome";
-  /* grid-template-columns: 60px auto 60px; */
-  background-image: linear-gradient(to right, darkolivegreen, rgb(64, 84, 30));
+    "title main"
+    "menu main";
+  grid-template-columns: 250px 1fr; /* Adjust as needed */
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  width: 100%;
+  background: black;
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+}
+
+#title {
+  background-color: rgb(34, 36, 50);
+  grid-area: title;
+  display: grid;
+  grid-template-areas: "menu name welcome";
   border-radius: 10px;
+  width: 250px;
 }
 
 #title h1 {
@@ -38,10 +49,9 @@ nav {
   padding: 0%;
   margin: 0%;
   color: whitesmoke;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 36pt;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 30pt;
   line-height: 75px;
-  text-decoration: underline;
   justify-content: center;
 }
 
@@ -96,7 +106,7 @@ nav {
   display: inline-block;
   width: 35px;
   height: 30px;
-  background-image: url('../public/mgicon.png');
+  background-image: url("../public/mgicon.png");
   /* Replace with your icon image */
   background-size: cover;
   margin-left: 10px;
@@ -119,7 +129,7 @@ nav {
   text-decoration: none;
   color: whitesmoke;
   font-size: 15pt;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border: none;
 }
 
@@ -127,7 +137,7 @@ nav {
   background-color: rgb(36, 48, 16);
   padding: 2.5% 0;
   margin: 2.5%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #curr-notifs dt {
@@ -146,14 +156,26 @@ nav {
   max-height: auto;
 }
 
+.chart {
+  position: relative;
+  width: 90%;
+  height: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: whitesmoke;
+  padding: 10px;
+}
+
 main {
-  /* position: relative; */
-  /* background: linear-gradient(to bottom, rgb(29, 56, 17), rgb(8, 10, 4)); */
-  /* width: 100%;
-  height: 100%;
-  padding: 0%; */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   grid-area: main;
+  background-color: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid-contain {
@@ -167,9 +189,6 @@ main {
 #main-show {
   grid-template-columns: 50% 50%;
   grid-template-rows: 10% 50%;
-  
-  
-  /*???*/
 }
 
 #graph-show {
@@ -177,7 +196,7 @@ main {
   margin: 0 auto;
   background-color: whitesmoke;
   width: 100%;
-  height: 100%;
+  height: 50%;
   position: relative;
   grid-row-start: 1;
   grid-row-end: 3;
@@ -213,7 +232,6 @@ main {
   padding: 0%;
   margin: 2px auto;
   width: 75%;
-  
 }
 
 #floor-select dt {
@@ -258,50 +276,50 @@ main {
   border-radius: 15px;
 }
 
-#room-show h1{
+#room-show h1 {
   padding: 0;
   margin: 0;
   text-align: center;
 }
 
 #room-show p {
-  margin:0;
+  margin: 0;
   text-align: center;
   font-size: 16pt;
 }
 
-#room-show table{
-  width:80%;
+#room-show table {
+  width: 80%;
   margin: 0 auto;
   font-size: 18pt;
   text-align: center;
 }
 
-#room-show th{
+#room-show th {
   background-color: gainsboro;
   width: 50%;
 }
 
-#room-show h1{
+#room-show h1 {
   padding: 0;
   margin: 0;
   text-align: center;
 }
 
 #room-show p {
-  margin:0;
+  margin: 0;
   text-align: center;
   font-size: 16pt;
 }
 
-#room-show table{
-  width:80%;
+#room-show table {
+  width: 80%;
   margin: 0 auto;
   font-size: 18pt;
   text-align: center;
 }
 
-#room-show th{
+#room-show th {
   background-color: gainsboro;
   width: 50%;
 }
@@ -374,7 +392,7 @@ main {
   background-color: whitesmoke;
   width: 98%;
   height: 98%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border-radius: 15px;
 }
 
@@ -382,7 +400,6 @@ main {
   padding: 0%;
   margin: 0%;
   text-align: center;
-
 }
 
 .general-panel p {
@@ -395,11 +412,11 @@ input {
   border-radius: 2px;
 }
 
-input[type=submit] {
+input[type="submit"] {
   background-color: rgb(71, 111, 60);
   color: whitesmoke;
   font-size: 12pt;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border: 2px solid whitesmoke;
   border-radius: 3px;
   padding: 5px;
@@ -410,7 +427,7 @@ select {
   width: 100%;
   border: 2px solid rgb(71, 111, 60);
   border-radius: 2px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #new-notif fieldset {
@@ -434,7 +451,7 @@ button {
   background: rgba(47, 85, 107, 1);
   color: whitesmoke;
   font-size: 12pt;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
   width: 100%;
   height: 10%;
@@ -446,7 +463,7 @@ button:hover {
   background: rgba(47, 85, 107, 0.8);
   color: whitesmoke;
   font-size: 12pt;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
   width: 100%;
   height: 10%;
@@ -454,26 +471,27 @@ button:hover {
 
 .sidebar-button {
   position: relative;
-  background: linear-gradient(to right, rgb(71, 111, 60), rgb(84, 111, 38));
   margin: 5px 0;
+  background: rgba(34, 36, 50, 0);
   color: whitesmoke;
   font-size: 20pt;
   font-weight: bold;
   text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
   width: 94%;
   height: 40px;
   line-height: 40px;
   border: none;
   border-radius: 5px;
+  text-decoration: none;
 }
 
 .sidebar-button:hover {
   position: relative;
-  background: linear-gradient(to right, rgb(71, 111, 60), rgb(59, 78, 27));
+  background: rgba(255, 255, 255, 0.3);
   color: whitesmoke;
   font-size: 19pt;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
 }
