@@ -109,71 +109,6 @@ body {
   cursor: pointer;
 }
 
-.search-button {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  align-content: center;
-}
-
-.search-button .icon {
-  display: inline-block;
-  width: 35px;
-  height: 30px;
-  background-image: url("../public/mgicon.png");
-  /* Replace with your icon image */
-  background-size: cover;
-  margin-left: 10px;
-  margin-bottom: 10px;
-}
-
-.search-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.hidden {
-  display: none;
-}
-
-.go button {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: whitesmoke;
-  font-size: 15pt;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  border: none;
-}
-
-#curr-notifs {
-  background-color: rgb(36, 48, 16);
-  padding: 2.5% 0;
-  margin: 2.5%;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-#curr-notifs dt {
-  background-color: whitesmoke;
-  padding: 2.5% 2.5%;
-  margin: 2.5% 2.5% 0 2.5%;
-  text-decoration: underline;
-  font-weight: bold;
-}
-
-#curr-notifs dd {
-  background-color: whitesmoke;
-  padding: 0 2.5%;
-  margin: 0 2.5%;
-  min-height: 25px;
-  max-height: auto;
-}
-
 .chart {
   background-image: url("../public/cork.png");
   position: relative;
@@ -224,19 +159,6 @@ nav {
   transform: translateX(0);
 }
 
-.grid-contain {
-  height: 96%;
-  width: 96;
-  margin: 1%;
-  display: grid;
-  gap: 1%;
-}
-
-#main-show {
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 10% 50%;
-}
-
 #graph-show {
   width: 90%;
   height: 50%;
@@ -250,198 +172,6 @@ nav {
   justify-content: left;
   align-items: center;
   font-size: 36pt;
-}
-
-/*work on this*/
-
-#floor-select {
-  padding: 0%;
-  margin: 0;
-  background-color: rgb(36, 48, 16);
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  width: 50px;
-  height: 128px;
-  border-radius: 5px;
-}
-
-#floor-select dl {
-  padding: 0%;
-  margin: 2px auto;
-  width: 75%;
-}
-
-#floor-select dt {
-  margin: 2px 2px;
-  height: 40px;
-  background-color: whitesmoke;
-  font-size: 18pt;
-  font-weight: bold;
-  line-height: 40px;
-  text-align: center;
-  border-radius: 5px;
-}
-
-#floor-select dt:hover {
-  background-color: aqua;
-  cursor: pointer;
-}
-
-#room-graph-show {
-  padding: 0%;
-  margin: 0 auto;
-  background-color: whitesmoke;
-  width: 100%;
-  height: 100%;
-  grid-row-start: 3;
-  grid-row-end: 4;
-  grid-column-start: 1;
-  grid-column-end: 2;
-}
-
-#room-show {
-  padding: 0%;
-  margin: 0 auto;
-  background-color: whitesmoke;
-  width: 100%;
-  height: 100%;
-  grid-row-start: 3;
-  grid-row-end: 4;
-  grid-column-start: 1;
-  grid-column-end: 3;
-  overflow: auto;
-  border-radius: 15px;
-}
-
-#room-show h1 {
-  padding: 0;
-  margin: 0;
-  text-align: center;
-}
-
-#room-show p {
-  margin: 0;
-  text-align: center;
-  font-size: 16pt;
-}
-
-#room-show table {
-  width: 80%;
-  margin: 0 auto;
-  font-size: 18pt;
-  text-align: center;
-}
-
-#room-show th {
-  background-color: gainsboro;
-  width: 50%;
-}
-
-#room-show h1 {
-  padding: 0;
-  margin: 0;
-  text-align: center;
-}
-
-#room-show p {
-  margin: 0;
-  text-align: center;
-  font-size: 16pt;
-}
-
-#room-show table {
-  width: 80%;
-  margin: 0 auto;
-  font-size: 18pt;
-  text-align: center;
-}
-
-#room-show th {
-  background-color: gainsboro;
-  width: 50%;
-}
-
-#login-panel {
-  background-color: whitesmoke;
-  width: 100%;
-  height: 99%;
-  grid-row-start: 1;
-  grid-row-end: 2;
-  border-radius: 15px;
-}
-
-#register-panel {
-  background-color: whitesmoke;
-  width: 100%;
-  height: 99%;
-  grid-row-start: 2;
-  grid-row-end: 3;
-  border-radius: 15px;
-}
-
-#top-set {
-  padding: 0%;
-  margin: 0%;
-  background-color: transparent;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 49.5% 49.5%;
-  gap: 1%;
-}
-
-#new-notif {
-  padding: 0;
-  margin: 0;
-  background-color: whitesmoke;
-  height: 100%;
-  width: 100%;
-  border-radius: 15px;
-}
-
-#mini-map {
-  padding: 0;
-  margin: 0;
-  background-color: whitesmoke;
-  height: 100%;
-  width: 100%;
-  border-radius: 15px;
-}
-
-#full-list {
-  background-color: whitesmoke;
-  width: 100%;
-  height: 98%;
-  overflow: scroll;
-  border-radius: 15px;
-}
-
-#full-list dt {
-  text-decoration: underline;
-  font-weight: bold;
-  border-top: 2px solid rgb(8, 65, 26);
-  padding: 5px;
-}
-
-.general-panel {
-  padding: 0%;
-  margin: 1%;
-  background-color: whitesmoke;
-  width: 98%;
-  height: 98%;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  border-radius: 15px;
-}
-
-.general-panel h1 {
-  padding: 0%;
-  margin: 0%;
-  text-align: center;
-}
-
-.general-panel p {
-  margin: 0 5px;
 }
 
 input {
@@ -459,29 +189,6 @@ input[type="submit"] {
   border-radius: 3px;
   padding: 5px;
   margin: 3px 0;
-}
-
-select {
-  width: 100%;
-  border: 2px solid rgb(71, 111, 60);
-  border-radius: 2px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-#new-notif fieldset {
-  height: 92.5%;
-}
-
-#login-panel fieldset {
-  height: 92.5%;
-}
-
-#register-panel fieldset {
-  height: 92.5%;
-}
-
-legend {
-  font-weight: bold;
 }
 
 button {
@@ -516,6 +223,9 @@ button:hover {
   border: none;
   border-radius: 5px;
   text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sidebar-button:hover {
@@ -525,4 +235,68 @@ button:hover {
   font-size: 19pt;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px;
+}
+
+/* Container styling */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Login box styling */
+.login-box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* General button styling */
+.sso-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific styling for Google button */
+.sso-button.outlook {
+  background-color: #4285f4;
+  color: white;
+}
+
+.sso-button.outlook:hover {
+  background-color: #357ae8;
+}
+
+/* Specific styling for Facebook button */
+.sso-button.facebook {
+  background-color: #3b5998;
+  color: white;
+}
+
+/* Icon styling */
+.sso-icon {
+  width: 20px; /* Adjust width as needed */
+  height: 20px; /* Adjust height as needed */
+  margin-right: 10px;
+  object-fit: contain; /* Ensure image maintains its aspect ratio */
+}
+
+/* Additional styling */
+.sso-button span {
+  display: inline-block;
+  vertical-align: middle;
 }

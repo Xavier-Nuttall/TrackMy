@@ -160,7 +160,7 @@
 }
 
 .untracked1::after {
-  content: "Untracked Facilities";
+  content: "Untracked";
   width: 98%;
   height: 97%;
   left: 1.2%;
@@ -176,7 +176,7 @@
 }
 
 .untracked2::after {
-  content: "Untracked Facilities";
+  content: "Untracked";
   width: 98%;
   height: 97%;
   left: 1.2%;
@@ -192,7 +192,7 @@
 }
 
 .untracked3::after {
-  content: "Untracked Facilities";
+  content: "Untracked";
   width: 98%;
   height: 97%;
   left: 1.2%;

@@ -85,8 +85,8 @@ function App() {
                         />
                     }
                 />
-                <Route path="/login" element={<Login />} />
-                <Route path="/about" element={<AboutUs />} />
+                <Route path="/login" element={<Login isOpen={isMenuOpen} />} />
+                <Route path="/about" element={<AboutUs isOpen={isMenuOpen} />} />
             </Routes>
         </>
     );
