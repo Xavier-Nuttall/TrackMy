@@ -4,7 +4,8 @@ const router = express.Router();
 const { WebSocket } = require('ws');
 const Ajv = require("ajv")
 
-console.log();
+const sessionUserMap = new Map();
+const userSessionMap = new Map();
 
 const ajv = new Ajv();
 const schemaRoomtime = {
@@ -48,9 +49,9 @@ const schemaUser = {
         email: { type: "string" },
         firstName: { type: "string" },
         lastName: { type: "string" },
-        otherNames: { type: "string" },
+        idToken: { type: "string" },
     },
-    required: ["email", "firstName", "lastName", "otherNames"],
+    required: ["email", "firstName", "lastName", "idToken"],
     additionalProperties: false
 }
 
@@ -230,6 +231,7 @@ router.post('/rooms/', async (req, res) => {
         res.status(500).send("Internal Server Error");
     });
 });
+
 router.post('/users/', async (req, res) => {
     try {
         const obj = req.body;
@@ -238,35 +240,24 @@ router.post('/users/', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        const result = dao.addUser(obj.email, obj.firstName, obj.lastName, obj.otherNames);
+        
+        const result = dao.addUser(obj.email, obj.firstName, obj.lastName, obj.email);
+        
         result.then((data) => {
-            res.status(201).send({ user_id: data });
+            sessionUserMap.set(data.session_token, data.user_id);
+            if (userSessionMap.get(data.user_id)==undefined){
+                userSessionMap.set(data.user_id, []);
+            }
+            userSessionMap.get(data.user_id).push(data.session_token);
+            res.status(201).send({ session_token: data.session_token });
         }).catch((err) => {
-            console.error(err);
             if (err.code === '23505') {
                 res.status(409).send("User already exists");
                 return;
             }
+            console.error(err);
             res.status(500).send("Internal Server Error");
         });
-    } catch (error) {
-    }
-});
-
-router.post('/users/session', async (req, res) => {
-    try {
-        const obj = req.body;
-        if (!validateSession(obj)) {
-            res.status(400).send("Bad Request");
-            return;
-        }
-        const result = dao.addSession(obj.user_id);
-        result.then((data) => {
-            res.status(201).send({ session_id: data });
-        }).catch((err) => {
-            res.status(500).send("Internal Server Error");
-        });
-
     } catch (error) {
     }
 });
@@ -279,8 +270,12 @@ router.delete('/users/session/', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        const result = dao.deleteSessionByUser(obj.user_id);
+        const result = dao.deleteSessionByUser(obj.email);
         result.then((data) => {
+            userSessionMap.get(data.user_id).forEach((session) => {
+                sessionUserMap.delete(session);
+            })
+            userSessionMap.delete(data.user_id);
             res.status(204).send('');
         }).catch((err) => {
             res.status(500).send("Internal Server Error");
@@ -288,17 +283,6 @@ router.delete('/users/session/', async (req, res) => {
     } catch (error) {
 
     }
-});
-
-// delete a specific session
-router.delete('/users/session/:id', async (req, res) => {
-    const result = dao.deleteSession(req.params.id);
-    result.then((data) => {
-        res.status(204).send('');
-    }).catch((err) => {
-        res.status(500).send("Internal Server Error");
-    });
-
 });
 
 // gets info about notifications set up

@@ -102,15 +102,24 @@ async function removeNotification(user_id, room_id) {
     return true;
 }
 
-async function addUser(email, firstName, lastName, otherNames) {
-    //generate a user id slug
-    const user_id = uuidv4();
-
+async function addUser(email, firstName, lastName, user_token) {
+    user_id = uuidv4();
+    let user = await getUserByToken(user_token);
+    if (user != undefined){
+        session = addSession(user.user_id);
+        return session.then((data) => {
+            return { session_token: data, user_id: user.user_id};
+        });
+        
+    }
     const res = await pool.query(`
-        INSERT INTO pii.User (email_address, firstname, lastname, othernames, user_id) 
+        INSERT INTO pii.User (email_address, firstname, lastname, user_id, user_token) 
         VALUES ($1, $2, $3, $4, $5);
-    `, [email, firstName, lastName, otherNames, user_id]);
-    return user_id;
+    `, [email, firstName, lastName, user_id, user_token]);
+    session = addSession(user_id);
+    return session.then((data) => {
+        return { session_token: data, user_id: user_id};
+    });
 
 }
 
@@ -123,18 +132,12 @@ async function addSession(user_id) {
     return session_id;
 }
 
-async function deleteSession(session_id) {
+async function deleteSessionByUser(user_token) {
     const res = await pool.query(`
         DELETE FROM pii.login 
-        WHERE session_token = $1;
-    `, [session_id]);
-}
-
-async function deleteSessionByUser(user_id) {
-    const res = await pool.query(`
-        DELETE FROM pii.login 
-        WHERE user_id = $1;
-    `, [user_id]);
+        WHERE user_token = $1 RETURNING user_id LIMIT 1;
+    `, [user_token]);
+    return res.rows[0];
 }
 
 async function getUserBySession(session_id) {
@@ -145,6 +148,15 @@ async function getUserBySession(session_id) {
     `, [session_id]);
     return res.rows[0];
 
+}
+
+async function getUserByToken(user_token) {
+    const res = await pool.query(`
+        SELECT user_id
+        FROM pii.User
+        WHERE user_token = $1 LIMIT 1;
+    `, [user_token]);
+    return res.rows[0];
 }
 
 
@@ -159,8 +171,6 @@ const dao = {
     addNotification,
     removeNotification,
     addUser,
-    addSession,
-    deleteSession,
     deleteSessionByUser,
     getUserBySession
 };
