@@ -88,8 +88,8 @@ function App() {
                 />
                 <Route path="/login" element={<Login isOpen={isMenuOpen} />} />
                 <Route path="/about" element={<AboutUs isOpen={isMenuOpen} />} />
-                <Route path="/account" element={<AccountPage />} />
-                <Route path="/account/notifications" element={<AccountPage />} />
+                <Route path="/account" element={<AccountPage isOpen={isMenuOpen} />} />
+                <Route path="/account/notification-update" element={<AccountPage />} />
             </Routes>
         </>
     );
