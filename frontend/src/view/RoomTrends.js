@@ -78,15 +78,28 @@ function generateGraphInfo(occupancyData, selectedPeriod) {
             "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"],
         Day: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         Month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        Year: year => year.toString() // Keep the year as is
+        Year: (startYear, endYear) => {
+            const years = [];
+            for (let year = startYear; year <= endYear; year++) {
+                years.push(year.toString());
+            }
+            return years;
+        }
     };
 
     const periodKeyFunction = periodMapping[selectedPeriod];
-    const labels = periodLabels[selectedPeriod];
+    let labels = periodLabels[selectedPeriod];
+
+    // If the period is 'Year', we need to generate the labels dynamically
+    if (selectedPeriod === 'Year') {
+        // Example: Generating labels from 2000 to 2020
+        labels = periodLabels.Year(1950, 2020);
+    }
+
     const occupancyStats = {};
 
     // Initialize occupancyStats with all period labels
-    labels.forEach((label, index) => {
+    labels.forEach(label => {
         occupancyStats[label] = {
             sum: 0,
             min: Infinity,
@@ -126,9 +139,6 @@ function generateGraphInfo(occupancyData, selectedPeriod) {
             stats.average = 0;
         }
     });
-
-    // console.log(occupancyStats);
-    // console.log(occupancyData);
 
     return {
         stats: occupancyStats,
