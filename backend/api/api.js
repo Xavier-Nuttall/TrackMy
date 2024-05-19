@@ -122,6 +122,7 @@ router.get('/rooms/occupancy/', async (req, res) => {
     const result = dao.getOccupancy();
 
     result.then((data) => {
+        console.log(data);
         // reduce the return from the dao into something more readable
         let returnArray = [];
         for (l in data) {
@@ -137,8 +138,7 @@ router.get('/rooms/occupancy/', async (req, res) => {
 
 
     }).catch((err) => {
-        ;
-        console.error('Error:', error);
+        console.error('Error:', err);
         res.status(500).send("Internal Server Error");
     });
 });

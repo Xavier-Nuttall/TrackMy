@@ -18,13 +18,9 @@ function AccountPage({ isOpen }) {
   }
 
   const notifications = [
-    { id: 1, roomName: "Room 101", notificationZone: "Zone A" },
-    { id: 2, roomName: "Room 102", notificationZone: "Zone B" },
-    { id: 3, roomName: "Room 103", notificationZone: "Zone C" },
-    { id: 3, roomName: "Room 103", notificationZone: "Zone C" },
-    { id: 3, roomName: "Room 103", notificationZone: "Zone C" },
-    { id: 3, roomName: "Room 103", notificationZone: "Zone C" },
-    { id: 3, roomName: "Room 103", notificationZone: "Zone C" },
+    { id: 1, roomName: "Room 101", notificationZone: "Zone A", startTime: "16:00:00", endTime: "21:00:00" },
+    { id: 2, roomName: "Room 102", notificationZone: "Zone B", startTime: "13:00:00", endTime: "19:00:00" },
+    { id: 3, roomName: "Room 103", notificationZone: "Zone C", startTime: "15:00:00", endTime: "20:00:00" },
     // Add more notifications as needed
   ];
 
@@ -52,8 +48,9 @@ function AccountPage({ isOpen }) {
                   checked={notification.enabled}
                   onChange={() => handleNotificationToggle(notification.id)}
                 />
-                <p><strong>Room Name:</strong> {notification.roomName}</p>
-                <p><strong>Notification Zone:</strong> {notification.notificationZone}</p>
+                <p><strong>Room Name:</strong> <br></br>{notification.roomName}</p>
+                <p><strong>Notification Zone:</strong> <br></br>{notification.notificationZone}</p>
+                <p><strong>Time Zone:</strong> <br></br>{notification.startTime} - {notification.endTime}</p>
                 <button onClick={() => handleUpdate(notification.id)} className="update-button">Update</button>
               </div>
             ))}
