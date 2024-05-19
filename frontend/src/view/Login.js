@@ -2,29 +2,21 @@ import React from "react";
 import '../App.css';
 import { useMsal } from '@azure/msal-react';
 import { loginRequest } from "../authConfig";
-import { callMsGraph } from "../graph";
 
 function LoginPage({ isOpen }) {
   const { instance } = useMsal();
   function loginPopup() {
     instance.loginPopup(loginRequest).then(response => {
       console.log(response);
-      callMsGraph(response.accessToken).then(secondResponse => {
-        let firstName = secondResponse.givenName;
-        let lastName = secondResponse.surname;
-        let email = secondResponse.mail;
-        let idToken = response.idToken;
-        fetch('http://localhost:3001/api/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ firstName, lastName, email, idToken }),
-        })
+      fetch('http://localhost:3001/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ accessToken: response.accessToken }),
+      })
 
 
-        console.log(secondResponse);
-      });
     })
     .catch(e => {
       console.log(e);

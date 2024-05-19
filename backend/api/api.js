@@ -46,12 +46,9 @@ const schemaUsertime = {
 const schemaUser = {
     type: "object",
     properties: {
-        email: { type: "string" },
-        firstName: { type: "string" },
-        lastName: { type: "string" },
-        idToken: { type: "string" },
+        accessToken: { type: "string" },
     },
-    required: ["email", "firstName", "lastName", "idToken"],
+    required: ["accessToken"],
     additionalProperties: false
 }
 
@@ -240,16 +237,17 @@ router.post('/users/', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        
-        const result = dao.addUser(obj.email, obj.firstName, obj.lastName, obj.email);
-        
+
+        result = dao.addUser(obj.accessToken);
+
         result.then((data) => {
             sessionUserMap.set(data.session_token, data.user_id);
-            if (userSessionMap.get(data.user_id)==undefined){
+            if (userSessionMap.get(data.user_id) == undefined) {
                 userSessionMap.set(data.user_id, []);
             }
             userSessionMap.get(data.user_id).push(data.session_token);
-            res.status(201).send({ session_token: data.session_token });
+            res.status(201).send({ email: data.email, firstName: data.firstName, lastName: data.lastName, session_token: data.session_token });
+
         }).catch((err) => {
             if (err.code === '23505') {
                 res.status(409).send("User already exists");
@@ -259,6 +257,7 @@ router.post('/users/', async (req, res) => {
             res.status(500).send("Internal Server Error");
         });
     } catch (error) {
+        console.error('Error:', error);
     }
 });
 
@@ -281,7 +280,7 @@ router.delete('/users/session/', async (req, res) => {
             res.status(500).send("Internal Server Error");
         });
     } catch (error) {
-
+        log.error(error);
     }
 });
 
