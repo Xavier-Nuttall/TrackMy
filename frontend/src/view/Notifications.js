@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function EditNotificationsPage({ notification }) {
     console.log(notification);
@@ -6,11 +7,6 @@ function EditNotificationsPage({ notification }) {
     const [roomThreshold, setRoomThreshold] = useState(notification?.room_threshold || "No");
     const [startTime, setStartTime] = useState(notification?.start_time || "");
     const [endTime, setEndTime] = useState(notification?.end_time || "");
-
-    // Check if notification or its properties are undefined before accessing them
-    if (!notification) {
-        return <main><div>Error: Invalid notification data</div></main>;
-    }
 
     const handleSave = () => {
         // Perform save logic with updated data
@@ -25,9 +21,16 @@ function EditNotificationsPage({ notification }) {
         // Redirect or close the editing page after saving
     };
 
+    const navigate = useNavigate();
+
     const handleCancel = () => {
-        // Handle cancel action (e.g., redirect or close the editing page)
+        navigate("/account/");
     };
+
+    // Check if notification or its properties are undefined before accessing them
+    if (!notification) {
+        return <main><div>Error: Invalid notification data</div></main>;
+    }
 
     return (
         <main>
