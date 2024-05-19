@@ -125,6 +125,7 @@ router.get('/rooms/occupancy/', async (req, res) => {
     const result = dao.getOccupancy();
 
     result.then((data) => {
+        console.log(data);
         // reduce the return from the dao into something more readable
         let returnArray = [];
         for (l in data) {
@@ -140,8 +141,7 @@ router.get('/rooms/occupancy/', async (req, res) => {
 
 
     }).catch((err) => {
-        ;
-        console.error('Error:', error);
+        console.error('Error:', err);
         res.status(500).send("Internal Server Error");
     });
 });
@@ -240,12 +240,12 @@ router.post('/users/', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        
+
         const result = dao.addUser(obj.email, obj.firstName, obj.lastName, obj.email);
-        
+
         result.then((data) => {
             sessionUserMap.set(data.session_token, data.user_id);
-            if (userSessionMap.get(data.user_id)==undefined){
+            if (userSessionMap.get(data.user_id) == undefined) {
                 userSessionMap.set(data.user_id, []);
             }
             userSessionMap.get(data.user_id).push(data.session_token);

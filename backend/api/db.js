@@ -105,12 +105,12 @@ async function removeNotification(user_id, room_id) {
 async function addUser(email, firstName, lastName, user_token) {
     user_id = uuidv4();
     let user = await getUserByToken(user_token);
-    if (user != undefined){
+    if (user != undefined) {
         session = addSession(user.user_id);
         return session.then((data) => {
-            return { session_token: data, user_id: user.user_id};
+            return { session_token: data, user_id: user.user_id };
         });
-        
+
     }
     const res = await pool.query(`
         INSERT INTO pii.User (email_address, firstname, lastname, user_id, user_token) 
@@ -118,7 +118,7 @@ async function addUser(email, firstName, lastName, user_token) {
     `, [email, firstName, lastName, user_id, user_token]);
     session = addSession(user_id);
     return session.then((data) => {
-        return { session_token: data, user_id: user_id};
+        return { session_token: data, user_id: user_id };
     });
 
 }
