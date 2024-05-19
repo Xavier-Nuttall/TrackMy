@@ -10,6 +10,7 @@ import HomePage from "./view/TempHome";
 import GetRoom from "./view/Rooms";
 import 'bootstrap/dist/css/bootstrap.css';
 import AccountPage from "./view/AccountPage";
+import GetRoomTrend from "./view/RoomTrends";
 
 const ws = new WebSocket("ws://localhost:8081/");
 
@@ -90,6 +91,7 @@ function App() {
                 <Route path="/about" element={<AboutUs isOpen={isMenuOpen} />} />
                 <Route path="/account" element={<AccountPage isOpen={isMenuOpen} />} />
                 <Route path="/account/notification-update" element={<AccountPage />} />
+                <Route path="/room-trends" element={<GetRoomTrend isOpen={isMenuOpen} rooms={floorInfo} />} />
             </Routes>
         </>
     );
