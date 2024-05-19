@@ -26,18 +26,18 @@ function LoginPage({ isOpen }) {
         console.log(secondResponse);
       });
     })
-    .catch(e => {
-      console.log(e);
-    });
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   return (
     <main className={`${isOpen ? '' : 'open'}`}>
-      <div class="container">
-        <div class="login-box">
+      <div className="container">
+        <div className="login-box">
           <h2>Login</h2>
-          <button class="sso-button outlook" onClick={() => { loginPopup() }}>
-            <img src="/outlook.png" alt="Outlook Icon" class="sso-icon" />
+          <button className="sso-button outlook" onClick={() => { loginPopup() }}>
+            <img src="/outlook.png" alt="Outlook Icon" className="sso-icon" />
             <span>Sign in with Outlook</span>
           </button>
         </div>
