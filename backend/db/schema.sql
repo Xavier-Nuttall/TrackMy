@@ -8,7 +8,6 @@ CREATE TABLE tracking.Room(
 
 CREATE TABLE pii.User(
     user_id CHAR(36) PRIMARY KEY,
-    user_token VARCHAR(2048) UNIQUE NOT NULL,
     email_address VARCHAR(255) NOT NULL UNIQUE,
     CHECK (email_address LIKE '%@%'),
     firstname VARCHAR(100) NOT NULL,
