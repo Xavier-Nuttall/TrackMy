@@ -86,6 +86,14 @@ async function getNotifications() {
     return res.rows;
 }
 
+async function getNotificationsByID(userId) {
+    const res = await pool.query(`
+        SELECT ut.user_id, ut.room_id, ut.room_threshold, ut.start_time, ut.end_time
+        FROM tracking.UserTimes ut WHERE ut.user_id = $1;
+    `, [userId]);
+    return res.rows;
+}
+
 async function addNotification(user_id, room_id, room_threshold, start_time, end_time) {
     const res = await pool.query(`
         INSERT INTO tracking.UserTimes (user_id, room_id, room_threshold, start_time, end_time)
@@ -172,7 +180,8 @@ const dao = {
     removeNotification,
     addUser,
     deleteSessionByUser,
-    getUserBySession
+    getUserBySession,
+    getNotificationsByID
 };
 
 module.exports = dao;

@@ -300,6 +300,18 @@ router.get('/users/notifications/', async (req, res) => {
     });
 });
 
+// Gets info about notifications set up for a specific user
+router.get('/users/notifications/:userid', async (req, res) => {
+    const userId = req.params.userid; // Get the user ID from the request parameters
+    try {
+        const data = await dao.getNotificationsByID(userId); // Pass the user ID to the DAO method
+        res.status(200).json(data); // Respond to the client with the retrieved data in JSON format
+    } catch (error) {
+        console.error('Error:', error); // Log the error for debugging
+        res.status(500).send("Internal Server Error"); // Send a 500 status code for internal server errors
+    }
+});
+
 // deletes a specific notif
 router.delete('/users/:userid/notifications/:roomid', async (req, res) => {
 

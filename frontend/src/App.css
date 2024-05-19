@@ -341,27 +341,6 @@ button:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.notifications h2 {
-  margin-bottom: 15px;
-}
-
-.notifications-list {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.notification-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.notification-row p {
-  margin: 0 10px;
-}
-
 .update-button,
 .delete-button {
   padding: 5px 10px;
@@ -422,4 +401,112 @@ button:hover {
   font-size: 18px;
   color: #333;
   margin-bottom: 5px;
+}
+
+.notification-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; /* Updated grid layout */
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  align-items: center; /* Align items vertically in the center */
+}
+
+.notification-row p {
+  margin: 0;
+}
+
+.notification-row button {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.notification-row button.update-button {
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.notification-row button.delete-button {
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.add-notification-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-notifications-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.edit-notifications-page h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input[type="number"],
+input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.save-button,
+.cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.save-button:hover {
+  background-color: #0056b3;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.cancel-button:hover {
+  background-color: #b02a37;
 }

@@ -9,6 +9,7 @@ import HomePage from "./view/TempHome";
 import 'bootstrap/dist/css/bootstrap.css';
 import AccountPage from "./view/AccountPage";
 import GetRoomTrend from "./view/RoomTrends";
+import UpdateNotifications from "./view/Notifications";
 
 const ws = new WebSocket("ws://localhost:8081/");
 
@@ -24,6 +25,8 @@ function App() {
     });
     const [dataFetched, setDataFetched] = useState(false);
     const [rooms, setRooms] = useState(getRoomInfo());
+    const [notificationData, setNotificationData] = useState(null);
+
 
     const fetchData = async () => {
         await fetchRoomData(floorInfo, setFloorInfo);
@@ -87,8 +90,8 @@ function App() {
                 />
                 <Route path="/login" element={<Login isOpen={isMenuOpen} />} />
                 <Route path="/about" element={<AboutUs isOpen={isMenuOpen} />} />
-                <Route path="/account" element={<AccountPage isOpen={isMenuOpen} />} />
-                <Route path="/account/notification-update" element={<AccountPage />} />
+                <Route path="/account" element={<AccountPage isOpen={isMenuOpen} setNotification={setNotificationData} />} />
+                <Route path="/account/notification-update" element={<UpdateNotifications notification={notificationData} />} />
                 <Route path="/room-trends" element={<GetRoomTrend isOpen={isMenuOpen} rooms={floorInfo} />} />
             </Routes>
         </>

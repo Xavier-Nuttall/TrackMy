@@ -1,6 +1,7 @@
 import React from "react";
 import GetFloor from "./Floor";
 import GetGraph from "./Graph";
+import "../FloorMap.css";
 
 function HomePage({ isOpen, floorNum, setCurrFloor, floorInfo, rooms, currRoom, setCurrRoom }) {
     // console.log(currRoom);
