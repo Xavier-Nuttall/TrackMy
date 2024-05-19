@@ -2,6 +2,24 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+async function deleteNotif(notification) {
+  try {
+    const response = await fetch(`http://localhost:3001/api/users/notifications`, {
+      method: "DELETE", // Specify the DELETE method for deleting the notification
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(notification),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+  } catch (error) {
+    console.error("Error fetching room data:", error.message);
+  }
+}
+
 function AccountPage({ isOpen, setNotification }) {
   let user = {
     email: "temch584@student.otago.ac.nz",
@@ -18,7 +36,6 @@ function AccountPage({ isOpen, setNotification }) {
     const fetchNotifications = async () => {
       try {
         const notificationsData = await getNotifications(userId);
-        console.log("Notifications data:", notificationsData); // Log the data received
         setNotifications(notificationsData);
       } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -28,12 +45,18 @@ function AccountPage({ isOpen, setNotification }) {
     fetchNotifications();
   }, []);
 
-  const handleDelete = (id) => {
-    console.log(`Update notification ${id}`);
-  };
-
   const handleAddNotification = () => {
 
+  };
+
+  const handleDeleteNotification = async (notification) => {
+    try {
+      await deleteNotif(notification);
+      const updatedNotifications = await getNotifications(userId);
+      setNotifications(updatedNotifications);
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+    }
   };
 
   const navigate = useNavigate();
@@ -67,7 +90,7 @@ function AccountPage({ isOpen, setNotification }) {
                 <p>0-{notification.room_threshold}</p>
                 <p>{new Date(notification.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} - {new Date(notification.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
                 <div><button onClick={() => redirectToPage(notification)} className="update-button">Update</button></div>
-                <div><button onClick={() => handleDelete(notification.id)} className="delete-button">Delete</button></div>
+                <div><button onClick={() => handleDeleteNotification(notification)} className="delete-button">Delete</button></div>
               </div>
             ))}
           </div>

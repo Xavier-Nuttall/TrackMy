@@ -105,11 +105,22 @@ async function addNotification(user_id, room_id, room_threshold, start_time, end
 }
 
 async function removeNotification(user_id, room_id) {
-    const res = await pool.query(`
-        DELETE FROM tracking.UserTimes
-        WHERE user_id = $1 AND room_id = $2;
-    `, [user_id, room_id]);
-    return true;
+    try {
+        const res = await pool.query(`
+            DELETE FROM tracking.UserTimes
+            WHERE user_id = $1 AND room_id = $2;
+        `, [user_id, room_id]);
+
+        // Check if rows were affected (deletion successful)
+        if (res.rowCount > 0) {
+            return true; // Deletion successful
+        } else {
+            return false; // Deletion failed (no rows affected)
+        }
+    } catch (error) {
+        console.error("Error removing notification:", error);
+        return false; // Deletion failed due to an error
+    }
 }
 
 async function addUser(accessToken) {

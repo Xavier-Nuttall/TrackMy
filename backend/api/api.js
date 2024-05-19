@@ -33,22 +33,25 @@ const validateRoom = ajv.compile(schemaRoom);
 const schemaUsertime = {
     type: "object",
     properties: {
-        user_id: { type: "number" },
+        user_id: { type: "string" },
         room_id: { type: "number" },
         room_threshold: { type: "number" },
         start_time: { type: "string" },
         end_time: { type: "string" }
     },
-    required: ["user_id", "room_id", "room_threshold", "start_time", "end-time"],
+    required: ["user_id", "room_id", "room_threshold", "start_time", "end_time"],
     additionalProperties: false
 }
 
 const schemaUser = {
     type: "object",
     properties: {
-        accessToken: { type: "string" },
+        email: { type: "string" },
+        firstName: { type: "string" },
+        lastName: { type: "string" },
+        idToken: { type: "string" },
     },
-    required: ["accessToken"],
+    required: ["email", "firstName", "lastName", "idToken"],
     additionalProperties: false
 }
 
@@ -238,7 +241,7 @@ router.post('/users/', async (req, res) => {
             return;
         }
 
-        result = dao.addUser(obj.accessToken);
+        const result = dao.addUser(obj.email, obj.firstName, obj.lastName, obj.email);
 
         result.then((data) => {
             sessionUserMap.set(data.session_token, data.user_id);
@@ -246,8 +249,7 @@ router.post('/users/', async (req, res) => {
                 userSessionMap.set(data.user_id, []);
             }
             userSessionMap.get(data.user_id).push(data.session_token);
-            res.status(201).send({ email: data.email, firstName: data.firstName, lastName: data.lastName, session_token: data.session_token });
-
+            res.status(201).send({ session_token: data.session_token });
         }).catch((err) => {
             if (err.code === '23505') {
                 res.status(409).send("User already exists");
@@ -257,7 +259,6 @@ router.post('/users/', async (req, res) => {
             res.status(500).send("Internal Server Error");
         });
     } catch (error) {
-        console.error('Error:', error);
     }
 });
 
@@ -280,7 +281,7 @@ router.delete('/users/session/', async (req, res) => {
             res.status(500).send("Internal Server Error");
         });
     } catch (error) {
-        log.error(error);
+
     }
 });
 
@@ -312,22 +313,22 @@ router.get('/users/notifications/:userid', async (req, res) => {
 });
 
 // deletes a specific notif
-router.delete('/users/:userid/notifications/:roomid', async (req, res) => {
+router.delete('/users/notifications/', async (req, res) => {
 
     try {
         const obj = req.body;
+        console.log("Hi");
+        console.log(obj);
+        console.log(obj.user_id);
         // check the post message for the correct fields
         if (!validateUsertime(obj)) {
+            console.log(validateUsertime.errors);
             res.status(400).send("Bad Request");
             return;
         }
 
         // deletes it
         const result = dao.removeNotification(obj.user_id, obj.room_id);
-        if (queryResult.rows.length === 0) {
-            res.status(404).send("Notif not found");
-            return;
-        }
         res.status(204).send(result);
         // if the query failed send an error message
     } catch (error) {

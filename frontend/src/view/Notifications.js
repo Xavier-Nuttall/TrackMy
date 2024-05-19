@@ -7,8 +7,6 @@ function EditNotificationsPage({ notification }) {
     const [startTime, setStartTime] = useState(notification?.start_time || "");
     const [endTime, setEndTime] = useState(notification?.end_time || "");
 
-    console.log(roomThreshold);
-
     // Check if notification or its properties are undefined before accessing them
     if (!notification) {
         return <main><div>Error: Invalid notification data</div></main>;
@@ -20,6 +18,9 @@ function EditNotificationsPage({ notification }) {
         console.log("Updated Room Threshold:", roomThreshold);
         console.log("Updated Start Time:", startTime);
         console.log("Updated End Time:", endTime);
+        notification.room_threshold = roomThreshold;
+        notification.start_time = startTime;
+        notification.end_time = endTime;
 
         // Redirect or close the editing page after saving
     };
