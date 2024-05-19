@@ -1,13 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import Home from "./view/Home";
 import Login from "./view/Login";
 import AboutUs from "./view/AboutUs";
 import Title from "./components/Title";
 import Navigation from "./components/Navigation";
 import { useState } from "react";
 import HomePage from "./view/TempHome";
-import GetRoom from "./view/Rooms";
 import 'bootstrap/dist/css/bootstrap.css';
 import AccountPage from "./view/AccountPage";
 import GetRoomTrend from "./view/RoomTrends";
