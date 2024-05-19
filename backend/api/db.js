@@ -202,7 +202,6 @@ const dao = {
     removeNotification,
     addUser,
     deleteSessionByUser,
-    getUserBySession,
     getNotificationsByID
 };
 
