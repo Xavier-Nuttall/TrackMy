@@ -18,8 +18,8 @@ CREATE TABLE tracking.UserTimes(
     user_id CHAR(36),
     room_id INT,
     room_threshold INT NOT NULL,
-    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    end_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    start_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    end_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_usertimes_userid FOREIGN KEY(user_id) REFERENCES pii.User(user_id),
     CONSTRAINT fk_usertimes_roomid FOREIGN KEY(room_id) REFERENCES tracking.Room(room_id),
@@ -39,11 +39,13 @@ CREATE TABLE pii.Login(
 CREATE TABLE tracking.RoomTime(
     room_id INT NOT NULL,
     occupancy INT NOT NULL,
-    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_roomtime FOREIGN KEY (room_id) REFERENCES tracking.Room(room_id),
 
     PRIMARY KEY (room_id, time)
 );
+
+SELECT create_hypertable('tracking.RoomTime', 'time');
 
 

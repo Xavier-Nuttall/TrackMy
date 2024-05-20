@@ -34,11 +34,12 @@ async function getRooms() {
     return ret.rows;
 }
 
-async function getOccupancy() {
+async function getOccupancy(start, end) {
     const ret = await pool.query(`
         SELECT t.room_id, t.time, t.occupancy
-        FROM tracking.RoomTime t;
-    `);
+        FROM tracking.RoomTime t
+        WHERE t.time >= to_timestamp($1) AND t.time <= to_timestamp($2);
+    `, [start/1000 , end/10 ]);
 
     return ret.rows;
 }

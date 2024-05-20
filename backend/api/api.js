@@ -122,9 +122,16 @@ router.get('/rooms/', async (req, res) => {
 });
 
 
-const offset = 1000*60*60*12;
 router.get('/rooms/occupancy/', async (req, res) => {
-    const result = dao.getOccupancy();
+    // const offset = 1000*60*60*12;
+    now = Date.now()
+    dayStart = 1000 * 60 * 60 * 8;
+    dayEnd = 1000 * 60 * 60 * 18;
+    start = req.query.start ? req.query.start : now - (now % (1000 * 60 * 60 * 24)) + dayStart;
+    console.log(new Date(start));
+    end = req.query.end ? req.query.end : now - (now % (1000 * 60 * 60 * 24)) + dayEnd;
+    console.log(new Date(end));
+    const result = dao.getOccupancy(start,end);
 
     result.then((data) => {
         // reduce the return from the dao into something more readable
@@ -134,7 +141,7 @@ router.get('/rooms/occupancy/', async (req, res) => {
             if (!returnArray[obj.room_id]) {
                 returnArray[obj.room_id] = { room_id: obj.room_id, occupancy: [] };
             }
-            time = (Date.parse(obj.time) + offset);
+            time = (Date.parse(obj.time));
             // console.log(time);
             returnArray[obj.room_id].occupancy.push({ time: new Date(time), value: obj.occupancy });
         }

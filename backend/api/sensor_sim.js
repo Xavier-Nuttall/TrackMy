@@ -1,5 +1,5 @@
-const startTime = Date.parse("1970-01-01T08:00:00Z");
-const endTime = Date.parse("1970-01-01T18:00:00Z");
+const startTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000)) + 1000 * 60 * 60 * 8;
+const endTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000)) + 1000 * 60 * 60 * 18;
 const days = 1;
 const steps = 10;
 
