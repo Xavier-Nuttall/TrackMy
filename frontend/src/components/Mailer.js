@@ -25,9 +25,7 @@ const sendMail = (to, subject, text, html) => {
         .catch(error => console.log('Error sending email:', error));
 };
 
-// Function to get email details (this could be dynamic based on your application needs)
 const getEmailDetails = async () => {
-    // Replace this with your logic to fetch email details
     return {
         to: 'cjmt97@gmail.com',
         subject: 'Scheduled Email',
@@ -57,8 +55,6 @@ const sendEmailImmediately = async () => {
 };
 
 sendEmailImmediately();
-// Uncomment the following line if you want to send an email immediately when the script starts
-// sendEmailImmediately();
 
 console.log('Email scheduler started. Emails will be sent every 15 minutes.');
 console.log('Call sendEmailImmediately() to send an email right away.');
