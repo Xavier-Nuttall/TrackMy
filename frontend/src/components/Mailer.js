@@ -37,7 +37,7 @@ const getEmailDetails = async () => {
 };
 
 // Schedule the email sending function to run every 15 minutes
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('*/15 * * * *', async () => {
     try {
         const emailDetails = await getEmailDetails();
         await sendMail(emailDetails.to, emailDetails.subject, emailDetails.text, emailDetails.html);
