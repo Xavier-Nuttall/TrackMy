@@ -122,7 +122,7 @@ router.get('/rooms/', async (req, res) => {
 });
 
 
-const offset = 1000*60*60*12;
+const offset = 1000 * 60 * 60 * 12;
 router.get('/rooms/occupancy/', async (req, res) => {
     const result = dao.getOccupancy();
 
@@ -319,12 +319,8 @@ router.delete('/users/notifications/', async (req, res) => {
 
     try {
         const obj = req.body;
-        console.log("Hi");
-        console.log(obj);
-        console.log(obj.user_id);
         // check the post message for the correct fields
         if (!validateUsertime(obj)) {
-            console.log(validateUsertime.errors);
             res.status(400).send("Bad Request");
             return;
         }

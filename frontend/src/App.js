@@ -35,6 +35,11 @@ function App() {
     };
     const [currRoom, setCurrRoom] = useState(0);
 
+    function connect() {
+        console.log('Attempting WebSocket connection...')
+        ws = new WebSocket('ws://localhost:8081');
+    }
+
     // Useffect for Websocket input
     useEffect(() => {
         ws.onopen = () => {
@@ -46,6 +51,7 @@ function App() {
         };
         ws.onclose = () => {
             console.log("WebSocket disconnected");
+            setTimeout(connect, 2000);
         };
         fetchData();
     }, []);
