@@ -99,9 +99,14 @@ async function getNotificationsByID(userId) {
 async function addNotification(user_id, room_id, room_threshold, start_time, end_time) {
     const res = await pool.query(`
         INSERT INTO tracking.UserTimes (user_id, room_id, room_threshold, start_time, end_time)
-        VALUES ($1, $2, $3, $4, $5);
+        VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (user_id, room_id) DO UPDATE
+        SET room_threshold = excluded.room_threshold,
+            start_time = excluded.start_time,
+            end_time = excluded.end_time;
     `, [user_id, room_id, room_threshold, start_time, end_time]);
-    return false;;
+
+    return res.rowCount > 0;
 }
 
 async function removeNotification(user_id, room_id) {

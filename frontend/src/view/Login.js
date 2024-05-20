@@ -15,8 +15,6 @@ function LoginPage({ isOpen }) {
         },
         body: JSON.stringify({ accessToken: response.accessToken }),
       })
-
-
     })
       .catch(e => {
         console.log(e);

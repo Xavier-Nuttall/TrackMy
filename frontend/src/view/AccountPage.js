@@ -27,7 +27,6 @@ function AccountPage({ isOpen, setNotification }) {
     lastName: "Templeton",
     otherNames: "Jack McKay"
   }
-
   const userId = "d78bc510-3eeb-4197-817a-7f665f032fa0";
 
   const [notifications, setNotifications] = useState([]);
@@ -45,10 +44,6 @@ function AccountPage({ isOpen, setNotification }) {
     fetchNotifications();
   }, []);
 
-  const handleAddNotification = () => {
-
-  };
-
   const handleDeleteNotification = async (notification) => {
     try {
       await deleteNotif(notification);
@@ -64,6 +59,10 @@ function AccountPage({ isOpen, setNotification }) {
   const redirectToPage = (notification) => {
     setNotification(notification);
     navigate("/account/notification-update", { state: { notification } });
+  };
+
+  const handleAddNotification = () => {
+    navigate("/account/add-notification");
   };
 
   return (

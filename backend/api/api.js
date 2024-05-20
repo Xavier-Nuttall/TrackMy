@@ -338,13 +338,14 @@ router.delete('/users/notifications/', async (req, res) => {
 });
 
 // posting a new notification
-router.post('/users/notifications/:', async (req, res) => {
-
+router.post('/users/notifications/', async (req, res) => {
     try {
+
         const obj = req.body;
-        // check the post message for the correct fields
-        if (!validateUsertime(obj)) {
-            res.status(400).send("Bad Request");
+        const validationErrors = validateUsertime(obj);
+        if (validationErrors) {
+            const errorMessage = Object.values(validationErrors).join(', ');
+            res.status(400).send(`Validation Error: ${errorMessage}`);
             return;
         }
 
@@ -360,7 +361,6 @@ router.post('/users/notifications/:', async (req, res) => {
         console.error('Error:', error);
         res.status(500).send("Internal Server Error");
     }
-
 });
 
 
