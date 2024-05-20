@@ -121,20 +121,22 @@ router.get('/rooms/', async (req, res) => {
     })
 });
 
+
+const offset = 1000*60*60*12;
 router.get('/rooms/occupancy/', async (req, res) => {
     const result = dao.getOccupancy();
 
     result.then((data) => {
-        console.log(data);
         // reduce the return from the dao into something more readable
         let returnArray = [];
         for (l in data) {
             obj = data[l];
-            // console.log(obj);
             if (!returnArray[obj.room_id]) {
                 returnArray[obj.room_id] = { room_id: obj.room_id, occupancy: [] };
             }
-            returnArray[obj.room_id].occupancy.push({ time: obj.time, value: obj.occupancy });
+            time = (Date.parse(obj.time) + offset);
+            // console.log(time);
+            returnArray[obj.room_id].occupancy.push({ time: new Date(time), value: obj.occupancy });
         }
         res.status(200).send(returnArray);
 
