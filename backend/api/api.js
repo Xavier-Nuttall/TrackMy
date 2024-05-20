@@ -121,7 +121,24 @@ router.get('/rooms/', async (req, res) => {
     })
 });
 
+router.get('/notif/emails/', async (req, res) => {
+    try {
+        const result = await dao.getNotifEmails(); // Assuming dao.getNotifEmails() returns a Promise
 
+        if (!result) {
+            res.status(404).send("Email details not found");
+            return;
+        }
+
+        res.status(200).json(result);
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error('Error fetching email details:', error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+const offset = 1000 * 60 * 60 * 12;
 router.get('/rooms/occupancy/', async (req, res) => {
     // const offset = 1000*60*60*12;
     now = Date.now()
@@ -326,12 +343,8 @@ router.delete('/users/notifications/', async (req, res) => {
 
     try {
         const obj = req.body;
-        console.log("Hi");
-        console.log(obj);
-        console.log(obj.user_id);
         // check the post message for the correct fields
         if (!validateUsertime(obj)) {
-            console.log(validateUsertime.errors);
             res.status(400).send("Bad Request");
             return;
         }
@@ -349,13 +362,14 @@ router.delete('/users/notifications/', async (req, res) => {
 });
 
 // posting a new notification
-router.post('/users/notifications/:', async (req, res) => {
-
+router.post('/users/notifications/', async (req, res) => {
     try {
+
         const obj = req.body;
-        // check the post message for the correct fields
-        if (!validateUsertime(obj)) {
-            res.status(400).send("Bad Request");
+        const validationErrors = validateUsertime(obj);
+        if (validationErrors) {
+            const errorMessage = Object.values(validationErrors).join(', ');
+            res.status(400).send(`Validation Error: ${errorMessage}`);
             return;
         }
 
@@ -371,7 +385,6 @@ router.post('/users/notifications/:', async (req, res) => {
         console.error('Error:', error);
         res.status(500).send("Internal Server Error");
     }
-
 });
 
 

@@ -10,8 +10,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import AccountPage from "./view/AccountPage";
 import GetRoomTrend from "./view/RoomTrends";
 import UpdateNotifications from "./view/Notifications";
+import AddNotification from "./view/AddNotification";
 
-const ws = new WebSocket("ws://localhost:8081/");
+let ws = new WebSocket("ws://localhost:8081/");
 
 function App() {
     const [isMenuOpen, setMenuOpen] = useState(true);
@@ -35,6 +36,11 @@ function App() {
     };
     const [currRoom, setCurrRoom] = useState(0);
 
+    function connect() {
+        console.log('Attempting WebSocket connection...')
+        ws = new WebSocket('ws://localhost:8081');
+    }
+
     // Useffect for Websocket input
     useEffect(() => {
         ws.onopen = () => {
@@ -46,6 +52,7 @@ function App() {
         };
         ws.onclose = () => {
             console.log("WebSocket disconnected");
+            setTimeout(connect, 2000);
         };
         fetchData();
     }, []);
@@ -93,6 +100,7 @@ function App() {
                 <Route path="/account" element={<AccountPage isOpen={isMenuOpen} setNotification={setNotificationData} />} />
                 <Route path="/account/notification-update" element={<UpdateNotifications notification={notificationData} />} />
                 <Route path="/room-trends" element={<GetRoomTrend isOpen={isMenuOpen} rooms={floorInfo} />} />
+                <Route path="/account/add-notification" element={<AddNotification rooms={floorInfo} />} />
             </Routes>
         </>
     );
