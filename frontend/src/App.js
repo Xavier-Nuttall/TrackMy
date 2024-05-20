@@ -175,6 +175,7 @@ async function fetchRoomData(floorInfo, setFloorInfo) {
                         name: prevState[roomId]?.name || "", // Use existing name or empty string
                         occupancy: room.occupancy,
                         threshold: prevState[roomId]?.threshold || 0, // Use existing threshold or 0
+                        room_id: roomId,
                     },
                 }));
             }
@@ -221,6 +222,7 @@ async function fetchRoomThresholdData(floorInfo, setFloorInfo) {
                     name: room.room_name,
                     threshold: room.threshold,
                     occupancy: prevState[roomId]?.occupancy || [],
+                    room_id: roomId,
                 },
             }));
         });

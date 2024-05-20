@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto'; // Import Chart.js library
 
-function GetTrendGraph({ floorInfo, room, timePeriod, graphInfo }) {
+function GetTrendGraph({ room, timePeriod, graphInfo }) {
     const canvasRef = useRef(null); // Ref for the canvas element
 
     useEffect(() => {

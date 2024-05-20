@@ -1,5 +1,5 @@
 const time = Date.parse("1970-01-01T22:20:00Z");
-const occupancy = 0;
+const occupancy = 69;
 const rId = 0;
 
 async function single(time, occupancy, rId) {

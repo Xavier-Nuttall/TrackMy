@@ -1,12 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Dropdown } from 'react-bootstrap';
 import GetTrendGraph from './TrendGraph';
+
+async function fetchRoomData(roomid) {
+    try {
+        const response = await fetch(`http://localhost:3001/api/rooms/${roomid}/occupancy`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const responseData = await response.json();
+        console.log(responseData);
+        return responseData;
+    } catch (error) {
+        console.error("Error fetching room data:", error.message);
+    }
+}
 
 function GetRoomTrend({ isOpen, rooms }) {
     const periods = ["Hour", "Day", "Month", "Year"];
 
     const [selectedRoom, setSelectedRoom] = useState({ name: "None", roomid: 0, occupancy: [0] });
     const [selectedPeriod, setSelectedPeriod] = useState("Hour");
+    const [occupancy, setOccupancy] = useState([]);
 
     const handleRoomChange = (room) => {
         setSelectedRoom(room);
@@ -16,9 +38,26 @@ function GetRoomTrend({ isOpen, rooms }) {
         setSelectedPeriod(periodId)
     };
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchRoomData(selectedRoom.room_id);
+                setOccupancy(data); // Update the state with fetched data
+            } catch (error) {
+                console.error("Error fetching room data:", error);
+            }
+        };
+        fetchData();
+
+        if (selectedRoom && selectedRoom.room_id) {
+            fetchData();
+        }
+    }, [selectedRoom]);
+
     const roomList = Object.values(rooms);
 
-    const graphInfo = generateGraphInfo(selectedRoom.occupancy, selectedPeriod);
+
+    const graphInfo = generateGraphInfo(occupancy, selectedPeriod);
 
     return (
         <main className={`room-trends ${isOpen ? '' : 'open'}`}>
@@ -31,7 +70,7 @@ function GetRoomTrend({ isOpen, rooms }) {
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                             {roomList.map(room => (
-                                <Dropdown.Item key={room.id} onClick={() => handleRoomChange(room)}>
+                                <Dropdown.Item key={room.room_id} onClick={() => handleRoomChange(room)}>
                                     {room.name}
                                 </Dropdown.Item>
                             ))}
@@ -56,7 +95,7 @@ function GetRoomTrend({ isOpen, rooms }) {
             <Row className="mt-4 trend-container ">
                 <Col>
                     {/* Space for Chart */}
-                    <GetTrendGraph floorInfo={rooms} room={selectedRoom} timePeriod={selectedPeriod} graphInfo={graphInfo} />
+                    <GetTrendGraph room={selectedRoom} timePeriod={selectedPeriod} graphInfo={graphInfo} />
                 </Col>
             </Row>
         </main>
@@ -65,6 +104,13 @@ function GetRoomTrend({ isOpen, rooms }) {
 
 }
 function generateGraphInfo(occupancyData, selectedPeriod) {
+
+    if (!occupancyData) {
+        return {
+            stats: [],
+            labels: []
+        };
+    }
 
     const periodMapping = {
         Hour: date => date.getUTCHours(),
