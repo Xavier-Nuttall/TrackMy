@@ -205,6 +205,15 @@ async function getUserByEmail(email_address) {
 
 }
 
+async function getNotifEmails() {
+    const res = await pool.query(`
+    SELECT u.email_address, t.room_id
+    FROM pii.User u
+    JOIN tracking.UserTimes t ON u.user_id = t.user_id
+    WHERE CURRENT_TIMESTAMP BETWEEN t.start_time AND t.end_time;
+    `);
+    return res.rows;
+}
 
 const dao = {
     getRooms,
@@ -218,7 +227,8 @@ const dao = {
     removeNotification,
     addUser,
     deleteSessionByUser,
-    getNotificationsByID
+    getNotificationsByID,
+    getNotifEmails
 };
 
 module.exports = dao;

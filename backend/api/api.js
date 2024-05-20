@@ -121,6 +121,22 @@ router.get('/rooms/', async (req, res) => {
     })
 });
 
+router.get('/notif/emails/', async (req, res) => {
+    try {
+        const result = await dao.getNotifEmails(); // Assuming dao.getNotifEmails() returns a Promise
+
+        if (!result) {
+            res.status(404).send("Email details not found");
+            return;
+        }
+
+        res.status(200).json(result);
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error('Error fetching email details:', error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 const offset = 1000 * 60 * 60 * 12;
 router.get('/rooms/occupancy/', async (req, res) => {

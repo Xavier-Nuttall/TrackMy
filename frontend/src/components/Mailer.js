@@ -26,19 +26,40 @@ const sendMail = (to, subject, text, html) => {
 };
 
 const getEmailDetails = async () => {
-    return {
-        to: 'cjmt97@gmail.com',
-        subject: 'Scheduled Email',
-        text: 'This is a scheduled email sent every 15 minutes.',
-        html: '<p>This is a <strong>scheduled</strong> email sent every 15 minutes.</p>'
-    };
+    try {
+        const response = await fetch('http://localhost:3001/api/notif/emails/');
+        if (!response.ok) {
+            throw new Error('Failed to fetch email details');
+        }
+        const data = await response.json();
+        console.log(data);
+        // Map the data to the desired format
+        const emailDetails = data.map(({ email_address, room_id }) => ({
+            to: email_address,
+            subject: 'Room Id: ' + room_id + " Occupancy", // Use room_id instead of roomid
+            text: 'The room with roomId ' + room_id + ' has gone below your required threshold',
+        }));
+        return emailDetails;
+    } catch (error) {
+        console.log('Error fetching email details:', error);
+        // Default email details in case of error
+        return [
+            { to: 'cjmt97@gmail.com', subject: 'Default Subject', text: 'Default Text', roomId: 6 },
+            { to: 'cjmt97@gmail.com', subject: 'Default Subject', text: 'Default Text', roomId: 8 }
+        ];
+    }
 };
+
+
 
 // Schedule the email sending function to run every 15 minutes
 cron.schedule('*/15 * * * *', async () => {
     try {
-        const emailDetails = await getEmailDetails();
-        await sendMail(emailDetails.to, emailDetails.subject, emailDetails.text, emailDetails.html);
+        const emailDetailsArray = await getEmailDetails();
+        // Iterate through each email detail object and send an email
+        for (const emailDetails of emailDetailsArray) {
+            await sendMail(emailDetails.to, emailDetails.subject, emailDetails.text, emailDetails.html);
+        }
     } catch (error) {
         console.log('Error scheduling email:', error);
     }
@@ -47,12 +68,16 @@ cron.schedule('*/15 * * * *', async () => {
 // Method to send email immediately
 const sendEmailImmediately = async () => {
     try {
-        const emailDetails = await getEmailDetails();
-        await sendMail(emailDetails.to, emailDetails.subject, emailDetails.text, emailDetails.html);
+        const emailDetailsArray = await getEmailDetails();
+        // Iterate through each email detail object and send an email
+        for (const emailDetails of emailDetailsArray) {
+            await sendMail(emailDetails.to, emailDetails.subject, emailDetails.text);
+        }
     } catch (error) {
         console.log('Error sending immediate email:', error);
     }
 };
+
 
 sendEmailImmediately();
 
