@@ -46,22 +46,20 @@ const schemaUsertime = {
 const schemaUser = {
     type: "object",
     properties: {
-        email: { type: "string" },
-        firstName: { type: "string" },
-        lastName: { type: "string" },
-        idToken: { type: "string" },
+        accessToken: { type: "string" },
     },
-    required: ["email", "firstName", "lastName", "idToken"],
+    required: ["accessToken"],
     additionalProperties: false
 }
 
 const schemaSession = {
     type: "object",
     properties: {
-        user_id: { type: "string" },
+        session_token: { type: "string" },
     },
-    required: ["user_id"],
+    required: ["session_token"],
     additionalProperties: false
+
 }
 
 const validateRoomtime = ajv.compile(schemaRoomtime);
@@ -267,7 +265,7 @@ router.post('/users/', async (req, res) => {
             return;
         }
 
-        const result = dao.addUser(obj.email, obj.firstName, obj.lastName, obj.email);
+        const result = dao.addUser(obj.accessToken);
 
         result.then((data) => {
             sessionUserMap.set(data.session_token, data.user_id);
@@ -275,7 +273,7 @@ router.post('/users/', async (req, res) => {
                 userSessionMap.set(data.user_id, []);
             }
             userSessionMap.get(data.user_id).push(data.session_token);
-            res.status(201).send({ session_token: data.session_token });
+            res.status(201).send({ email: data.email, firstName: data.firstName, lastName: data.lastName, session_token: data.session_token });
         }).catch((err) => {
             if (err.code === '23505') {
                 res.status(409).send("User already exists");
@@ -296,7 +294,7 @@ router.delete('/users/session/', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        const result = dao.deleteSessionByUser(obj.email);
+        const result = dao.deleteSession(obj.email);
         result.then((data) => {
             userSessionMap.get(data.user_id).forEach((session) => {
                 sessionUserMap.delete(session);
@@ -304,6 +302,7 @@ router.delete('/users/session/', async (req, res) => {
             userSessionMap.delete(data.user_id);
             res.status(204).send('');
         }).catch((err) => {
+            console.error(err);
             res.status(500).send("Internal Server Error");
         });
     } catch (error) {

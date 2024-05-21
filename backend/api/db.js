@@ -189,11 +189,11 @@ async function addSession(user_id) {
     return session_id;
 }
 
-async function deleteSessionByUser(user_token) {
+async function deleteSession(session_token) {
     const res = await pool.query(`
         DELETE FROM pii.login 
-        WHERE user_token = $1 RETURNING user_id LIMIT 1;
-    `, [user_token]);
+        WHERE session_token = $1 RETURNING user_id;
+    `, [session_token]);
     return res.rows[0];
 }
 
@@ -228,7 +228,7 @@ const dao = {
     addNotification,
     removeNotification,
     addUser,
-    deleteSessionByUser,
+    deleteSession,
     getNotificationsByID,
     getNotifEmails
 };

@@ -24,9 +24,12 @@ function App() {
             threshold: -1,
         },
     });
+
     const [dataFetched, setDataFetched] = useState(false);
     const [rooms, setRooms] = useState(getRoomInfo());
     const [notificationData, setNotificationData] = useState(null);
+
+    const [userSession, setUserSession] = useState({});
 
 
     const fetchData = async () => {
@@ -95,7 +98,7 @@ function App() {
                         />
                     }
                 />
-                <Route path="/login" element={<Login isOpen={isMenuOpen} />} />
+                <Route path="/login" element={<Login isOpen={isMenuOpen} userSession={userSession} setUserSession={setUserSession} />} />
                 <Route path="/about" element={<AboutUs isOpen={isMenuOpen} />} />
                 <Route path="/account" element={<AccountPage isOpen={isMenuOpen} setNotification={setNotificationData} />} />
                 <Route path="/account/notification-update" element={<UpdateNotifications notification={notificationData} />} />
