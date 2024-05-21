@@ -28,8 +28,8 @@ function App() {
     const [dataFetched, setDataFetched] = useState(false);
     const [rooms, setRooms] = useState(getRoomInfo());
     const [notificationData, setNotificationData] = useState(null);
-
     const [userSession, setUserSession] = useState({});
+    const [loggedIn, setLoggedIn] = useState(false);
 
 
     const fetchData = async () => {
@@ -82,7 +82,7 @@ function App() {
                 onToggle={() => setMenuOpen(!isMenuOpen)}
                 isMenuOpen={isMenuOpen}
             />
-            <Navigation isOpen={isMenuOpen} />
+            <Navigation isOpen={isMenuOpen} loggedIn={loggedIn} />
             <Routes>
                 <Route
                     path="/"
@@ -98,9 +98,9 @@ function App() {
                         />
                     }
                 />
-                <Route path="/login" element={<Login isOpen={isMenuOpen} userSession={userSession} setUserSession={setUserSession} />} />
+                <Route path="/login" element={<Login isOpen={isMenuOpen} userSession={userSession} setUserSession={setUserSession} setLoggedIn={setLoggedIn} />} />
                 <Route path="/about" element={<AboutUs isOpen={isMenuOpen} />} />
-                <Route path="/account" element={<AccountPage isOpen={isMenuOpen} setNotification={setNotificationData} />} />
+                <Route path="/account" element={<AccountPage isOpen={isMenuOpen} setNotification={setNotificationData} userSession={userSession} />} />
                 <Route path="/account/notification-update" element={<UpdateNotifications notification={notificationData} />} />
                 <Route path="/room-trends" element={<GetRoomTrend isOpen={isMenuOpen} rooms={floorInfo} />} />
                 <Route path="/account/add-notification" element={<AddNotification rooms={floorInfo} />} />

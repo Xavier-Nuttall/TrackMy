@@ -146,7 +146,7 @@ router.get('/rooms/occupancy/', async (req, res) => {
     console.log(new Date(start));
     end = req.query.end ? req.query.end : now - (now % (1000 * 60 * 60 * 24)) + dayEnd;
     console.log(new Date(end));
-    const result = dao.getOccupancy(start,end);
+    const result = dao.getOccupancy(start, end);
 
     result.then((data) => {
         // reduce the return from the dao into something more readable
@@ -326,10 +326,12 @@ router.get('/users/notifications/', async (req, res) => {
 });
 
 // Gets info about notifications set up for a specific user
-router.get('/users/notifications/:userid', async (req, res) => {
-    const userId = req.params.userid; // Get the user ID from the request parameters
+router.get('/users/notifications/:session_token', async (req, res) => {
+    const session_token = req.params.session_token; // Get the user ID from the request parameters
+
     try {
-        const data = await dao.getNotificationsByID(userId); // Pass the user ID to the DAO method
+        const user_id = await dao.getUserId(session_token);
+        const data = await dao.getNotificationsByID(user_id); // Pass the user ID to the DAO method
         res.status(200).json(data); // Respond to the client with the retrieved data in JSON format
     } catch (error) {
         console.error('Error:', error); // Log the error for debugging

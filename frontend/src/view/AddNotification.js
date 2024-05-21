@@ -64,17 +64,6 @@ function AddNotification({ rooms }) {
             <div className="container">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="userId">User ID:</label>
-                        <input
-                            type="text"
-                            id="userId"
-                            name="user_id"
-                            value={formData.user_id}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
                         <label htmlFor="roomId">Room ID:</label>
                         <input
                             type="number"

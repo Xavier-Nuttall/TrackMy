@@ -20,21 +20,15 @@ async function deleteNotif(notification) {
   }
 }
 
-function AccountPage({ isOpen, setNotification }) {
-  let user = {
-    email: "temch584@student.otago.ac.nz",
-    firstName: "Charlie",
-    lastName: "Templeton",
-    otherNames: "Jack McKay"
-  }
-  const userId = "d78bc510-3eeb-4197-817a-7f665f032fa0";
 
+
+function AccountPage({ isOpen, setNotification, userSession }) {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const notificationsData = await getNotifications(userId);
+        const notificationsData = await getNotifications(userSession.session_token);
         setNotifications(notificationsData);
       } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -47,7 +41,7 @@ function AccountPage({ isOpen, setNotification }) {
   const handleDeleteNotification = async (notification) => {
     try {
       await deleteNotif(notification);
-      const updatedNotifications = await getNotifications(userId);
+      const updatedNotifications = await getNotifications(userSession.session_token);
       setNotifications(updatedNotifications);
     } catch (error) {
       console.error('Error deleting notification:', error);
@@ -70,10 +64,7 @@ function AccountPage({ isOpen, setNotification }) {
       <div className="account-container">
         <div className="user-info">
           <h2>Account Information</h2>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>First Name:</strong> {user.firstName}</p>
-          <p><strong>Last Name:</strong> {user.lastName}</p>
-          <p><strong>Other Names:</strong> {user.otherNames}</p>
+          <p><strong>Email:</strong> {userSession.email}</p>
         </div>
         <div className="notifications">
           <h2>Notifications</h2>
@@ -100,9 +91,9 @@ function AccountPage({ isOpen, setNotification }) {
   );
 }
 
-async function getNotifications(userId) {
+async function getNotifications(userSessionId) {
   try {
-    const response = await fetch(`http://localhost:3001/api/users/notifications/${userId}`, {
+    const response = await fetch(`http://localhost:3001/api/users/notifications/${userSessionId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -115,7 +106,7 @@ async function getNotifications(userId) {
     const data = await response.json();
     // Check if data is empty
     if (data.length === 0) {
-      return [{ id: null, room_id: 'No notifications found', room_threshold: null, start_time: null, end_time: null }];
+      return [];
     }
     return data;
   } catch (error) {

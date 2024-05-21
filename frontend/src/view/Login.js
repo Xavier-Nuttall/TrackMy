@@ -3,7 +3,7 @@ import '../App.css';
 import { useMsal } from '@azure/msal-react';
 import { loginRequest } from "../authConfig";
 
-function LoginPage({ isOpen, setUserSession, userSession }) {
+function LoginPage({ isOpen, setUserSession, userSession, setLoggedIn }) {
   const { instance } = useMsal();
   function loginPopup() {
     instance.loginPopup(loginRequest).then(response => {
@@ -16,7 +16,9 @@ function LoginPage({ isOpen, setUserSession, userSession }) {
         body: JSON.stringify({ accessToken: response.accessToken }),
       }).then(response => {
         response.json().then(data => {
+          console.log(data);
           setUserSession(data);
+          setLoggedIn(true);
         });
       });
     }).catch(e => {
@@ -34,6 +36,7 @@ function LoginPage({ isOpen, setUserSession, userSession }) {
       },
       body: JSON.stringify({ session_token: userSession.session_token }),
     });
+    setLoggedIn(false);
   }
 
   function signedIn() {
@@ -47,7 +50,7 @@ function LoginPage({ isOpen, setUserSession, userSession }) {
           <h2>Login</h2>
           <button className="sso-button outlook" onClick={() => { signedIn() ? logout() : loginPopup() }}>
             <img src="/outlook.png" alt="Outlook Icon" className="sso-icon" />
-            { signedIn() ? <span>Sign Out</span> : <span>Sign in with Outlook</span>}
+            {signedIn() ? <span>Sign Out</span> : <span>Sign in with Outlook</span>}
           </button>
         </div>
       </div>

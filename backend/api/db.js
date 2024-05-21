@@ -40,7 +40,7 @@ async function getOccupancy(start, end) {
         FROM tracking.RoomTime t
         WHERE t.time >= to_timestamp($1) AND t.time <= to_timestamp($2)
         ORDER BY t.time;
-    `, [start/1000 , end/1000 ]);
+    `, [start / 1000, end / 1000]);
 
     return ret.rows;
 }
@@ -217,6 +217,15 @@ async function getNotifEmails() {
     return res.rows;
 }
 
+async function getUserId(session_token) {
+    const res = await pool.query(`
+    SELECT l.user_id 
+    FROM pii.Login l 
+    WHERE session_token = $1;
+    `, [session_token]);
+    return res.rows;
+}
+
 const dao = {
     getRooms,
     getOccupancy,
@@ -230,7 +239,8 @@ const dao = {
     addUser,
     deleteSession,
     getNotificationsByID,
-    getNotifEmails
+    getNotifEmails,
+    getUserId
 };
 
 module.exports = dao;
