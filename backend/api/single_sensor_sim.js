@@ -1,16 +1,14 @@
-const time = Date.parse("1970-01-01T22:20:00Z");
-const occupancy = 69;
+const time = Date.parse("2024-05-21T13:24:00Z");
+const occupancy = 10;
 const rId = 0;
 
-async function single(time, occupancy, rId) {
-
-
+async function single(timestamp, occupancy, rId) {
     ret = await fetch('http://localhost:3001/api/rooms/occupancy', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ room_id: rId, time: time, occupancy: occupancy })
+        body: JSON.stringify({ room_id: rId, time: timestamp, occupancy: occupancy })
     })
 }
 
