@@ -294,7 +294,7 @@ router.delete('/users/session/', async (req, res) => {
             res.status(400).send("Bad Request");
             return;
         }
-        const result = dao.deleteSession(obj.email);
+        const result = dao.deleteSession(obj.session_token);
         result.then((data) => {
             userSessionMap.get(data.user_id).forEach((session) => {
                 sessionUserMap.delete(session);
@@ -306,7 +306,7 @@ router.delete('/users/session/', async (req, res) => {
             res.status(500).send("Internal Server Error");
         });
     } catch (error) {
-
+        console.error(error);
     }
 });
 

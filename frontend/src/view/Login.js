@@ -16,7 +16,6 @@ function LoginPage({ isOpen, setUserSession, userSession }) {
         body: JSON.stringify({ accessToken: response.accessToken }),
       }).then(response => {
         response.json().then(data => {
-          console.log(data);
           setUserSession(data);
         });
       });
