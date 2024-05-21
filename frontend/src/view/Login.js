@@ -7,7 +7,6 @@ function LoginPage({ isOpen, setUserSession, userSession, setLoggedIn }) {
   const { instance } = useMsal();
   function loginPopup() {
     instance.loginPopup(loginRequest).then(response => {
-      console.log(response);
       fetch('http://localhost:3001/api/users', {
         method: 'POST',
         headers: {
@@ -16,7 +15,7 @@ function LoginPage({ isOpen, setUserSession, userSession, setLoggedIn }) {
         body: JSON.stringify({ accessToken: response.accessToken }),
       }).then(response => {
         response.json().then(data => {
-          console.log(data);
+          localStorage.setItem('userSession', JSON.stringify(data));
           setUserSession(data);
           setLoggedIn(true);
         });
@@ -29,6 +28,7 @@ function LoginPage({ isOpen, setUserSession, userSession, setLoggedIn }) {
   function logout() {
     console.log('logout');
     setUserSession({});
+    localStorage.removeItem('userSession');
     fetch('http://localhost:3001/api/users/session', {
       method: 'DELETE',
       headers: {

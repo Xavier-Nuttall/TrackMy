@@ -60,6 +60,15 @@ function App() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        const storedSession = localStorage.getItem('userSession');
+        if (storedSession) {
+            const sessionData = JSON.parse(storedSession);
+            setUserSession(sessionData);
+            setLoggedIn(true);
+        }
+    }, [setUserSession, setLoggedIn]);
+
     // UseEffect to run getColors after data is fetched
     useEffect(() => {
         if (dataFetched) {

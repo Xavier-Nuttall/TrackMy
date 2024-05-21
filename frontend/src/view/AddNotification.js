@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import '../AddNotification.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function AddNotification({ rooms }) {
+    const location = useLocation();
+    const { session_id } = location.state || {}
+    console.log(session_id);
     const [formData, setFormData] = useState({
-        user_id: '',
+        session_id: session_id,
         room_id: '',
         room_threshold: '',
         start_time: '',
@@ -15,6 +18,8 @@ function AddNotification({ rooms }) {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,12 +36,13 @@ function AddNotification({ rooms }) {
             if (response.ok) {
                 alert('Notification added successfully!');
                 setFormData({
-                    user_id: '',
+                    session_id: session_id,
                     room_id: '',
                     room_threshold: '',
                     start_time: '',
                     end_time: ''
                 });
+                navigate("/account");
             } else {
                 alert('Failed to add notification.');
             }
@@ -46,11 +52,9 @@ function AddNotification({ rooms }) {
         }
     };
 
-    const navigate = useNavigate();
-
     const handleCancel = () => {
         setFormData({
-            user_id: '',
+            session_id: session_id,
             room_id: '',
             room_threshold: '',
             start_time: '',

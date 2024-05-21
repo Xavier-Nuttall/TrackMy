@@ -20,15 +20,15 @@ async function deleteNotif(notification) {
   }
 }
 
-
-
 function AccountPage({ isOpen, setNotification, userSession }) {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
+        console.log(userSession.session_token);
         const notificationsData = await getNotifications(userSession.session_token);
+        console.log(notificationsData);
         setNotifications(notificationsData);
       } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -36,6 +36,7 @@ function AccountPage({ isOpen, setNotification, userSession }) {
     };
 
     fetchNotifications();
+    console.log("Hit");
   }, []);
 
   const handleDeleteNotification = async (notification) => {
@@ -56,9 +57,10 @@ function AccountPage({ isOpen, setNotification, userSession }) {
   };
 
   const handleAddNotification = () => {
-    navigate("/account/add-notification");
+    navigate("/account/add-notification", { state: { session_id: userSession.session_token } });
   };
 
+  console.log(notifications);
   return (
     <main className={`account-page ${isOpen ? '' : 'open'}`}>
       <div className="account-container">
@@ -104,8 +106,11 @@ async function getNotifications(userSessionId) {
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
     const data = await response.json();
+    console.log("LOL");
+    console.log(data);
     // Check if data is empty
     if (data.length === 0) {
+      console.log("bad Hit");
       return [];
     }
     return data;

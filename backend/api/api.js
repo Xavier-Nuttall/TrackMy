@@ -259,6 +259,7 @@ router.post('/rooms/', async (req, res) => {
 router.post('/users/', async (req, res) => {
     try {
         const obj = req.body;
+        console.log(obj);
         // validate
         if (!validateUser(obj)) {
             res.status(400).send("Bad Request");
@@ -327,11 +328,14 @@ router.get('/users/notifications/', async (req, res) => {
 
 // Gets info about notifications set up for a specific user
 router.get('/users/notifications/:session_token', async (req, res) => {
-    const session_token = req.params.session_token; // Get the user ID from the request parameters
+    const session_token = req.params.session_token;
 
     try {
+        console.log(session_token);
         const user_id = await dao.getUserId(session_token);
-        const data = await dao.getNotificationsByID(user_id); // Pass the user ID to the DAO method
+        console.log(user_id);
+        const data = await dao.getNotificationsByID(user_id[0].user_id); // Pass the user ID to the DAO method
+        console.log(data);
         res.status(200).json(data); // Respond to the client with the retrieved data in JSON format
     } catch (error) {
         console.error('Error:', error); // Log the error for debugging
@@ -364,9 +368,16 @@ router.delete('/users/notifications/', async (req, res) => {
 
 // posting a new notification
 router.post('/users/notifications/', async (req, res) => {
+    const session_token = req.body.session_id;
     try {
-
-        const obj = req.body;
+        const user_id = await dao.getUserId(session_token);
+        const obj = {
+            user_id: user_id[0].user_id,
+            room_id: req.body.room_id,
+            room_threshold: req.body.room_threshold,
+            start_time: req.body.start_time,
+            end_time: req.body.end_time,
+        };
         const validationErrors = validateUsertime(obj);
         if (validationErrors) {
             const errorMessage = Object.values(validationErrors).join(', ');
