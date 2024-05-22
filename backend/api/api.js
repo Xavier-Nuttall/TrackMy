@@ -144,14 +144,13 @@ router.get('/notif/emails/', async (req, res) => {
 
 const offset = 1000 * 60 * 60 * 12;
 router.get('/rooms/occupancy/', async (req, res) => {
-    // const offset = 1000*60*60*12;
     now = Date.now()
-    dayStart = 1000 * 60 * 60 * 8;
-    dayEnd = 1000 * 60 * 60 * 18;
+    dayStart = 1000 * 60 * 60 * 12; // 12:00 AM NZT
+    dayEnd = 1000 * 60 * 60 * 24 + dayStart - 1; // 11:59 PM NZT
+
     start = req.query.start ? req.query.start : now - (now % (1000 * 60 * 60 * 24)) + dayStart;
-    //console.log(new Date(start));
     end = req.query.end ? req.query.end : now - (now % (1000 * 60 * 60 * 24)) + dayEnd;
-    //console.log(new Date(end));
+
     const result = dao.getOccupancy(start, end);
 
     result.then((data) => {
@@ -410,7 +409,7 @@ router.post('/users/notifications/', async (req, res) => {
 });
 
 // Schedule the email sending function to run every 15 minutes
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('*/15 * * * *', async () => {
     console.log("notifs");
     sendEmailImmediately();
 });
