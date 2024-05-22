@@ -18,7 +18,7 @@ test("GetRooms/", async () => {
             threshold: 20
         },
     ]
-    
+    console.log(data);
     expect(data).toEqual(arr1);
 });
 

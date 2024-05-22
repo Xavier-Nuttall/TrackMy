@@ -5,7 +5,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 function AddNotification({ rooms }) {
     const location = useLocation();
     const { session_id } = location.state || {}
-    console.log(session_id);
     const [formData, setFormData] = useState({
         session_id: session_id,
         room_id: '',

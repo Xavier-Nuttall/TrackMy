@@ -16,7 +16,6 @@ async function fetchRoomData(roomid) {
         }
 
         const responseData = await response.json();
-        console.log(responseData);
         return responseData;
     } catch (error) {
         console.error("Error fetching room data:", error.message);
@@ -24,9 +23,9 @@ async function fetchRoomData(roomid) {
 }
 
 function GetRoomTrend({ isOpen, rooms }) {
-    const periods = ["Hour", "Day", "Month", "Year"];
+    const periods = ["Hour", "Day", "Month"];
 
-    const [selectedRoom, setSelectedRoom] = useState({ name: "None", roomid: 0, occupancy: [0] });
+    const [selectedRoom, setSelectedRoom] = useState(rooms[0]);
     const [selectedPeriod, setSelectedPeriod] = useState("Hour");
     const [occupancy, setOccupancy] = useState([]);
 
@@ -115,8 +114,7 @@ function generateGraphInfo(occupancyData, selectedPeriod) {
     const periodMapping = {
         Hour: date => date.getUTCHours(),
         Day: date => date.getUTCDay(),
-        Month: date => date.getUTCMonth(),
-        Year: date => date.getUTCFullYear()
+        Month: date => date.getUTCMonth()
     };
 
     const periodLabels = {
@@ -124,23 +122,10 @@ function generateGraphInfo(occupancyData, selectedPeriod) {
             "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM"],
         Day: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         Month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        Year: (startYear, endYear) => {
-            const years = [];
-            for (let year = startYear; year <= endYear; year++) {
-                years.push(year.toString());
-            }
-            return years;
-        }
     };
 
     const periodKeyFunction = periodMapping[selectedPeriod];
     let labels = periodLabels[selectedPeriod];
-
-    // If the period is 'Year', we need to generate the labels dynamically
-    if (selectedPeriod === 'Year') {
-        // Example: Generating labels from 2000 to 2020
-        labels = periodLabels.Year(1950, 2020);
-    }
 
     const occupancyStats = {};
 

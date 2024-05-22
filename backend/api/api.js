@@ -2,7 +2,15 @@ const express = require('express');
 const dao = process.argv[2] == 'false' ? require('../../test/mock_db') : require('./db');
 const router = express.Router();
 const { WebSocket } = require('ws');
-const Ajv = require("ajv")
+const Ajv = require("ajv");
+const cron = require('node-cron');
+const nodemailer = require('nodemailer');
+import('node-fetch').then(fetchModule => {
+    const fetch = fetchModule.default; // Assuming 'node-fetch' exports a default module
+    // Your code using fetch goes here
+}).catch(err => {
+    console.error('Error importing node-fetch:', err);
+});
 
 const sessionUserMap = new Map();
 const userSessionMap = new Map();
@@ -86,7 +94,6 @@ function connect() {
         } catch (error) {
             console.warn("Invalid JSON", error);
         }
-        // console.log('Received Message:', JSON.stringify(obj));
     });
 
     ws.onclose = () => {
@@ -103,7 +110,6 @@ function connect() {
 connect();
 
 router.get('/', async (req, res) => {
-    console.log('api hit');
     res.status(200).send('');
 });
 
@@ -122,7 +128,7 @@ router.get('/rooms/', async (req, res) => {
 router.get('/notif/emails/', async (req, res) => {
     try {
         const result = await dao.getNotifEmails(); // Assuming dao.getNotifEmails() returns a Promise
-
+        console.log(result);
         if (!result) {
             res.status(404).send("Email details not found");
             return;
@@ -143,9 +149,9 @@ router.get('/rooms/occupancy/', async (req, res) => {
     dayStart = 1000 * 60 * 60 * 8;
     dayEnd = 1000 * 60 * 60 * 18;
     start = req.query.start ? req.query.start : now - (now % (1000 * 60 * 60 * 24)) + dayStart;
-    console.log(new Date(start));
+    //console.log(new Date(start));
     end = req.query.end ? req.query.end : now - (now % (1000 * 60 * 60 * 24)) + dayEnd;
-    console.log(new Date(end));
+    //console.log(new Date(end));
     const result = dao.getOccupancy(start, end);
 
     result.then((data) => {
@@ -157,7 +163,6 @@ router.get('/rooms/occupancy/', async (req, res) => {
                 returnArray[obj.room_id] = { room_id: obj.room_id, occupancy: [] };
             }
             time = (Date.parse(obj.time));
-            // console.log(time);
             returnArray[obj.room_id].occupancy.push({ time: new Date(time), value: obj.occupancy });
         }
         res.status(200).send(returnArray);
@@ -259,7 +264,6 @@ router.post('/rooms/', async (req, res) => {
 router.post('/users/', async (req, res) => {
     try {
         const obj = req.body;
-        console.log(obj);
         // validate
         if (!validateUser(obj)) {
             res.status(400).send("Bad Request");
@@ -331,11 +335,11 @@ router.get('/users/notifications/:session_token', async (req, res) => {
     const session_token = req.params.session_token;
 
     try {
-        console.log(session_token);
+        //console.log(session_token + " Session Token");
         const user_id = await dao.getUserId(session_token);
-        console.log(user_id);
+        //console.log(user_id);
         const data = await dao.getNotificationsByID(user_id[0].user_id); // Pass the user ID to the DAO method
-        console.log(data);
+        //console.log(data);
         res.status(200).json(data); // Respond to the client with the retrieved data in JSON format
     } catch (error) {
         console.error('Error:', error); // Log the error for debugging
@@ -369,8 +373,11 @@ router.delete('/users/notifications/', async (req, res) => {
 // posting a new notification
 router.post('/users/notifications/', async (req, res) => {
     const session_token = req.body.session_id;
+    //console.log("Session Token" + session_token);
     try {
         const user_id = await dao.getUserId(session_token);
+        //console.log("User id");
+        //console.log(user_id);
         const obj = {
             user_id: user_id[0].user_id,
             room_id: req.body.room_id,
@@ -378,17 +385,20 @@ router.post('/users/notifications/', async (req, res) => {
             start_time: req.body.start_time,
             end_time: req.body.end_time,
         };
+        // console.log("Notif Post");
+        // console.log(obj);
         const validationErrors = validateUsertime(obj);
         if (validationErrors) {
             const errorMessage = Object.values(validationErrors).join(', ');
             res.status(400).send(`Validation Error: ${errorMessage}`);
+            // console.log(validationErrors);
             return;
         }
 
         // adds the data to the dao.
 
         const result = dao.addNotification(obj.user_id, obj.room_id, obj.room_threshold, obj.start_time, obj.end_time);
-
+        // console.log("Added");
         // if the query failed send an error message
 
         res.status(204).send('');
@@ -398,6 +408,69 @@ router.post('/users/notifications/', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+// Schedule the email sending function to run every 15 minutes
+cron.schedule('*/1 * * * *', async () => {
+    console.log("notifs");
+    sendEmailImmediately();
+});
+// Nodemailer transporter configuration
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // or any other email service
+    auth: {
+        user: 'trackMy310@gmail.com',
+        pass: 'tacc lxax lxdv mheq'
+    }
+});
+
+// Email sending function
+const sendMail = (to, subject, text, html) => {
+    const mailOptions = {
+        from: 'trackMy310@gmail.com',
+        to,
+        subject,
+        text,
+        html
+    };
+
+    return transporter.sendMail(mailOptions)
+        .then(info => console.log('Email sent:', info.response))
+        .catch(error => console.log('Error sending email:', error));
+};
+
+const getEmailDetails = async () => {
+    try {
+        const response = await fetch('http://localhost:3001/api/notif/emails/');
+        if (!response.ok) {
+            throw new Error('Failed to fetch email details');
+        }
+        const data = await response.json();
+        console.log(data);
+        // Map the data to the desired format
+        const emailDetails = data.map(({ email_address, room_id }) => ({
+            to: email_address,
+            subject: 'Room Id: ' + room_id + " Occupancy", // Use room_id instead of roomid
+            text: 'The room with roomId ' + room_id + ' has gone below your required threshold',
+        }));
+        return emailDetails;
+    } catch (error) {
+        console.log('Error fetching email details:', error);
+    }
+};
+
+// Method to send email immediately
+const sendEmailImmediately = async () => {
+    try {
+        const emailDetailsArray = await getEmailDetails();
+        // Iterate through each email detail object and send an email
+        console.log(emailDetailsArray);
+        for (const emailDetails of emailDetailsArray) {
+            await sendMail(emailDetails.to, emailDetails.subject, emailDetails.text);
+        }
+    } catch (error) {
+        console.log('Error sending immediate email:', error);
+    }
+};
 
 
 module.exports = router; 

@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-async function updateNotif(notification) {
+async function updateNotif(notification, sessionToken) {
+    let obj = {
+        session_id: String(sessionToken),
+        room_id: String(notification.room_id),
+        room_threshold: String(notification.room_threshold),
+        start_time: String(notification.start_time),
+        end_time: String(notification.end_time)
+    }
     try {
         const response = await fetch('http://localhost:3001/api/users/notifications', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(notification)
+            body: JSON.stringify(obj)
         });
 
         if (response.ok) {
@@ -23,9 +30,22 @@ async function updateNotif(notification) {
 }
 
 function EditNotificationsPage({ notification }) {
+    const storedSession = localStorage.getItem('userSession');
+    let sessionToken = null;
+    if (storedSession) {
+        const sessionData = JSON.parse(storedSession);
+        sessionToken = sessionData.session_token;
+    }
+
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        return date.toISOString().slice(0, 16);
+    };
+
     const [roomThreshold, setRoomThreshold] = useState(notification?.room_threshold || "No");
-    const [startTime, setStartTime] = useState(notification?.start_time || "");
-    const [endTime, setEndTime] = useState(notification?.end_time || "");
+    const [startTime, setStartTime] = useState(formatDate(notification?.start_time));
+    const [endTime, setEndTime] = useState(formatDate(notification?.end_time));
     const navigate = useNavigate();
 
     const handleSave = async () => {
@@ -37,7 +57,7 @@ function EditNotificationsPage({ notification }) {
         notification.end_time = endTime;
 
         try {
-            await updateNotif(notification);
+            await updateNotif(notification, sessionToken);
             navigate("/account/");
         } catch (error) {
             console.error('Error updating notification:', error);

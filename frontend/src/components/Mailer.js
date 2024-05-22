@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const cron = require('node-cron');
+const fetch = require('node-fetch');
 
 // Nodemailer transporter configuration
 const transporter = nodemailer.createTransport({
@@ -42,28 +42,8 @@ const getEmailDetails = async () => {
         return emailDetails;
     } catch (error) {
         console.log('Error fetching email details:', error);
-        // Default email details in case of error
-        return [
-            { to: 'cjmt97@gmail.com', subject: 'Default Subject', text: 'Default Text', roomId: 6 },
-            { to: 'cjmt97@gmail.com', subject: 'Default Subject', text: 'Default Text', roomId: 8 }
-        ];
     }
 };
-
-
-
-// Schedule the email sending function to run every 15 minutes
-cron.schedule('*/15 * * * *', async () => {
-    try {
-        const emailDetailsArray = await getEmailDetails();
-        // Iterate through each email detail object and send an email
-        for (const emailDetails of emailDetailsArray) {
-            await sendMail(emailDetails.to, emailDetails.subject, emailDetails.text, emailDetails.html);
-        }
-    } catch (error) {
-        console.log('Error scheduling email:', error);
-    }
-});
 
 // Method to send email immediately
 const sendEmailImmediately = async () => {
@@ -77,7 +57,6 @@ const sendEmailImmediately = async () => {
         console.log('Error sending immediate email:', error);
     }
 };
-
 
 sendEmailImmediately();
 

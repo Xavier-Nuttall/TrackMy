@@ -4,8 +4,6 @@ import GetGraph from "./Graph";
 import "../FloorMap.css";
 
 function HomePage({ isOpen, floorNum, setCurrFloor, floorInfo, rooms, currRoom, setCurrRoom }) {
-    // console.log(currRoom);
-    //console.log(rooms);
     const handleFloorChange = (floor) => {
         if (floor < 4 && floor > 0) {
             setCurrFloor(floor);

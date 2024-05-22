@@ -20,15 +20,26 @@ async function deleteNotif(notification) {
   }
 }
 
-function AccountPage({ isOpen, setNotification, userSession }) {
+function AccountPage({ isOpen, setNotification }) {
+  const storedSession = localStorage.getItem('userSession');
+  let sessionToken = null;
+  let email = null;
+  let firstName = null;
+  let lastName = null;
+
+  if (storedSession) {
+    const sessionData = JSON.parse(storedSession);
+    sessionToken = sessionData.session_token;
+    email = sessionData.email;
+    firstName = sessionData.firstName;
+    lastName = sessionData.lastName;
+  }
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        console.log(userSession.session_token);
-        const notificationsData = await getNotifications(userSession.session_token);
-        console.log(notificationsData);
+        const notificationsData = await getNotifications(sessionToken);
         setNotifications(notificationsData);
       } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -36,13 +47,12 @@ function AccountPage({ isOpen, setNotification, userSession }) {
     };
 
     fetchNotifications();
-    console.log("Hit");
   }, []);
 
   const handleDeleteNotification = async (notification) => {
     try {
       await deleteNotif(notification);
-      const updatedNotifications = await getNotifications(userSession.session_token);
+      const updatedNotifications = await getNotifications(sessionToken);
       setNotifications(updatedNotifications);
     } catch (error) {
       console.error('Error deleting notification:', error);
@@ -53,20 +63,21 @@ function AccountPage({ isOpen, setNotification, userSession }) {
 
   const redirectToPage = (notification) => {
     setNotification(notification);
-    navigate("/account/notification-update", { state: { notification } });
+    navigate("/account/notification-update", { state: { notification: notification } });
   };
 
   const handleAddNotification = () => {
-    navigate("/account/add-notification", { state: { session_id: userSession.session_token } });
+    navigate("/account/add-notification", { state: { session_id: sessionToken } });
   };
 
-  console.log(notifications);
   return (
     <main className={`account-page ${isOpen ? '' : 'open'}`}>
       <div className="account-container">
         <div className="user-info">
           <h2>Account Information</h2>
-          <p><strong>Email:</strong> {userSession.email}</p>
+          <p><strong>Email:</strong> {email}</p>
+          {firstName && <p><strong>First Name:</strong> {firstName}</p>}
+          {lastName && <p><strong>Last Name:</strong> {lastName}</p>}
         </div>
         <div className="notifications">
           <h2>Notifications</h2>
@@ -106,8 +117,6 @@ async function getNotifications(userSessionId) {
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log("LOL");
-    console.log(data);
     // Check if data is empty
     if (data.length === 0) {
       console.log("bad Hit");

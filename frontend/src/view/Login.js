@@ -26,7 +26,6 @@ function LoginPage({ isOpen, setUserSession, userSession, setLoggedIn }) {
   }
 
   function logout() {
-    console.log('logout');
     setUserSession({});
     localStorage.removeItem('userSession');
     fetch('http://localhost:3001/api/users/session', {
