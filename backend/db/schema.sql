@@ -18,8 +18,8 @@ CREATE TABLE tracking.UserTimes(
     user_id CHAR(36),
     room_id INT,
     room_threshold INT NOT NULL,
-    start_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    end_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    start_time TIME WITHOUT TIME ZONE DEFAULT '00:00',
+    end_time TIME WITHOUT TIME ZONE DEFAULT '23:59',
 
     CONSTRAINT fk_usertimes_userid FOREIGN KEY(user_id) REFERENCES pii.User(user_id),
     CONSTRAINT fk_usertimes_roomid FOREIGN KEY(room_id) REFERENCES tracking.Room(room_id),

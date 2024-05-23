@@ -20,7 +20,7 @@ async function deleteNotif(notification) {
   }
 }
 
-function AccountPage({ isOpen, setNotification }) {
+function AccountPage({ isOpen, setNotification, rooms }) {
   const storedSession = localStorage.getItem('userSession');
   let sessionToken = null;
   let email = null;
@@ -89,9 +89,11 @@ function AccountPage({ isOpen, setNotification }) {
             </div>
             {notifications.map(notification => (
               <div key={`${notification.user_id}-${notification.room_id}`} className="notification-row">
-                <p>{notification.room_id}</p>
+                {notification.room_id && rooms[notification.room_id] && (
+                  <p>{rooms[notification.room_id].name}</p>
+                )}
                 <p>0-{notification.room_threshold}</p>
-                <p>{new Date(notification.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} - {new Date(notification.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
+                <p>{notification.start_time} - {notification.end_time}</p>
                 <div><button onClick={() => redirectToPage(notification)} className="update-button">Update</button></div>
                 <div><button onClick={() => handleDeleteNotification(notification)} className="delete-button">Delete</button></div>
               </div>

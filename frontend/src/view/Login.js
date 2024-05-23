@@ -46,10 +46,10 @@ function LoginPage({ isOpen, setUserSession, userSession, setLoggedIn }) {
     <main className={`${isOpen ? '' : 'open'}`}>
       <div className="container">
         <div className="login-box">
-          <h2>Login</h2>
+          {signedIn() ? <h2>Logout</h2> : <h2>Login</h2>}
           <button className="sso-button outlook" onClick={() => { signedIn() ? logout() : loginPopup() }}>
             <img src="/outlook.png" alt="Outlook Icon" className="sso-icon" />
-            {signedIn() ? <span>Sign Out</span> : <span>Sign in with Outlook</span>}
+            {signedIn() ? <span>Sign Out</span> : <span>Sign in with Email</span>}
           </button>
         </div>
       </div>

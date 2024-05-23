@@ -3,19 +3,39 @@ import '../AddNotification.css';
 import { useNavigate, useLocation } from "react-router-dom";
 
 function AddNotification({ rooms }) {
+
+    // Function to get default time in format 'HH:MM'
+    const getDefaultTime = (hour) => {
+        const formattedHour = hour < 10 ? `0${hour}` : hour;
+        return `${formattedHour}:00`;
+    };
+
     const location = useLocation();
-    const { session_id } = location.state || {}
+    const { session_id } = location.state || {};
     const [formData, setFormData] = useState({
         session_id: session_id,
         room_id: '',
         room_threshold: '',
-        start_time: '',
-        end_time: ''
+        start_time: getDefaultTime(7),
+        end_time: getDefaultTime(21)
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const roomArray = Object.values(rooms);
+
+    const handleRoomChange = (e) => {
+        const selectedRoomId = e.target.value;
+        const selectedRoom = roomArray.find((room) => room.room_id == selectedRoomId);
+
+        setFormData((prevData) => ({
+            ...prevData,
+            room_id: selectedRoom.room_id,
+            room_info: selectedRoom, // Store the whole room information
+        }));
     };
 
     const navigate = useNavigate();
@@ -67,15 +87,21 @@ function AddNotification({ rooms }) {
             <div className="container">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="roomId">Room ID:</label>
-                        <input
-                            type="number"
+                        <label htmlFor="roomId">Room:</label>
+                        <select
                             id="roomId"
                             name="room_id"
                             value={formData.room_id}
-                            onChange={handleChange}
+                            onChange={handleRoomChange}
                             required
-                        />
+                        >
+                            <option value="" disabled>Select a room</option>
+                            {roomArray.map((room) => (
+                                <option key={room.room_id} value={room.room_id}>
+                                    {room.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="roomThreshold">Room Threshold:</label>
@@ -91,7 +117,7 @@ function AddNotification({ rooms }) {
                     <div className="form-group">
                         <label htmlFor="startTime">Start Time:</label>
                         <input
-                            type="datetime-local"
+                            type="time" // Change type to "time"
                             id="startTime"
                             name="start_time"
                             value={formData.start_time}
@@ -101,7 +127,7 @@ function AddNotification({ rooms }) {
                     <div className="form-group">
                         <label htmlFor="endTime">End Time:</label>
                         <input
-                            type="datetime-local"
+                            type="time" // Change type to "time"
                             id="endTime"
                             name="end_time"
                             value={formData.end_time}

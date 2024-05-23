@@ -212,8 +212,8 @@ async function getNotifEmails() {
     SELECT u.email_address, t.room_id
     FROM pii.User u
     JOIN tracking.UserTimes t ON u.user_id = t.user_id
-    WHERE t.start_time AT TIME ZONE 'UTC' AT TIME ZONE 'NZ' <= CURRENT_TIMESTAMP
-    AND t.end_time AT TIME ZONE 'UTC' AT TIME ZONE 'NZ' >= CURRENT_TIMESTAMP;
+    WHERE EXTRACT(HOUR FROM t.start_time) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP)
+      AND EXTRACT(HOUR FROM t.end_time) >= EXTRACT(HOUR FROM CURRENT_TIMESTAMP);
     `);
     return res.rows;
 }

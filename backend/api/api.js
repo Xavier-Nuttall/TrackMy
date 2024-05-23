@@ -372,7 +372,7 @@ router.delete('/users/notifications/', async (req, res) => {
 // posting a new notification
 router.post('/users/notifications/', async (req, res) => {
     const session_token = req.body.session_id;
-    //console.log("Session Token" + session_token);
+    console.log("Session Token" + session_token);
     try {
         const user_id = await dao.getUserId(session_token);
         //console.log("User id");
@@ -408,11 +408,10 @@ router.post('/users/notifications/', async (req, res) => {
     }
 });
 
-// Schedule the email sending function to run every 15 minutes
-cron.schedule('*/15 * * * *', async () => {
-    console.log("notifs");
-    sendEmailImmediately();
-});
+
+// Assume you have a variable to keep track of sent notifications
+let sentNotifications = new Set();
+
 // Nodemailer transporter configuration
 const transporter = nodemailer.createTransport({
     service: 'gmail', // or any other email service
@@ -433,7 +432,11 @@ const sendMail = (to, subject, text, html) => {
     };
 
     return transporter.sendMail(mailOptions)
-        .then(info => console.log('Email sent:', info.response))
+        .then(info => {
+            console.log('Email sent:', info.response);
+            // Add the sent notification to the set
+            sentNotifications.add(`${to}-${subject.split(' ')[3]}`);
+        })
         .catch(error => console.log('Error sending email:', error));
 };
 
@@ -444,13 +447,25 @@ const getEmailDetails = async () => {
             throw new Error('Failed to fetch email details');
         }
         const data = await response.json();
-        console.log(data);
         // Map the data to the desired format
-        const emailDetails = data.map(({ email_address, room_id }) => ({
-            to: email_address,
-            subject: 'Room Id: ' + room_id + " Occupancy", // Use room_id instead of roomid
-            text: 'The room with roomId ' + room_id + ' has gone below your required threshold',
-        }));
+        const emailDetails = data.map(({ email_address, room_id }) => {
+            // Check if this notification has already been sent for this email and room ID pair
+            if (!sentNotifications.has(`${email_address}-${room_id}`)) {
+                return {
+                    to: email_address,
+                    subject: `Alert: Room ID ${room_id} Occupancy Below Threshold`,
+                    text: `Dear recipient,
+                    \n\nWe wanted to alert you that the occupancy of Room ID ${room_id} has fallen below your specified threshold. As you use our app to plan your arrivals and activities based on room occupancy, this notification is intended to assist you in making informed decisions regarding your schedule.
+                    \n\nPlease review the current occupancy status and adjust your plans accordingly if needed.
+                    \n\nThank you for using TrackMy to optimize your experience.
+                    \n\nBest regards,
+                    \n\nThe TrackMy Team`,
+                };
+            } else {
+                return null; // Skip this notification
+            }
+        }).filter(notification => notification !== null); // Remove skipped notifications
+
         return emailDetails;
     } catch (error) {
         console.log('Error fetching email details:', error);
@@ -461,8 +476,6 @@ const getEmailDetails = async () => {
 const sendEmailImmediately = async () => {
     try {
         const emailDetailsArray = await getEmailDetails();
-        // Iterate through each email detail object and send an email
-        console.log(emailDetailsArray);
         for (const emailDetails of emailDetailsArray) {
             await sendMail(emailDetails.to, emailDetails.subject, emailDetails.text);
         }
@@ -471,5 +484,14 @@ const sendEmailImmediately = async () => {
     }
 };
 
+// Schedule the email sending function to run every 15 minutes with duplicate prevention
+cron.schedule('*/5 * * * *', async () => {
+    console.log(sentNotifications);
+    try {
+        await sendEmailImmediately();
+    } catch (error) {
+        console.log('Error sending scheduled email:', error);
+    }
+});
 
 module.exports = router; 

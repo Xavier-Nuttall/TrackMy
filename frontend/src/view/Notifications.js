@@ -37,16 +37,21 @@ function EditNotificationsPage({ notification }) {
         sessionToken = sessionData.session_token;
     }
 
-    const formatDate = (dateString) => {
-        if (!dateString) return "";
-        const date = new Date(dateString);
-        return date.toISOString().slice(0, 16);
+    const [roomThreshold, setRoomThreshold] = useState(notification?.room_threshold || "No");
+    const [startTime, setStartTime] = useState(notification?.start_time || "");
+    const [endTime, setEndTime] = useState(notification?.end_time || "");
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        if (name === "start_time") {
+            setStartTime(value);
+        } else if (name === "end_time") {
+            setEndTime(value);
+        }
     };
 
-    const [roomThreshold, setRoomThreshold] = useState(notification?.room_threshold || "No");
-    const [startTime, setStartTime] = useState(formatDate(notification?.start_time));
-    const [endTime, setEndTime] = useState(formatDate(notification?.end_time));
-    const navigate = useNavigate();
+    console.log(startTime);
 
     const handleSave = async () => {
         if (!validateInputs()) return;
@@ -98,19 +103,21 @@ function EditNotificationsPage({ notification }) {
                 <div className="form-group">
                     <label htmlFor="startTime">Start Time:</label>
                     <input
-                        type="datetime-local"
+                        type="time" // Change type to "time"
                         id="startTime"
-                        value={startTime}
-                        onChange={(e) => setStartTime(e.target.value)}
+                        name="start_time"
+                        value={startTime} // Use startTime state variable here
+                        onChange={handleChange} // Use handleChange function
                     />
                 </div>
                 <div className="form-group">
                     <label htmlFor="endTime">End Time:</label>
                     <input
-                        type="datetime-local"
+                        type="time" // Change type to "time"
                         id="endTime"
-                        value={endTime}
-                        onChange={(e) => setEndTime(e.target.value)}
+                        name="end_time"
+                        value={endTime} // Use endTime state variable here
+                        onChange={handleChange} // Use handleChange function
                     />
                 </div>
                 <div className="button-group">

@@ -109,7 +109,7 @@ function App() {
                 />
                 <Route path="/login" element={<Login isOpen={isMenuOpen} userSession={userSession} setUserSession={setUserSession} setLoggedIn={setLoggedIn} />} />
                 <Route path="/about" element={<AboutUs isOpen={isMenuOpen} />} />
-                <Route path="/account" element={<AccountPage isOpen={isMenuOpen} setNotification={setNotificationData} userSession={userSession} />} />
+                <Route path="/account" element={<AccountPage isOpen={isMenuOpen} setNotification={setNotificationData} userSession={userSession} rooms={rooms} />} />
                 <Route path="/account/notification-update" element={<UpdateNotifications notification={notificationData} />} />
                 <Route path="/room-trends" element={<GetRoomTrend isOpen={isMenuOpen} rooms={floorInfo} />} />
                 <Route path="/account/add-notification" element={<AddNotification rooms={floorInfo} />} />
