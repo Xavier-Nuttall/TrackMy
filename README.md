@@ -25,6 +25,7 @@ Launch Instructions:
 4. Set up configuration file located at `backend/secrets/secrets.ini` or leave default
 5. Run `npm run init-install` sets up the docker image and creates secrets from config.
 6. Run `npm run start` this runs the server.
+7. Run `node backend/api/sensor_sim.js` to populate with some simulated sensor data.
 
 Connect:
 
