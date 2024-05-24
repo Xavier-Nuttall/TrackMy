@@ -70,6 +70,9 @@ function AccountPage({ isOpen, setNotification, rooms }) {
     navigate("/account/add-notification", { state: { session_id: sessionToken } });
   };
 
+  console.log(notifications);
+  console.log(rooms[0]?.name);
+
   return (
     <main className={`account-page ${isOpen ? '' : 'open'}`}>
       <div className="account-container">
@@ -89,9 +92,7 @@ function AccountPage({ isOpen, setNotification, rooms }) {
             </div>
             {notifications.map(notification => (
               <div key={`${notification.user_id}-${notification.room_id}`} className="notification-row">
-                {notification.room_id && rooms[notification.room_id] && (
-                  <p>{rooms[notification.room_id].name}</p>
-                )}
+                <p>{rooms[notification.room_id]?.name}</p>
                 <p>0-{notification.room_threshold}</p>
                 <p>{notification.start_time} - {notification.end_time}</p>
                 <div><button onClick={() => redirectToPage(notification)} className="update-button">Update</button></div>
