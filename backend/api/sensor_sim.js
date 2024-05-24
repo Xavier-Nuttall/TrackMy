@@ -1,7 +1,7 @@
 const startTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000)) + 1000 * 60 * 60 * 8;
 const endTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000)) + 1000 * 60 * 60 * 18;
-const days = 1;
-const steps = 10;
+const days = 7;
+const steps = 40;
 
 function generateRandomFunction() {
     const numFunctions = 100;
