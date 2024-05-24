@@ -1,7 +1,7 @@
 # TrackMy
 
 Expected:
-* [Ubuntu Server LTS 24.04](https://releases.ubuntu.com/noble/) - other os will probably work but are not officially supported.
+* [Ubuntu LTS 24.04](https://releases.ubuntu.com/noble/) - other os will probably work but are not officially supported.
 
 Requirements: 
 * [Git](https://git-scm.com/download/linux) - allows cloning of the repository
