@@ -19,13 +19,13 @@ async function updateNotif(notification, sessionToken) {
         });
 
         if (response.ok) {
-            alert('Notification updated successfully!');
+            // alert('Notification updated successfully!');
         } else {
-            alert('Failed to update notification.');
+            // alert('Failed to update notification.');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred while updating the notification.');
+        // alert('An error occurred while updating the notification.');
     }
 }
 

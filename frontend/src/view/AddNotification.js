@@ -53,7 +53,7 @@ function AddNotification({ rooms }) {
             });
 
             if (response.ok) {
-                alert('Notification added successfully!');
+                // alert('Notification added successfully!');
                 setFormData({
                     session_id: session_id,
                     room_id: '',
@@ -63,11 +63,11 @@ function AddNotification({ rooms }) {
                 });
                 navigate("/account");
             } else {
-                alert('Failed to add notification.');
+                // alert('Failed to add notification.');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred while adding the notification.');
+            // alert('An error occurred while adding the notification.');
         }
     };
 
