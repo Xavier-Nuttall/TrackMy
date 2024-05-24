@@ -12,10 +12,10 @@ function AboutUsPage({ isOpen }) {
           Our team is comprised of dedicated students from the University of Otago:
         </p>
         <ul className="team-list">
-          <li>Charlie</li>
-          <li>Xavier</li>
-          <li>Dianne</li>
-          <li>Ben</li>
+          <li>Charlie Templeton</li>
+          <li>Xavier Nuttall</li>
+          <li>Dianne Margaret Albarico</li>
+          <li>Ben English</li>
         </ul>
         <p>
           Together, we aim to enhance your ability to manage and monitor room usage effectively with accurate data and insightful visualizations.
